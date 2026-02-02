@@ -22,13 +22,17 @@ public class User {
     @Column(nullable = false)
     private String fullName;
 
+    @Column(nullable = false)
+    private String role; // PATIENT, DOCTOR, NURSE
+
     public User() {}
 
-    public User(String username, String password, String email, String fullName) {
+    public User(String username, String password, String email, String fullName, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.fullName = fullName;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -46,4 +50,7 @@ public class User {
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

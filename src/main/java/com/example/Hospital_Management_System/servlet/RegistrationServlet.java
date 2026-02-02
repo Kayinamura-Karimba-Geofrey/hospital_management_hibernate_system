@@ -25,8 +25,9 @@ public class RegistrationServlet extends HttpServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullName");
+        String role = request.getParameter("role");
 
-        User user = new User(username, password, email, fullName);
+        User user = new User(username, password, email, fullName, role);
         userDAO.saveUser(user);
 
         response.sendRedirect("registration-success.jsp");

@@ -94,6 +94,7 @@
 
     <!-- ✅ Maven Plugin Configuration -->
     <build>
+        <finalName>hospital_management_system</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
