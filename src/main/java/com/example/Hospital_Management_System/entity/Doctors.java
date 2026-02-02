@@ -14,6 +14,10 @@ public class Doctors {
     private String name;
     private String specialisation;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Patients> patients = new ArrayList<>();
@@ -38,6 +42,9 @@ public class Doctors {
 
     public String getSpecialisation() { return specialisation; }
     public void setSpecialisation(String specialisation) { this.specialisation = specialisation; }
+
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
 
     public List<Patients> getPatients() { return patients; }
     public void setPatients(List<Patients> patients) { this.patients = patients; }
