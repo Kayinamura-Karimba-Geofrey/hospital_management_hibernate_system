@@ -24,6 +24,19 @@ public class DoctorServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            doctorDAO.deleteDoctor(id);
+            response.sendRedirect(request.getContextPath() + "/doctors");
+            return;
+        } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Doctors doctor = doctorDAO.getDoctorById(id);
+            request.setAttribute("editableDoc", doctor);
+        }
+
         List<Doctors> doctors = doctorDAO.getAllDoctors();
         List<Department> departments = departmentDAO.getAllDepartments();
         request.setAttribute("doctors", doctors);
@@ -33,15 +46,26 @@ public class DoctorServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String idStr = request.getParameter("id");
         String name = request.getParameter("name");
         String specialisation = request.getParameter("specialisation");
         int departmentId = Integer.parseInt(request.getParameter("departmentId"));
 
         Department dept = departmentDAO.getDepartmentById(departmentId);
-        Doctors doctor = new Doctors(name, specialisation);
-        doctor.setDepartment(dept);
         
-        doctorDAO.saveDoctor(doctor);
+        if (idStr != null && !idStr.isEmpty()) {
+            // Update
+            int id = Integer.parseInt(idStr);
+            Doctors doctor = new Doctors(name, specialisation);
+            doctor.setId(id);
+            doctor.setDepartment(dept);
+            doctorDAO.updateDoctor(doctor);
+        } else {
+            // Save
+            Doctors doctor = new Doctors(name, specialisation);
+            doctor.setDepartment(dept);
+            doctorDAO.saveDoctor(doctor);
+        }
 
         response.sendRedirect(request.getContextPath() + "/doctors");
     }

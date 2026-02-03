@@ -11,6 +11,8 @@
                     --secondary: #6a1b9a;
                     --white: #ffffff;
                     --gray: #f8f9fa;
+                    --danger: #c62828;
+                    --info: #0277bd;
                 }
 
                 body {
@@ -96,10 +98,22 @@
                     font-weight: bold;
                     text-decoration: none;
                     display: inline-block;
+                    font-size: 0.9rem;
                 }
 
                 .btn-primary {
                     background: var(--primary);
+                    color: white;
+                }
+
+                .btn-info {
+                    background: var(--info);
+                    color: white;
+                    margin-right: 5px;
+                }
+
+                .btn-danger {
+                    background: var(--danger);
                     color: white;
                 }
 
@@ -139,27 +153,35 @@
                 <h2>Appointment Scheduling</h2>
 
                 <div class="card">
-                    <h3>Schedule New Appointment</h3>
+                    <h3>${editableApp != null ? 'Edit' : 'Schedule New'} Appointment</h3>
                     <form action="appointments" method="post"
                         style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end;">
+                        <input type="hidden" name="id" value="${editableApp.id}">
                         <div class="form-group">
                             <label>Select Patient</label>
                             <select name="patientId" required>
-                                <option value="" disabled selected>Select Patient</option>
+                                <option value="" disabled>Select Patient</option>
                                 <c:forEach var="p" items="${patients}">
-                                    <option value="${p.id}">${p.name}</option>
+                                    <option value="${p.id}" ${(editableApp !=null && editableApp.patient.id==p.id)
+                                        ? 'selected' : '' }>${p.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Date</label>
-                            <input type="date" name="appointmentDate" required>
+                            <input type="date" name="appointmentDate" required value="${editableApp.appointmentDate}">
                         </div>
                         <div class="form-group">
                             <label>Time</label>
-                            <input type="time" name="appointmentTime" required>
+                            <input type="time" name="appointmentTime" required value="${editableApp.appointmentTime}">
                         </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">Book Appointment</button>
+                        <button type="submit" class="btn btn-primary" style="height: 45px;">
+                            ${editableApp != null ? 'Update' : 'Book'} Appointment
+                        </button>
+                        <c:if test="${editableApp != null}">
+                            <a href="appointments" class="btn"
+                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
+                        </c:if>
                     </form>
                 </div>
 
@@ -173,6 +195,7 @@
                                 <th>Doctor</th>
                                 <th>Date</th>
                                 <th>Time</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -183,11 +206,16 @@
                                     <td>${app.patient.doctor.name}</td>
                                     <td>${app.appointmentDate}</td>
                                     <td>${app.appointmentTime}</td>
+                                    <td>
+                                        <a href="appointments?action=edit&id=${app.id}" class="btn btn-info">Edit</a>
+                                        <a href="javascript:void(0)" onclick="confirmDelete(${app.id})"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             <c:if test="${empty appointments}">
                                 <tr>
-                                    <td colspan="5" style="text-align: center; color: #999;">No appointments scheduled.
+                                    <td colspan="6" style="text-align: center; color: #999;">No appointments scheduled.
                                     </td>
                                 </tr>
                             </c:if>
@@ -195,6 +223,14 @@
                     </table>
                 </div>
             </div>
+
+            <script>
+                function confirmDelete(id) {
+                    if (confirm("Are you sure you want to delete this appointment?")) {
+                        window.location.href = "appointments?action=delete&id=" + id;
+                    }
+                }
+            </script>
         </body>
 
         </html>

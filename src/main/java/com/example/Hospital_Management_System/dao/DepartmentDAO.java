@@ -28,6 +28,49 @@ public class DepartmentDAO {
         }
     }
 
+    public void updateDepartment(Department department) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.merge(department);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public void deleteDepartment(int id) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Department dept = session.get(Department.class, id);
+            if (dept != null) {
+                session.remove(dept);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     public List<Department> getAllDepartments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Department", Department.class).list();

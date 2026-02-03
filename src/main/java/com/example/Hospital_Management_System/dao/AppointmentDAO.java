@@ -28,9 +28,58 @@ public class AppointmentDAO {
         }
     }
 
+    public void updateAppointment(Appointments appointment) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.merge(appointment);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public void deleteAppointment(int id) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            Appointments appointment = session.get(Appointments.class, id);
+            if (appointment != null) {
+                session.remove(appointment);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     public List<Appointments> getAllAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Appointments", Appointments.class).list();
+        }
+    }
+
+    public Appointments getAppointmentById(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Appointments.class, id);
         }
     }
 }

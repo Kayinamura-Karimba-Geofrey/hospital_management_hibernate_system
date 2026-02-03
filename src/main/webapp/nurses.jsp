@@ -11,6 +11,8 @@
                     --secondary: #6a1b9a;
                     --white: #ffffff;
                     --gray: #f8f9fa;
+                    --danger: #c62828;
+                    --info: #0277bd;
                 }
 
                 body {
@@ -96,10 +98,22 @@
                     font-weight: bold;
                     text-decoration: none;
                     display: inline-block;
+                    font-size: 0.9rem;
                 }
 
                 .btn-primary {
                     background: var(--primary);
+                    color: white;
+                }
+
+                .btn-info {
+                    background: var(--info);
+                    color: white;
+                    margin-right: 5px;
+                }
+
+                .btn-danger {
+                    background: var(--danger);
                     color: white;
                 }
 
@@ -139,23 +153,32 @@
                 <h2>Nurse Management</h2>
 
                 <div class="card">
-                    <h3>Add New Nurse</h3>
+                    <h3>${editableNurse != null ? 'Edit' : 'Add New'} Nurse</h3>
                     <form action="nurses" method="post"
                         style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; align-items: end;">
+                        <input type="hidden" name="id" value="${editableNurse.id}">
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" name="name" required placeholder="Nurse Jane Smith">
+                            <input type="text" name="name" required placeholder="Nurse Jane Smith"
+                                value="${editableNurse.name}">
                         </div>
                         <div class="form-group">
                             <label>Department</label>
                             <select name="departmentId" required>
-                                <option value="" disabled selected>Select Dept</option>
+                                <option value="" disabled>Select Dept</option>
                                 <c:forEach var="dept" items="${departments}">
-                                    <option value="${dept.id}">${dept.name}</option>
+                                    <option value="${dept.id}" ${(editableNurse !=null &&
+                                        editableNurse.department.id==dept.id) ? 'selected' : '' }>${dept.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">Add Nurse</button>
+                        <button type="submit" class="btn btn-primary" style="height: 45px;">
+                            ${editableNurse != null ? 'Update' : 'Add'} Nurse
+                        </button>
+                        <c:if test="${editableNurse != null}">
+                            <a href="nurses" class="btn"
+                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
+                        </c:if>
                     </form>
                 </div>
 
@@ -167,6 +190,7 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Department</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -175,17 +199,30 @@
                                     <td>${nurse.id}</td>
                                     <td>${nurse.name}</td>
                                     <td>${nurse.department.name}</td>
+                                    <td>
+                                        <a href="nurses?action=edit&id=${nurse.id}" class="btn btn-info">Edit</a>
+                                        <a href="javascript:void(0)" onclick="confirmDelete(${nurse.id})"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             <c:if test="${empty nurses}">
                                 <tr>
-                                    <td colspan="3" style="text-align: center; color: #999;">No nurses found.</td>
+                                    <td colspan="4" style="text-align: center; color: #999;">No nurses found.</td>
                                 </tr>
                             </c:if>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <script>
+                function confirmDelete(id) {
+                    if (confirm("Are you sure you want to delete this nurse?")) {
+                        window.location.href = "nurses?action=delete&id=" + id;
+                    }
+                }
+            </script>
         </body>
 
         </html>

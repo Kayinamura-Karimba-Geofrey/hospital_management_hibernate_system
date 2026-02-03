@@ -11,6 +11,8 @@
                     --secondary: #6a1b9a;
                     --white: #ffffff;
                     --gray: #f8f9fa;
+                    --danger: #c62828;
+                    --info: #0277bd;
                 }
 
                 body {
@@ -95,10 +97,22 @@
                     font-weight: bold;
                     text-decoration: none;
                     display: inline-block;
+                    font-size: 0.9rem;
                 }
 
                 .btn-primary {
                     background: var(--primary);
+                    color: white;
+                }
+
+                .btn-info {
+                    background: var(--info);
+                    color: white;
+                    margin-right: 5px;
+                }
+
+                .btn-danger {
+                    background: var(--danger);
                     color: white;
                 }
 
@@ -138,18 +152,27 @@
                 <h2>Hospital Departments</h2>
 
                 <div class="card">
-                    <h3>Add New Department</h3>
+                    <h3>${editableDept != null ? 'Edit' : 'Add New'} Department</h3>
                     <form action="departments" method="post"
                         style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; align-items: end;">
+                        <input type="hidden" name="id" value="${editableDept.id}">
                         <div class="form-group">
                             <label>Department Name</label>
-                            <input type="text" name="name" required placeholder="e.g. Cardiology">
+                            <input type="text" name="name" required placeholder="e.g. Cardiology"
+                                value="${editableDept.name}">
                         </div>
                         <div class="form-group">
                             <label>Location</label>
-                            <input type="text" name="location" required placeholder="e.g. Wing A, Floor 3">
+                            <input type="text" name="location" required placeholder="e.g. Wing A, Floor 3"
+                                value="${editableDept.location}">
                         </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">Add Department</button>
+                        <button type="submit" class="btn btn-primary" style="height: 45px;">
+                            ${editableDept != null ? 'Update' : 'Add'} Department
+                        </button>
+                        <c:if test="${editableDept != null}">
+                            <a href="departments" class="btn"
+                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
+                        </c:if>
                     </form>
                 </div>
 
@@ -161,6 +184,7 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Location</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -169,17 +193,30 @@
                                     <td>${dept.id}</td>
                                     <td>${dept.name}</td>
                                     <td>${dept.location}</td>
+                                    <td>
+                                        <a href="departments?action=edit&id=${dept.id}" class="btn btn-info">Edit</a>
+                                        <a href="javascript:void(0)" onclick="confirmDelete(${dept.id})"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             <c:if test="${empty departments}">
                                 <tr>
-                                    <td colspan="3" style="text-align: center; color: #999;">No departments found.</td>
+                                    <td colspan="4" style="text-align: center; color: #999;">No departments found.</td>
                                 </tr>
                             </c:if>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <script>
+                function confirmDelete(id) {
+                    if (confirm("Are you sure you want to delete this department?")) {
+                        window.location.href = "departments?action=delete&id=" + id;
+                    }
+                }
+            </script>
         </body>
 
         </html>

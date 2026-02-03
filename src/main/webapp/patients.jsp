@@ -11,6 +11,8 @@
                     --secondary: #6a1b9a;
                     --white: #ffffff;
                     --gray: #f8f9fa;
+                    --danger: #c62828;
+                    --info: #0277bd;
                 }
 
                 body {
@@ -96,10 +98,22 @@
                     font-weight: bold;
                     text-decoration: none;
                     display: inline-block;
+                    font-size: 0.9rem;
                 }
 
                 .btn-primary {
                     background: var(--primary);
+                    color: white;
+                }
+
+                .btn-info {
+                    background: var(--info);
+                    color: white;
+                    margin-right: 5px;
+                }
+
+                .btn-danger {
+                    background: var(--danger);
                     color: white;
                 }
 
@@ -136,52 +150,64 @@
                 </div>
             </div>
             <div class="main-content">
-                <h2>Patient Management</h2>
+                <h2>Patient Records</h2>
 
                 <div class="card">
-                    <h3>Register New Patient</h3>
+                    <h3>${editablePatient != null ? 'Edit' : 'Register New'} Patient</h3>
                     <form action="patients" method="post"
                         style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 15px; align-items: end;">
+                        <input type="hidden" name="id" value="${editablePatient.id}">
                         <div class="form-group">
                             <label>Patient Name</label>
-                            <input type="text" name="name" required placeholder="Full Name">
+                            <input type="text" name="name" required placeholder="John Doe"
+                                value="${editablePatient.name}">
                         </div>
                         <div class="form-group">
-                            <label>Disease/Reason</label>
-                            <input type="text" name="disease" required placeholder="Symptoms">
+                            <label>Disease/Diagnosis</label>
+                            <input type="text" name="disease" required placeholder="e.g. Fever"
+                                value="${editablePatient.disease}">
                         </div>
                         <div class="form-group">
                             <label>Assigned Doctor</label>
                             <select name="doctorId" required>
-                                <option value="" disabled selected>Select Doctor</option>
+                                <option value="" disabled>Select Doctor</option>
                                 <c:forEach var="doc" items="${doctors}">
-                                    <option value="${doc.id}">${doc.name} (${doc.specialisation})</option>
+                                    <option value="${doc.id}" ${(editablePatient !=null &&
+                                        editablePatient.doctor.id==doc.id) ? 'selected' : '' }>${doc.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Assigned Nurse</label>
                             <select name="nurseId" required>
-                                <option value="" disabled selected>Select Nurse</option>
+                                <option value="" disabled>Select Nurse</option>
                                 <c:forEach var="nurse" items="${nurses}">
-                                    <option value="${nurse.id}">${nurse.name}</option>
+                                    <option value="${nurse.id}" ${(editablePatient !=null &&
+                                        editablePatient.nurse.id==nurse.id) ? 'selected' : '' }>${nurse.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">Add Patient</button>
+                        <button type="submit" class="btn btn-primary" style="height: 45px;">
+                            ${editablePatient != null ? 'Update' : 'Register'}
+                        </button>
+                        <c:if test="${editablePatient != null}">
+                            <a href="patients" class="btn"
+                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
+                        </c:if>
                     </form>
                 </div>
 
                 <div class="card">
-                    <h3>Patient Records</h3>
+                    <h3>All Patients</h3>
                     <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Disease</th>
+                                <th>Diagnosis</th>
                                 <th>Doctor</th>
                                 <th>Nurse</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -192,18 +218,30 @@
                                     <td>${p.disease}</td>
                                     <td>${p.doctor.name}</td>
                                     <td>${p.nurse.name}</td>
+                                    <td>
+                                        <a href="patients?action=edit&id=${p.id}" class="btn btn-info">Edit</a>
+                                        <a href="javascript:void(0)" onclick="confirmDelete(${p.id})"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             <c:if test="${empty patients}">
                                 <tr>
-                                    <td colspan="5" style="text-align: center; color: #999;">No patient records found.
-                                    </td>
+                                    <td colspan="6" style="text-align: center; color: #999;">No patients found.</td>
                                 </tr>
                             </c:if>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <script>
+                function confirmDelete(id) {
+                    if (confirm("Are you sure you want to delete this patient record?")) {
+                        window.location.href = "patients?action=delete&id=" + id;
+                    }
+                }
+            </script>
         </body>
 
         </html>

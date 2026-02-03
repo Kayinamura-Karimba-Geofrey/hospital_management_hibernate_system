@@ -24,6 +24,19 @@ public class NurseServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            nurseDAO.deleteNurse(id);
+            response.sendRedirect(request.getContextPath() + "/nurses");
+            return;
+        } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Nurses nurse = nurseDAO.getNurseById(id);
+            request.setAttribute("editableNurse", nurse);
+        }
+
         List<Nurses> nurses = nurseDAO.getAllNurses();
         List<Department> departments = departmentDAO.getAllDepartments();
         request.setAttribute("nurses", nurses);
@@ -33,13 +46,23 @@ public class NurseServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String idStr = request.getParameter("id");
         String name = request.getParameter("name");
         int departmentId = Integer.parseInt(request.getParameter("departmentId"));
 
         Department dept = departmentDAO.getDepartmentById(departmentId);
-        Nurses nurse = new Nurses(name, dept);
         
-        nurseDAO.saveNurse(nurse);
+        if (idStr != null && !idStr.isEmpty()) {
+            // Update
+            int id = Integer.parseInt(idStr);
+            Nurses nurse = new Nurses(name, dept);
+            nurse.setId(id);
+            nurseDAO.updateNurse(nurse);
+        } else {
+            // Save
+            Nurses nurse = new Nurses(name, dept);
+            nurseDAO.saveNurse(nurse);
+        }
 
         response.sendRedirect(request.getContextPath() + "/nurses");
     }

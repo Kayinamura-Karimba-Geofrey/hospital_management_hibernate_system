@@ -31,6 +31,19 @@ public class PatientServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            patientsDAO.deletePatient(id);
+            response.sendRedirect(request.getContextPath() + "/patients");
+            return;
+        } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Patients patient = patientsDAO.getPatientById(id);
+            request.setAttribute("editablePatient", patient);
+        }
+
         List<Patients> patients = patientsDAO.getAllPatients();
         List<Doctors> doctors = doctorDAO.getAllDoctors();
         List<Nurses> nurses = nurseDAO.getAllNurses();
@@ -42,6 +55,7 @@ public class PatientServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String idStr = request.getParameter("id");
         String name = request.getParameter("name");
         String disease = request.getParameter("disease");
         int doctorId = Integer.parseInt(request.getParameter("doctorId"));
@@ -49,16 +63,27 @@ public class PatientServlet extends HttpServlet {
 
         Patients patient = new Patients(name, disease);
         
+        // Use a manual session here to fetch relations and save/update
+        // Alternatively, update DAO to handle relations, but this is simpler for now
         Transaction tx = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
+            
             Doctors doctor = session.get(Doctors.class, doctorId);
             Nurses nurse = session.get(Nurses.class, nurseId);
+            
             patient.setDoctor(doctor);
             patient.setNurse(nurse);
-            session.persist(patient);
+
+            if (idStr != null && !idStr.isEmpty()) {
+                patient.setId(Integer.parseInt(idStr));
+                session.merge(patient);
+            } else {
+                session.persist(patient);
+            }
+            
             tx.commit();
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {

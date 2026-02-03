@@ -11,6 +11,8 @@
                     --secondary: #6a1b9a;
                     --white: #ffffff;
                     --gray: #f8f9fa;
+                    --danger: #c62828;
+                    --info: #0277bd;
                 }
 
                 body {
@@ -96,10 +98,22 @@
                     font-weight: bold;
                     text-decoration: none;
                     display: inline-block;
+                    font-size: 0.9rem;
                 }
 
                 .btn-primary {
                     background: var(--primary);
+                    color: white;
+                }
+
+                .btn-info {
+                    background: var(--info);
+                    color: white;
+                    margin-right: 5px;
+                }
+
+                .btn-danger {
+                    background: var(--danger);
                     color: white;
                 }
 
@@ -139,27 +153,37 @@
                 <h2>Doctor Management</h2>
 
                 <div class="card">
-                    <h3>Add New Doctor</h3>
+                    <h3>${editableDoc != null ? 'Edit' : 'Add New'} Doctor</h3>
                     <form action="doctors" method="post"
                         style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end;">
+                        <input type="hidden" name="id" value="${editableDoc.id}">
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" name="name" required placeholder="Dr. John Doe">
+                            <input type="text" name="name" required placeholder="Dr. John Doe"
+                                value="${editableDoc.name}">
                         </div>
                         <div class="form-group">
                             <label>Specialisation</label>
-                            <input type="text" name="specialisation" required placeholder="e.g. Neurology">
+                            <input type="text" name="specialisation" required placeholder="e.g. Neurology"
+                                value="${editableDoc.specialisation}">
                         </div>
                         <div class="form-group">
                             <label>Department</label>
                             <select name="departmentId" required>
-                                <option value="" disabled selected>Select Dept</option>
+                                <option value="" disabled>Select Dept</option>
                                 <c:forEach var="dept" items="${departments}">
-                                    <option value="${dept.id}">${dept.name}</option>
+                                    <option value="${dept.id}" ${doc.department.id==dept.id || (editableDoc !=null &&
+                                        editableDoc.department.id==dept.id) ? 'selected' : '' }>${dept.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">Add Doctor</button>
+                        <button type="submit" class="btn btn-primary" style="height: 45px;">
+                            ${editableDoc != null ? 'Update' : 'Add'} Doctor
+                        </button>
+                        <c:if test="${editableDoc != null}">
+                            <a href="doctors" class="btn"
+                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
+                        </c:if>
                     </form>
                 </div>
 
@@ -172,6 +196,7 @@
                                 <th>Name</th>
                                 <th>Specialisation</th>
                                 <th>Department</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,17 +206,30 @@
                                     <td>${doc.name}</td>
                                     <td>${doc.specialisation}</td>
                                     <td>${doc.department.name}</td>
+                                    <td>
+                                        <a href="doctors?action=edit&id=${doc.id}" class="btn btn-info">Edit</a>
+                                        <a href="javascript:void(0)" onclick="confirmDelete(${doc.id})"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             <c:if test="${empty doctors}">
                                 <tr>
-                                    <td colspan="4" style="text-align: center; color: #999;">No doctors found.</td>
+                                    <td colspan="5" style="text-align: center; color: #999;">No doctors found.</td>
                                 </tr>
                             </c:if>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <script>
+                function confirmDelete(id) {
+                    if (confirm("Are you sure you want to delete this doctor?")) {
+                        window.location.href = "doctors?action=delete&id=" + id;
+                    }
+                }
+            </script>
         </body>
 
         </html>
