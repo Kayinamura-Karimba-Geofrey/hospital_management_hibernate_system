@@ -49,8 +49,11 @@ public class PatientServlet extends HttpServlet {
 
         Patients patient = new Patients(name, disease);
         
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+        Transaction tx = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
             Doctors doctor = session.get(Doctors.class, doctorId);
             Nurses nurse = session.get(Nurses.class, nurseId);
             patient.setDoctor(doctor);
@@ -58,7 +61,14 @@ public class PatientServlet extends HttpServlet {
             session.persist(patient);
             tx.commit();
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
             e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
 
         response.sendRedirect(request.getContextPath() + "/patients");

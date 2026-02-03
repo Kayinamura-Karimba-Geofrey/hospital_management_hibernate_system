@@ -129,7 +129,7 @@
                 <div class="sidebar-nav">
                     <a href="${pageContext.request.contextPath}/index.jsp">🏠 Dashboard</a>
                     <a href="${pageContext.request.contextPath}/departments">🏥 Departments</a>
-                    <a href="${pageContext.contextPath}/doctors">👨‍⚕️ Doctors</a>
+                    <a href="${pageContext.request.contextPath}/doctors">👨‍⚕️ Doctors</a>
                     <a href="${pageContext.request.contextPath}/nurses">👩‍⚕️ Nurses</a>
                     <a href="${pageContext.request.contextPath}/patients">🚑 Patients</a>
                     <a href="${pageContext.request.contextPath}/appointments">📅 Appointments</a>
