@@ -12,7 +12,10 @@ public class Nurses {
     private int id;
 
     private String name;
-    private String department;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
 
     @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
@@ -25,12 +28,10 @@ public class Nurses {
 
     public Nurses() {}
 
-
-    public Nurses(String name, String department) {
+    public Nurses(String name, Department department) {
         this.name = name;
         this.department = department;
     }
-
 
     public int getId() {
         return id;
@@ -48,11 +49,11 @@ public class Nurses {
         this.name = name;
     }
 
-    public String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 

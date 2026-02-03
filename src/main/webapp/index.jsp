@@ -3,90 +3,188 @@
     <html>
 
     <head>
-        <title>Hospital Management System</title>
+        <title>Dashboard - Hospital Management System</title>
         <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: #f0f2f5;
-                margin: 0;
-                padding: 0;
+            :root {
+                --primary: #4a148c;
+                --secondary: #6a1b9a;
+                --light: #f3e5f5;
+                --dark: #311b92;
+                --accent: #ff4081;
+                --white: #ffffff;
+                --gray: #f8f9fa;
             }
 
-            .navbar {
-                background: #4a148c;
-                color: white;
-                padding: 1rem 2rem;
+            body {
+                font-family: 'Segoe UI', sans-serif;
+                margin: 0;
+                background: var(--gray);
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .sidebar {
+                width: 250px;
+                background: var(--primary);
+                color: var(--white);
+                padding: 20px 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-header {
+                padding: 0 20px 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 1.5rem;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .sidebar-nav {
+                margin-top: 20px;
+            }
+
+            .sidebar-nav a {
+                display: block;
+                padding: 15px 25px;
+                color: rgba(255, 255, 255, 0.8);
+                text-decoration: none;
+                transition: all 0.3s;
+            }
+
+            .sidebar-nav a:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--white);
+                padding-left: 35px;
+            }
+
+            .main-content {
+                flex-grow: 1;
+                padding: 40px;
+            }
+
+            .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                margin-bottom: 40px;
             }
 
-            .navbar a {
-                color: white;
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .stat-card {
+                background: var(--white);
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                text-align: center;
+                transition: transform 0.3s;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .stat-card h3 {
+                color: #666;
+                font-size: 0.9rem;
+                margin-top: 0;
+            }
+
+            .stat-card .value {
+                font-size: 2rem;
+                font-weight: bold;
+                color: var(--primary);
+            }
+
+            .action-btns {
+                margin-top: 40px;
+                display: flex;
+                gap: 15px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                border-radius: 8px;
                 text-decoration: none;
-                margin-left: 1rem;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            .btn-primary {
+                background: var(--primary);
+                color: white;
+            }
+
+            .btn-secondary {
+                background: var(--secondary);
+                color: white;
             }
 
             .hero {
-                background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-                background-size: cover;
-                height: 400px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
                 color: white;
-                text-align: center;
+                padding: 60px;
+                border-radius: 20px;
+                margin-bottom: 40px;
             }
 
             .hero h1 {
-                font-size: 3rem;
-                margin-bottom: 0.5rem;
+                margin: 0;
+                font-size: 2.5rem;
             }
 
-            .features {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-                padding: 4rem 2rem;
-                max-width: 1200px;
-                margin: 0 auto;
-            }
-
-            .card {
-                background: white;
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                text-align: center;
+            .hero p {
+                opacity: 0.9;
+                font-size: 1.1rem;
             }
         </style>
     </head>
 
     <body>
-        <div class="navbar">
-            <div class="logo">HMS Pro</div>
-            <div>
-                <a href="index.jsp">Home</a>
-                <a href="register">Register</a>
+        <div class="sidebar">
+            <div class="sidebar-header">HMS Admin</div>
+            <div class="sidebar-nav">
+                <a href="${pageContext.request.contextPath}/index.jsp">🏠 Dashboard</a>
+                <a href="${pageContext.request.contextPath}/departments">🏥 Departments</a>
+                <a href="${pageContext.request.contextPath}/doctors">👨‍⚕️ Doctors</a>
+                <a href="${pageContext.request.contextPath}/nurses">👩‍⚕️ Nurses</a>
+                <a href="${pageContext.request.contextPath}/patients">🚑 Patients</a>
+                <a href="${pageContext.request.contextPath}/appointments">📅 Appointments</a>
+                <a href="${pageContext.request.contextPath}/register">🔐 Registration</a>
             </div>
         </div>
-        <div class="hero">
-            <h1>Welcome to Hospital Management</h1>
-            <p>Advanced healthcare solutions for modern hospitals.</p>
-        </div>
-        <div class="features">
-            <div class="card">
-                <h3>Doctors</h3>
-                <p>Manage medical professionals across 5 departments.</p>
+        <div class="main-content">
+            <div class="hero">
+                <h1>Welcome back, Admin</h1>
+                <p>Monitor and manage hospital operations from one central place.</p>
             </div>
-            <div class="card">
-                <h3>Patients</h3>
-                <p>Track patient records and medical history seamlessly.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <div class="value">Ready</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Doctors</h3>
+                    <div class="value">Active</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Nurses</h3>
+                    <div class="value">On-Duty</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Appointments</h3>
+                    <div class="value">Scheduled</div>
+                </div>
             </div>
-            <div class="card">
-                <h3>Appointments</h3>
-                <p>Integrated scheduling system for patients and doctors.</p>
+
+            <div class="action-btns">
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Add New User</a>
+                <a href="${pageContext.request.contextPath}/appointments" class="btn btn-secondary">Manage Schedule</a>
             </div>
         </div>
     </body>

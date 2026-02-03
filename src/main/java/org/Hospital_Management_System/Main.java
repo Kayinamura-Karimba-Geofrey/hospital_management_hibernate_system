@@ -13,8 +13,11 @@ public class Main {
         NursesServices nursesServices = new NursesServices();
         AppointmentsService appointmentsService = new AppointmentsService();
 
+        // Create a default department
+        Department generalDept = new Department("General", "Wing A");
 
         Doctors d1 = new Doctors("Mr. John", "Cardiologist");
+        d1.setDepartment(generalDept);
         doctorsService.saveDoctors(d1);
 
 
@@ -23,7 +26,7 @@ public class Main {
         patientsService.createPatient(p1);
 
 
-        Nurses n1 = new Nurses("Jane", "Surgery");
+        Nurses n1 = new Nurses("Jane", generalDept);
         nursesServices.createNurses(n1);
 
 

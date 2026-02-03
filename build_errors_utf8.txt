@@ -1,0 +1,127 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< org.javaproject:School-Management >------------------
+[INFO] Building School-Management 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ School-Management ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ School-Management ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 26 source files with javac [debug target 21] to target\classes
+[INFO] Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[17,13] cannot find symbol
+  symbol:   class DepartmentDAO
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/org/Hospital_Management_System/Main.java:[26,40] incompatible types: java.lang.String cannot be converted to com.example.Hospital_Management_System.entity.Department
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[21,29] cannot find symbol
+  symbol:   class DepartmentDAO
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[35,14] cannot find symbol
+  symbol:   class Session
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[35,32] cannot find symbol
+  symbol:   variable HibernateUtil
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[36,13] cannot find symbol
+  symbol:   class Transaction
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[41,17] cannot find symbol
+  symbol:   class Department
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[41,47] cannot find symbol
+  symbol:   class Department
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[42,17] cannot find symbol
+  symbol:   class Doctors
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[42,38] cannot find symbol
+  symbol:   class Doctors
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[47,17] cannot find symbol
+  symbol:   class Department
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[47,47] cannot find symbol
+  symbol:   class Department
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[48,17] cannot find symbol
+  symbol:   class Nurses
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[48,36] cannot find symbol
+  symbol:   class Nurses
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[51,17] cannot find symbol
+  symbol:   class Patients
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[51,40] cannot find symbol
+  symbol:   class Patients
+  location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/UserDAO.java:[29,63] incompatible types: java.lang.String cannot be converted to com.example.Hospital_Management_System.entity.Department
+[INFO] 17 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.614 s
+[INFO] Finished at: 2026-02-03T07:37:03+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project School-Management: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[17,13] cannot find symbol
+[ERROR]   symbol:   class DepartmentDAO
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/org/Hospital_Management_System/Main.java:[26,40] incompatible types: java.lang.String cannot be converted to com.example.Hospital_Management_System.entity.Department
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[21,29] cannot find symbol
+[ERROR]   symbol:   class DepartmentDAO
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[35,14] cannot find symbol
+[ERROR]   symbol:   class Session
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[35,32] cannot find symbol
+[ERROR]   symbol:   variable HibernateUtil
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[36,13] cannot find symbol
+[ERROR]   symbol:   class Transaction
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[41,17] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[41,47] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[42,17] cannot find symbol
+[ERROR]   symbol:   class Doctors
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[42,38] cannot find symbol
+[ERROR]   symbol:   class Doctors
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[47,17] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[47,47] cannot find symbol
+[ERROR]   symbol:   class Department
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[48,17] cannot find symbol
+[ERROR]   symbol:   class Nurses
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[48,36] cannot find symbol
+[ERROR]   symbol:   class Nurses
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[51,17] cannot find symbol
+[ERROR]   symbol:   class Patients
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/RegistrationServlet.java:[51,40] cannot find symbol
+[ERROR]   symbol:   class Patients
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.RegistrationServlet
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/UserDAO.java:[29,63] incompatible types: java.lang.String cannot be converted to com.example.Hospital_Management_System.entity.Department
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
