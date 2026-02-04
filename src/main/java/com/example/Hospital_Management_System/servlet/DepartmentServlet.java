@@ -45,13 +45,12 @@ public class DepartmentServlet extends HttpServlet {
         String location = request.getParameter("location");
 
         if (idStr != null && !idStr.isEmpty()) {
-            // Update existing
             int id = Integer.parseInt(idStr);
             Department department = new Department(name, location);
             department.setId(id);
             departmentDAO.updateDepartment(department);
         } else {
-            // Save new
+
             Department department = new Department(name, location);
             departmentDAO.saveDepartment(department);
         }

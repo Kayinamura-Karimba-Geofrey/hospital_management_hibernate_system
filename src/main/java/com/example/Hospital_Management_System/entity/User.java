@@ -23,7 +23,7 @@ public class User {
     private String fullName;
 
     @Column(nullable = false)
-    private String role; // PATIENT, DOCTOR, NURSE
+    private String role;
 
     public User() {}
 
@@ -35,7 +35,7 @@ public class User {
         this.role = role;
     }
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
