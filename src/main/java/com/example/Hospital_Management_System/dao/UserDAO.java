@@ -29,4 +29,31 @@ public class UserDAO {
             }
         }
     }
+
+    public User validateUser(String username, String password) {
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            
+            user = session.createQuery("FROM User WHERE username = :username AND password = :password", User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return user;
+    }
 }

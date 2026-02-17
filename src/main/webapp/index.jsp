@@ -155,11 +155,26 @@
                 <a href="${pageContext.request.contextPath}/patients">🚑 Patients</a>
                 <a href="${pageContext.request.contextPath}/appointments">📅 Appointments</a>
                 <a href="${pageContext.request.contextPath}/register">🔐 Registration</a>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <a href="${pageContext.request.contextPath}/logout" style="color: #ff8a80;">🚪 Logout</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/login">🔑 Login</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
         <div class="main-content">
             <div class="hero">
-                <h1>Welcome back, Admin</h1>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <h1>Welcome back, ${sessionScope.user.fullName}</h1>
+                    </c:when>
+                    <c:otherwise>
+                        <h1>Hospital Management System</h1>
+                    </c:otherwise>
+                </c:choose>
                 <p>Monitor and manage hospital operations from one central place.</p>
             </div>
 

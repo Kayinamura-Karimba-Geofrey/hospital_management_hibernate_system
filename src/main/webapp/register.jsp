@@ -140,6 +140,10 @@
                     </div>
                     <button type="submit">Complete Registration</button>
                     <p style="text-align: center; margin-top: 1rem;">
+                        Already have an account? <a href="${pageContext.request.contextPath}/login"
+                            style="color: #6a1b9a; text-decoration: none; font-weight: bold;">Login here</a>
+                    </p>
+                    <p style="text-align: center; margin-top: 0.5rem;">
                         <a href="${pageContext.request.contextPath}/index.jsp"
                             style="color: #6a1b9a; text-decoration: none;">Back to Home</a>
                     </p>
