@@ -147,6 +147,9 @@
                     <a href="${pageContext.request.contextPath}/nurses">👩‍⚕️ Nurses</a>
                     <a href="${pageContext.request.contextPath}/patients">🚑 Patients</a>
                     <a href="${pageContext.request.contextPath}/appointments">📅 Appointments</a>
+                    <a href="${pageContext.request.contextPath}/logout"
+                        style="color: #ff8a80; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">🚪
+                        Logout</a>
                 </div>
             </div>
             <div class="main-content">
