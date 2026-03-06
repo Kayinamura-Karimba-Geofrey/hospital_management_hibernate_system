@@ -46,7 +46,7 @@ public class NursesServices {
             }
         }
     }
-    //READ ALL
+
     public List<Nurses> getAllNurses(){
         Session session= null;
         try{

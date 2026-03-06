@@ -51,7 +51,7 @@ public class PatientsService {
         return getPatient(id);
     }
 
-    //READ ALL
+
     public List<Patients> getAllPatients(){
         Session session= null;
         try{
