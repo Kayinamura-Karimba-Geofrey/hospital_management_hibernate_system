@@ -14,7 +14,7 @@ public class AuthFilter implements Filter {
 
     static {
         roleAccess.put("ADMIN", new String[]{"*"});
-        roleAccess.put("DOCTOR", new String[]{"dashboard.jsp", "doctors", "patients", "clinical", "surgery", "appointments", "facility"});
+        roleAccess.put("DOCTOR", new String[]{"dashboard.jsp", "doctors", "patients", "clinical", "surgery", "appointments", "facility", "analytics"});
         roleAccess.put("NURSE", new String[]{"dashboard.jsp", "nurses", "patients", "clinical", "facility", "appointments"});
         roleAccess.put("ACCOUNTANT", new String[]{"dashboard.jsp", "financial", "inventory"});
         roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard.jsp"});
@@ -33,6 +33,7 @@ public class AuthFilter implements Filter {
         boolean isPublicPage = path.equals("/") ||
                                path.endsWith("index.jsp") ||
                                path.endsWith("login") || 
+                               path.endsWith("logout") || 
                                path.endsWith("register") || 
                                path.endsWith("registration-success.jsp") || 
                                path.endsWith("login.jsp") ||
