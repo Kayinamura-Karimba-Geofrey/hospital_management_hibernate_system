@@ -30,7 +30,7 @@ public class DoctorsService {
             }
         }
     }
-    //READ
+
     public Doctors getDoctors(int id){
         Session session= null;
         try{
@@ -49,7 +49,7 @@ public class DoctorsService {
     public Doctors getDoctorById(int id){
         return getDoctors(id);
     }
-    //READ ALL
+
     public List<Doctors>getAllDoctors(){
         Session session= null;
         try{

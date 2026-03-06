@@ -46,7 +46,7 @@ public class AppointmentsService {
             }
         }
     }
-    //READ ALL
+
     public List<Appointments> getAllAppointments(){
         Session session= null;
         try{
