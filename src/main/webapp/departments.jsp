@@ -12,7 +12,8 @@
             <div class="sidebar">
                 <div class="sidebar-header">HMSystem</div>
                 <div class="sidebar-nav">
-                    <a href="${pageContext.request.contextPath}/index.jsp"><span>🏠</span> <span>Dashboard</span></a>
+                    <a href="${pageContext.request.contextPath}/dashboard.jsp"><span>🏠</span>
+                        <span>Dashboard</span></a>
                     <a href="${pageContext.request.contextPath}/departments" class="active"><span>🏥</span>
                         <span>Departments</span></a>
                     <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>

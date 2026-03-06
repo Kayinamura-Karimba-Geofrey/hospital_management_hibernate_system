@@ -27,7 +27,9 @@ public class AuthFilter implements Filter {
 
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         
-        boolean isPublicPage = path.equals("/login") || 
+        boolean isPublicPage = path.equals("/") ||
+                               path.equals("/index.jsp") ||
+                               path.equals("/login") || 
                                path.equals("/register") || 
                                path.equals("/registration-success.jsp") || 
                                path.equals("/login.jsp") ||
