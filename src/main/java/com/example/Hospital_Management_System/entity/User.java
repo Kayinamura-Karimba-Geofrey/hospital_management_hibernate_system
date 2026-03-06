@@ -3,7 +3,7 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "app_users")
 public class User {
 
     @Id

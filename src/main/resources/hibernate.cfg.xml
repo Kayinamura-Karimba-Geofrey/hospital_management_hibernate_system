@@ -20,7 +20,7 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Automatically create or update tables -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- Entity mappings -->
         <mapping class="com.example.Hospital_Management_System.entity.Doctors"/>
