@@ -1,50 +1,33 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <title>Registration Successful</title>
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                color: #333;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - HMSystem</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+</head>
 
-            .container {
-                background: rgba(255, 255, 255, 0.9);
-                padding: 2rem;
-                border-radius: 15px;
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-                text-align: center;
-                max-width: 400px;
-            }
+<body>
+    <div class="auth-container">
+        <div class="auth-card" style="text-align: center;">
+            <div class="auth-header">
+                <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
+                <h1 style="color: var(--success);">Registration Successful!</h1>
+                <p>Your account has been created successfully.</p>
+            </div>
 
-            h2 {
-                color: #2e7d32;
-            }
+            <div style="margin-top: 30px;">
+                <a href="${pageContext.request.contextPath}/login" class="btn btn-primary"
+                    style="display: inline-block; text-decoration: none;">Go to Login</a>
+            </div>
 
-            a {
-                display: inline-block;
-                margin-top: 1rem;
-                text-decoration: none;
-                color: #6a1b9a;
-                font-weight: bold;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="container">
-            <h2>Registration Successful!</h2>
-            <p>Your account has been created successfully.</p>
-            <a href="index.jsp">Go to Home</a>
+            <div style="margin-top: 20px;">
+                <a href="${pageContext.request.contextPath}/index.jsp"
+                    style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">🏠 Back to Home</a>
+            </div>
         </div>
-    </body>
+    </div>
+</body>
 
-    </html>
+</html>

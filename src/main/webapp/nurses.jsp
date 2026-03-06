@@ -1,231 +1,107 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <!DOCTYPE html>
-        <html>
+<!DOCTYPE html>
+<html>
 
-        <head>
-            <title>Nurses - Hospital Management System</title>
-            <style>
-                :root {
-                    --primary: #4a148c;
-                    --secondary: #6a1b9a;
-                    --white: #ffffff;
-                    --gray: #f8f9fa;
-                    --danger: #c62828;
-                    --info: #0277bd;
-                }
+<head>
+    <title>Nurses - HMSystem</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+</head>
 
-                body {
-                    font-family: 'Segoe UI', sans-serif;
-                    margin: 0;
-                    background: var(--gray);
-                    display: flex;
-                }
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">HMSystem</div>
+        <div class="sidebar-nav">
+            <a href="${pageContext.request.contextPath}/index.jsp"><span>🏠</span> <span>Dashboard</span></a>
+            <a href="${pageContext.request.contextPath}/departments"><span>🏥</span> <span>Departments</span></a>
+            <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
+            <a href="${pageContext.request.contextPath}/nurses" class="active"><span>👩‍⚕️</span>
+                <span>Nurses</span></a>
+            <a href="${pageContext.request.contextPath}/patients"><span>🚑</span> <span>Patients</span></a>
+            <a href="${pageContext.request.contextPath}/appointments"><span>📅</span> <span>Appointments</span></a>
+            <a href="${pageContext.request.contextPath}/register"><span>🔐</span> <span>Registration</span></a>
+            <a href="${pageContext.request.contextPath}/logout"
+                style="color: var(--danger); margin-top: auto; border-top: 1px solid var(--border);"><span>🚪</span>
+                <span>Logout</span></a>
+        </div>
+    </div>
+    <div class="main-content">
+        <h2>Nurse Management</h2>
 
-                .sidebar {
-                    width: 250px;
-                    background: var(--primary);
-                    color: var(--white);
-                    min-height: 100vh;
-                    padding: 20px 0;
-                    flex-shrink: 0;
-                }
-
-                .sidebar-header {
-                    padding: 0 20px 20px;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    text-align: center;
-                }
-
-                .sidebar-nav a {
-                    display: block;
-                    padding: 15px 25px;
-                    color: rgba(255, 255, 255, 0.8);
-                    text-decoration: none;
-                    transition: all 0.3s;
-                }
-
-                .sidebar-nav a:hover {
-                    background: rgba(255, 255, 255, 0.1);
-                    color: var(--white);
-                    padding-left: 35px;
-                }
-
-                .main-content {
-                    flex-grow: 1;
-                    padding: 40px;
-                }
-
-                .card {
-                    background: var(--white);
-                    padding: 25px;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-                    margin-bottom: 30px;
-                }
-
-                h2 {
-                    color: var(--primary);
-                    margin-top: 0;
-                }
-
-                .form-group {
-                    margin-bottom: 1rem;
-                }
-
-                label {
-                    display: block;
-                    margin-bottom: 0.5rem;
-                    font-weight: bold;
-                }
-
-                input,
-                select {
-                    width: 100%;
-                    padding: 0.8rem;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                    box-sizing: border-box;
-                }
-
-                .btn {
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    border: none;
-                    font-weight: bold;
-                    text-decoration: none;
-                    display: inline-block;
-                    font-size: 0.9rem;
-                }
-
-                .btn-primary {
-                    background: var(--primary);
-                    color: white;
-                }
-
-                .btn-info {
-                    background: var(--info);
-                    color: white;
-                    margin-right: 5px;
-                }
-
-                .btn-danger {
-                    background: var(--danger);
-                    color: white;
-                }
-
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 20px;
-                }
-
-                th,
-                td {
-                    padding: 12px;
-                    text-align: left;
-                    border-bottom: 1px solid #eee;
-                }
-
-                th {
-                    background: #fdfafd;
-                    color: var(--primary);
-                }
-            </style>
-        </head>
-
-        <body>
-            <div class="sidebar">
-                <div class="sidebar-header">HMS Admin</div>
-                <div class="sidebar-nav">
-                    <a href="${pageContext.request.contextPath}/index.jsp">🏠 Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/departments">🏥 Departments</a>
-                    <a href="${pageContext.request.contextPath}/doctors">👨‍⚕️ Doctors</a>
-                    <a href="${pageContext.request.contextPath}/nurses">👩‍⚕️ Nurses</a>
-                    <a href="${pageContext.request.contextPath}/patients">🚑 Patients</a>
-                    <a href="${pageContext.request.contextPath}/appointments">📅 Appointments</a>
-                    <a href="${pageContext.request.contextPath}/logout"
-                        style="color: #ff8a80; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">🚪
-                        Logout</a>
+        <div class="card">
+            <h3>${editableNurse != null ? 'Edit' : 'Add New'} Nurse</h3>
+            <form action="nurses" method="post"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
+                <input type="hidden" name="id" value="${editableNurse.id}">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="Nurse Jane Smith"
+                        value="${editableNurse.name}">
                 </div>
-            </div>
-            <div class="main-content">
-                <h2>Nurse Management</h2>
-
-                <div class="card">
-                    <h3>${editableNurse != null ? 'Edit' : 'Add New'} Nurse</h3>
-                    <form action="nurses" method="post"
-                        style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; align-items: end;">
-                        <input type="hidden" name="id" value="${editableNurse.id}">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" name="name" required placeholder="Nurse Jane Smith"
-                                value="${editableNurse.name}">
-                        </div>
-                        <div class="form-group">
-                            <label>Department</label>
-                            <select name="departmentId" required>
-                                <option value="" disabled>Select Dept</option>
-                                <c:forEach var="dept" items="${departments}">
-                                    <option value="${dept.id}" ${(editableNurse !=null &&
-                                        editableNurse.department.id==dept.id) ? 'selected' : '' }>${dept.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="height: 45px;">
-                            ${editableNurse != null ? 'Update' : 'Add'} Nurse
-                        </button>
-                        <c:if test="${editableNurse != null}">
-                            <a href="nurses" class="btn"
-                                style="background: #ccc; height: 45px; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">Cancel</a>
-                        </c:if>
-                    </form>
+                <div class="form-group">
+                    <label>Department</label>
+                    <select name="departmentId" required>
+                        <option value="" disabled>Select Dept</option>
+                        <c:forEach var="dept" items="${departments}">
+                            <option value="${dept.id}" ${(editableNurse !=null && editableNurse.department.id==dept.id)
+                                ? 'selected' : '' }>${dept.name}</option>
+                        </c:forEach>
+                    </select>
                 </div>
+                <div class="form-actions" style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" style="flex-grow: 1;">
+                        ${editableNurse != null ? 'Update' : 'Add'} Nurse
+                    </button>
+                    <c:if test="${editableNurse != null}">
+                        <a href="nurses" class="btn btn-secondary">Cancel</a>
+                    </c:if>
+                </div>
+            </form>
+        </div>
 
-                <div class="card">
-                    <h3>Nurses on Duty</h3>
-                    <table>
-                        <thead>
+        <div class="card">
+            <h3>Nurses on Duty</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="nurse" items="${nurses}">
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Department</th>
-                                <th>Actions</th>
+                                <td>${nurse.id}</td>
+                                <td>${nurse.name}</td>
+                                <td>${nurse.department.name}</td>
+                                <td style="display: flex; gap: 10px;">
+                                    <a href="nurses?action=edit&id=${nurse.id}" class="btn btn-info btn-sm">Edit</a>
+                                    <a href="javascript:void(0)" onclick="confirmDelete('${nurse.id}')"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="nurse" items="${nurses}">
-                                <tr>
-                                    <td>${nurse.id}</td>
-                                    <td>${nurse.name}</td>
-                                    <td>${nurse.department.name}</td>
-                                    <td>
-                                        <a href="nurses?action=edit&id=${nurse.id}" class="btn btn-info">Edit</a>
-                                        <a href="javascript:void(0)" onclick="confirmDelete(${nurse.id})"
-                                            class="btn btn-danger">Delete</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                            <c:if test="${empty nurses}">
-                                <tr>
-                                    <td colspan="4" style="text-align: center; color: #999;">No nurses found.</td>
-                                </tr>
-                            </c:if>
-                        </tbody>
-                    </table>
-                </div>
+                        </c:forEach>
+                        <c:if test="${empty nurses}">
+                            <tr>
+                                <td colspan="4"
+                                    style="text-align: center; color: var(--text-secondary); padding: 40px;">No nurses
+                                    found.</td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
             </div>
+        </div>
+    </div>
 
-            <script>
-                function confirmDelete(id) {
-                    if (confirm("Are you sure you want to delete this nurse?")) {
-                        window.location.href = "nurses?action=delete&id=" + id;
-                    }
-                }
-            </script>
-        </body>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this nurse?")) {
+                window.location.href = "nurses?action=delete&id=" + id;
+            }
+        }
+    </script>
+</body>
 
-        </html>
+</html>
