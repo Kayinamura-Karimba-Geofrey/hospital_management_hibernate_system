@@ -56,4 +56,16 @@ public class UserDAO {
         }
         return user;
     }
+
+    public boolean existsByUsername(String username) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery("SELECT count(u) FROM User u WHERE u.username = :username", Long.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+            return count != null && count > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -35,33 +35,52 @@ public class RegistrationServlet extends HttpServlet {
 
         User user = new User(username, password, email, fullName, role);
         
-        // Handle specific role logic
+        // Check if username already exists
+        if (userDAO.existsByUsername(username)) {
+            request.setAttribute("error", "Username already exists. Please choose another.");
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.persist(user);
 
             if ("DOCTOR".equalsIgnoreCase(role)) {
-                int deptId = Integer.parseInt(request.getParameter("departmentId"));
-                Department dept = session.get(Department.class, deptId);
-                Doctors doctor = new Doctors(fullName, "General");
-                doctor.setDepartment(dept);
-                session.persist(doctor);
+                String deptIdStr = request.getParameter("departmentId");
+                if (deptIdStr != null) {
+                    int deptId = Integer.parseInt(deptIdStr);
+                    Department dept = session.get(Department.class, deptId);
+                    Doctors doctor = new Doctors(fullName, "General");
+                    doctor.setDepartment(dept);
+                    session.persist(doctor);
+                }
             } else if ("NURSE".equalsIgnoreCase(role)) {
-                int deptId = Integer.parseInt(request.getParameter("departmentId"));
-                Department dept = session.get(Department.class, deptId);
-                Nurses nurse = new Nurses(fullName, dept);
-                session.persist(nurse);
+                String deptIdStr = request.getParameter("departmentId");
+                if (deptIdStr != null) {
+                    int deptId = Integer.parseInt(deptIdStr);
+                    Department dept = session.get(Department.class, deptId);
+                    Nurses nurse = new Nurses(fullName, dept);
+                    session.persist(nurse);
+                }
             } else if ("PATIENT".equalsIgnoreCase(role)) {
                 Patients patient = new Patients(fullName, "Consultation");
                 session.persist(patient);
             }
 
             tx.commit();
+            response.sendRedirect(request.getContextPath() + "/registration-success.jsp");
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
             e.printStackTrace();
+            request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
-
-        response.sendRedirect(request.getContextPath() + "/registration-success.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

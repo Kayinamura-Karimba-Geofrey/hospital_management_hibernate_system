@@ -23,23 +23,28 @@ public class AuthFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
 
-        String loginURI = req.getContextPath() + "/login";
-        String registerURI = req.getContextPath() + "/register";
-        String successURI = req.getContextPath() + "/registration-success.jsp";
-        
-        boolean loggedIn = session != null && session.getAttribute("user") != null;
-        boolean loginRequest = req.getRequestURI().equals(loginURI);
-        boolean registerRequest = req.getRequestURI().equals(registerURI);
-        boolean successRequest = req.getRequestURI().equals(successURI);
-        boolean isStaticResource = req.getRequestURI().endsWith(".css") || 
-                                   req.getRequestURI().endsWith(".js") || 
-                                   req.getRequestURI().endsWith(".png") || 
-                                   req.getRequestURI().endsWith(".jpg");
+        String path = req.getRequestURI().substring(req.getContextPath().length());
 
-        if (loggedIn || loginRequest || registerRequest || successRequest || isStaticResource) {
+        boolean loggedIn = session != null && session.getAttribute("user") != null;
+        
+        boolean isPublicPage = path.equals("/login") || 
+                               path.equals("/register") || 
+                               path.equals("/registration-success.jsp") || 
+                               path.equals("/login.jsp") ||
+                               path.equals("/register.jsp");
+                               
+        boolean isStaticResource = path.endsWith(".css") || 
+                                   path.endsWith(".js") || 
+                                   path.endsWith(".png") || 
+                                   path.endsWith(".jpg") ||
+                                   path.endsWith(".svg") ||
+                                   path.endsWith(".ico") ||
+                                   path.endsWith(".woff2");
+
+        if (loggedIn || isPublicPage || isStaticResource) {
             chain.doFilter(request, response);
         } else {
-            res.sendRedirect(loginURI);
+            res.sendRedirect(req.getContextPath() + "/login");
         }
     }
 
