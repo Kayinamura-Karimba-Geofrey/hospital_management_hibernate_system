@@ -44,7 +44,9 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
             session.persist(user);
 
@@ -80,6 +82,10 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
             request.setAttribute("departments", departmentDAO.getAllDepartments());
             request.getRequestDispatcher("register.jsp").forward(request, response);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
