@@ -29,6 +29,9 @@
         <mapping class="com.example.Hospital_Management_System.entity.Appointments"/>
         <mapping class="com.example.Hospital_Management_System.entity.User"/>
         <mapping class="com.example.Hospital_Management_System.entity.Department"/>
+        <mapping class="com.example.Hospital_Management_System.entity.PatientRecord"/>
+        <mapping class="com.example.Hospital_Management_System.entity.Prescription"/>
+        <mapping class="com.example.Hospital_Management_System.entity.LabTest"/>
 
     </session-factory>
 </hibernate-configuration>

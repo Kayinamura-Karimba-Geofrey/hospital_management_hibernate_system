@@ -18,7 +18,9 @@
                         <span>Departments</span></a>
                     <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
                     <a href="${pageContext.request.contextPath}/nurses"><span>👩‍⚕️</span> <span>Nurses</span></a>
-                    <a href="${pageContext.request.contextPath}/patients" class="active"><span>🚑</span>
+                    <a href="${pageContext.request.contextPath}/clinical"><span>📂</span> <span>Clinical
+                            Records</span></a>
+                    <a href="${pageContext.request.contextPath}/patients" class="active"><span>👤</span>
                         <span>Patients</span></a>
                     <a href="${pageContext.request.contextPath}/appointments"><span>📅</span>
                         <span>Appointments</span></a>
