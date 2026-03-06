@@ -34,6 +34,7 @@ public class AuthFilter implements Filter {
                                path.endsWith("index.jsp") ||
                                path.endsWith("login") || 
                                path.endsWith("logout") || 
+                               path.endsWith("register") || 
                                path.endsWith("registration-success.jsp") || 
                                path.endsWith("login.jsp") ||
                                path.endsWith("register.jsp");
