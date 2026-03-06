@@ -32,6 +32,9 @@
         <mapping class="com.example.Hospital_Management_System.entity.PatientRecord"/>
         <mapping class="com.example.Hospital_Management_System.entity.Prescription"/>
         <mapping class="com.example.Hospital_Management_System.entity.LabTest"/>
+        <mapping class="com.example.Hospital_Management_System.entity.Invoice"/>
+        <mapping class="com.example.Hospital_Management_System.entity.Insurance"/>
+        <mapping class="com.example.Hospital_Management_System.entity.InventoryItem"/>
 
     </session-factory>
 </hibernate-configuration>

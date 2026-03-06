@@ -18,14 +18,15 @@
                         <span>Departments</span></a>
                     <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
                     <a href="${pageContext.request.contextPath}/nurses"><span>👩‍⚕️</span> <span>Nurses</span></a>
-                    <a href="${pageContext.request.contextPath}/clinical"><span>📂</span> <span>Clinical
-                            Records</span></a>
+                    <a href="${pageContext.request.contextPath}/clinical"><span>📂</span> <span>Clinical Records</span></a>
                     <a href="${pageContext.request.contextPath}/patients"><span>👤</span> <span>Patients</span></a>
+                    <a href="${pageContext.request.contextPath}/financial"><span>💰</span> <span>Billing</span></a>
+                    <a href="${pageContext.request.contextPath}/inventory"><span>📦</span> <span>Inventory</span></a>
                     <a href="${pageContext.request.contextPath}/appointments" class="active"><span>📅</span>
                         <span>Appointments</span></a>
                     <a href="${pageContext.request.contextPath}/register"><span>🔐</span> <span>Registration</span></a>
                     <a href="${pageContext.request.contextPath}/logout"
-                        style="color: var(--danger); margin-top: auto; border-top: 1px solid var(--border);"><span>🚪</span>
+                        class="logout-btn"><span>🚪</span>
                         <span>Logout</span></a>
                 </div>
             </div>
