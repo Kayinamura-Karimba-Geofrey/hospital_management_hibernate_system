@@ -32,6 +32,18 @@ public class RegistrationServlet extends HttpServlet {
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullName");
         String role = request.getParameter("role");
+        User currentUser = (User) request.getSession().getAttribute("user");
+        String currentRole = (String) request.getSession().getAttribute("role");
+
+        // RBAC: Only ADMIN can register STAFF (Doctor, Nurse, Accountant)
+        if (!"PATIENT".equalsIgnoreCase(role)) {
+            if (currentUser == null || !"ADMIN".equalsIgnoreCase(currentRole)) {
+                request.setAttribute("error", "Unauthorized: Only Administrators can register staff members.");
+                request.setAttribute("departments", departmentDAO.getAllDepartments());
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
+            }
+        }
 
         User user = new User(username, password, email, fullName, role);
         

@@ -112,53 +112,8 @@
         </head>
 
         <body>
-            <div class="sidebar">
-                <div class="sidebar-header">HMSystem</div>
-                <div class="sidebar-nav">
-                    <a href="${pageContext.request.contextPath}/dashboard.jsp"><span>🏠</span>
-                        <span>Dashboard</span></a>
-
-                    <c:if test="${sessionScope.role == 'ADMIN'}">
-                        <a href="${pageContext.request.contextPath}/departments"><span>🏥</span>
-                            <span>Departments</span></a>
-                        <a href="${pageContext.request.contextPath}/register"><span>🔐</span>
-                            <span>Registration</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR'}">
-                        <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
-                        <a href="${pageContext.request.contextPath}/surgery"><span>🔪</span> <span>Surgeries</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'NURSE'}">
-                        <a href="${pageContext.request.contextPath}/nurses"><span>👩‍⚕️</span> <span>Nurses</span></a>
-                    </c:if>
-
-                    <c:if
-                        test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR' || sessionScope.role == 'NURSE'}">
-                        <a href="${pageContext.request.contextPath}/clinical" class="active"><span>📂</span>
-                            <span>Clinical Records</span></a>
-                        <a href="${pageContext.request.contextPath}/patients"><span>👤</span> <span>Patients</span></a>
-                        <a href="${pageContext.request.contextPath}/facility"><span>🏢</span> <span>Facility</span></a>
-                        <a href="${pageContext.request.contextPath}/appointments"><span>📅</span>
-                            <span>Appointments</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'ACCOUNTANT'}">
-                        <a href="${pageContext.request.contextPath}/financial"><span>💰</span> <span>Billing</span></a>
-                        <a href="${pageContext.request.contextPath}/inventory"><span>📦</span>
-                            <span>Inventory</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'PATIENT'}">
-                        <a href="${pageContext.request.contextPath}/patient-portal"><span>👤</span> <span>My
-                                Portal</span></a>
-                    </c:if>
-
-                    <a href="${pageContext.request.contextPath}/logout" class="logout-btn"><span>🚪</span>
-                        <span>Logout</span></a>
-                </div>
-            </div>
+            <jsp:include page="includes/sidebar.jsp" />
+            <script>document.getElementById('nav-clinical').classList.add('active');</script>
 
             <div class="main-content">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
@@ -233,35 +188,38 @@
 
                 <!-- PRESCRIPTIONS TAB -->
                 <div id="prescriptions" class="tab-content">
-                    <div class="card">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3>New Prescription</h3>
+                    <c:if test="${sessionScope.role == 'DOCTOR' || sessionScope.role == 'ADMIN'}">
+                        <div class="card">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3>New Prescription</h3>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/clinical?action=addPrescription"
+                                method="post" class="info-grid"
+                                style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                                <input type="hidden" name="patientId" value="${patient.id}">
+                                <div class="form-group">
+                                    <label>Medication</label>
+                                    <input type="text" name="medicationName" required placeholder="Aspirin">
+                                </div>
+                                <div class="form-group">
+                                    <label>Dosage</label>
+                                    <input type="text" name="dosage" required placeholder="500mg">
+                                </div>
+                                <div class="form-group">
+                                    <label>Frequency</label>
+                                    <input type="text" name="frequency" required placeholder="Once daily">
+                                </div>
+                                <div class="form-group">
+                                    <label>Instructions</label>
+                                    <input type="text" name="instructions" placeholder="After meals">
+                                </div>
+                                <div class="form-group" style="display: flex; align-items: flex-end;">
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">Add</button>
+                                </div>
+                            </form>
                         </div>
-                        <form action="${pageContext.request.contextPath}/clinical?action=addPrescription" method="post"
-                            class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-                            <input type="hidden" name="patientId" value="${patient.id}">
-                            <div class="form-group">
-                                <label>Medication</label>
-                                <input type="text" name="medicationName" required placeholder="Aspirin">
-                            </div>
-                            <div class="form-group">
-                                <label>Dosage</label>
-                                <input type="text" name="dosage" required placeholder="500mg">
-                            </div>
-                            <div class="form-group">
-                                <label>Frequency</label>
-                                <input type="text" name="frequency" required placeholder="Once daily">
-                            </div>
-                            <div class="form-group">
-                                <label>Instructions</label>
-                                <input type="text" name="instructions" placeholder="After meals">
-                            </div>
-                            <div class="form-group" style="display: flex; align-items: flex-end;">
-                                <button type="submit" class="btn btn-primary" style="width: 100%;">Add</button>
-                            </div>
-                        </form>
-                    </div>
+                    </c:if>
 
                     <div class="card">
                         <h3>Prescription History</h3>
@@ -300,21 +258,24 @@
 
                 <!-- LABS TAB -->
                 <div id="labs" class="tab-content">
-                    <div class="card">
-                        <h3>Request Lab Diagnostics</h3>
-                        <form action="${pageContext.request.contextPath}/clinical?action=requestLab" method="post"
-                            style="display: flex; gap: 20px; align-items: flex-end;">
-                            <input type="hidden" name="patientId" value="${patient.id}">
-                            <div class="form-group" style="flex-grow: 1;">
-                                <label>Test Name</label>
-                                <input type="text" name="testName" required placeholder="Complete Blood Count (CBC)">
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">Request
-                                    Test</button>
-                            </div>
-                        </form>
-                    </div>
+                    <c:if test="${sessionScope.role == 'DOCTOR' || sessionScope.role == 'ADMIN'}">
+                        <div class="card">
+                            <h3>Request Lab Diagnostics</h3>
+                            <form action="${pageContext.request.contextPath}/clinical?action=requestLab" method="post"
+                                style="display: flex; gap: 20px; align-items: flex-end;">
+                                <input type="hidden" name="patientId" value="${patient.id}">
+                                <div class="form-group" style="flex-grow: 1;">
+                                    <label>Test Name</label>
+                                    <input type="text" name="testName" required
+                                        placeholder="Complete Blood Count (CBC)">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">Request
+                                        Test</button>
+                                </div>
+                            </form>
+                        </div>
+                    </c:if>
 
                     <div class="card">
                         <h3>Test Results</h3>

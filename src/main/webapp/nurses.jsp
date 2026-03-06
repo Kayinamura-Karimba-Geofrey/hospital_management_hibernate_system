@@ -9,54 +9,8 @@
         </head>
 
         <body>
-            <div class="sidebar">
-                <div class="sidebar-header">HMSystem</div>
-                <div class="sidebar-nav">
-                    <a href="${pageContext.request.contextPath}/dashboard.jsp"><span>🏠</span>
-                        <span>Dashboard</span></a>
-
-                    <c:if test="${sessionScope.role == 'ADMIN'}">
-                        <a href="${pageContext.request.contextPath}/departments"><span>🏥</span>
-                            <span>Departments</span></a>
-                        <a href="${pageContext.request.contextPath}/register"><span>🔐</span>
-                            <span>Registration</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR'}">
-                        <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
-                        <a href="${pageContext.request.contextPath}/surgery"><span>🔪</span> <span>Surgeries</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'NURSE'}">
-                        <a href="${pageContext.request.contextPath}/nurses" class="active"><span>👩‍⚕️</span>
-                            <span>Nurses</span></a>
-                    </c:if>
-
-                    <c:if
-                        test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR' || sessionScope.role == 'NURSE'}">
-                        <a href="${pageContext.request.contextPath}/clinical"><span>📂</span> <span>Clinical
-                                Records</span></a>
-                        <a href="${pageContext.request.contextPath}/patients"><span>👤</span> <span>Patients</span></a>
-                        <a href="${pageContext.request.contextPath}/facility"><span>🏢</span> <span>Facility</span></a>
-                        <a href="${pageContext.request.contextPath}/appointments"><span>📅</span>
-                            <span>Appointments</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'ACCOUNTANT'}">
-                        <a href="${pageContext.request.contextPath}/financial"><span>💰</span> <span>Billing</span></a>
-                        <a href="${pageContext.request.contextPath}/inventory"><span>📦</span>
-                            <span>Inventory</span></a>
-                    </c:if>
-
-                    <c:if test="${sessionScope.role == 'PATIENT'}">
-                        <a href="${pageContext.request.contextPath}/patient-portal"><span>👤</span> <span>My
-                                Portal</span></a>
-                    </c:if>
-
-                    <a href="${pageContext.request.contextPath}/logout" class="logout-btn"><span>🚪</span>
-                        <span>Logout</span></a>
-                </div>
-            </div>
+            <jsp:include page="includes/sidebar.jsp" />
+            <script>document.getElementById('nav-nurses').classList.add('active');</script>
             <div class="main-content">
                 <h2>Nurse Management</h2>
 

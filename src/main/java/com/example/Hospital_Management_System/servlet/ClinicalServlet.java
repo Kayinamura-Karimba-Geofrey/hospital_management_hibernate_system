@@ -66,13 +66,20 @@ public class ClinicalServlet extends HttpServlet {
         String action = request.getParameter("action");
         int patientId = Integer.parseInt(request.getParameter("patientId"));
 
+        String userRole = (String) request.getSession().getAttribute("role");
+
         if ("updateEHR".equals(action)) {
             updateEHR(request, patientId);
         } else if ("addPrescription".equals(action)) {
-            addPrescription(request, patientId);
+            if ("DOCTOR".equals(userRole) || "ADMIN".equals(userRole)) {
+                addPrescription(request, patientId);
+            }
         } else if ("requestLab".equals(action)) {
-            requestLab(request, patientId);
+            if ("DOCTOR".equals(userRole) || "ADMIN".equals(userRole)) {
+                requestLab(request, patientId);
+            }
         } else if ("uploadLabResult".equals(action)) {
+            // Lab results can be uploaded by staff (Nurses included)
             uploadLabResult(request);
         }
 

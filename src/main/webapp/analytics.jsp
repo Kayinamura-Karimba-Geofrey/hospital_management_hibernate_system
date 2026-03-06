@@ -96,19 +96,8 @@
         </head>
 
         <body>
-            <div class="sidebar">
-                <div class="sidebar-header">HMSystem</div>
-                <div class="sidebar-nav">
-                    <a href="${pageContext.request.contextPath}/dashboard.jsp"><span>🏠</span>
-                        <span>Dashboard</span></a>
-                    <a href="${pageContext.request.contextPath}/analytics" class="active"><span>📊</span>
-                        <span>Analytics</span></a>
-                    <a href="${pageContext.request.contextPath}/patients"><span>👥</span> <span>Patients</span></a>
-                    <a href="${pageContext.request.contextPath}/clinical"><span>📂</span> <span>Clinical</span></a>
-                    <a href="${pageContext.request.contextPath}/logout" class="logout-btn"><span>🚪</span>
-                        <span>Logout</span></a>
-                </div>
-            </div>
+            <jsp:include page="includes/sidebar.jsp" />
+            <script>document.getElementById('nav-analytics').classList.add('active');</script>
             <div class="main-content">
                 <div class="hero" style="margin-bottom: 30px;">
                     <h1>Advanced Analytics</h1>

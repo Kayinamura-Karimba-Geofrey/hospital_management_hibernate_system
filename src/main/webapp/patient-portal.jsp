@@ -66,17 +66,8 @@
             </head>
 
             <body>
-                <div class="sidebar">
-                    <div class="sidebar-header">HMSystem</div>
-                    <div class="sidebar-nav">
-                        <a href="${pageContext.request.contextPath}/dashboard.jsp"><span>🏠</span>
-                            <span>Dashboard</span></a>
-                        <a href="${pageContext.request.contextPath}/patient-portal" class="active"><span>👤</span>
-                            <span>My Portal</span></a>
-                        <a href="${pageContext.request.contextPath}/logout" class="logout-btn"><span>🚪</span>
-                            <span>Logout</span></a>
-                    </div>
-                </div>
+                <jsp:include page="includes/sidebar.jsp" />
+                <script>document.getElementById('nav-portal').classList.add('active');</script>
                 <div class="main-content">
                     <div class="hero">
                         <h1>Patient Portal</h1>
