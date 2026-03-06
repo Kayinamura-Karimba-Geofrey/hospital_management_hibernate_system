@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter("/*")
+public class AuthFilter implements Filter {
     private static final java.util.Map<String, String[]> roleAccess = new java.util.HashMap<>();
 
     static {

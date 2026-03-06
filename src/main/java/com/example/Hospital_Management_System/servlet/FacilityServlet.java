@@ -35,7 +35,7 @@ public class FacilityServlet extends HttpServlet {
         } else if (path.equals("/surgery")) {
             List<Surgery> surgeries = surgeryDAO.getAllSurgeries();
             List<Patients> patients = patientsService.getAllPatients();
-            List<Doctor> doctors = doctorsService.getAllDoctors();
+            List<Doctors> doctors = doctorsService.getAllDoctors();
             request.setAttribute("surgeries", surgeries);
             request.setAttribute("patients", patients);
             request.setAttribute("doctors", doctors);
@@ -48,7 +48,7 @@ public class FacilityServlet extends HttpServlet {
 
         try {
             if ("admit".equals(action)) {
-                Long patientId = Long.parseLong(request.getParameter("patientId"));
+                int patientId = Integer.parseInt(request.getParameter("patientId"));
                 Long bedId = Long.parseLong(request.getParameter("bedId"));
                 
                 Patients patient = patientsService.getPatientById(patientId);
@@ -68,7 +68,7 @@ public class FacilityServlet extends HttpServlet {
                 
             } else if ("scheduleSurgery".equals(action)) {
                 Surgery surgery = new Surgery();
-                surgery.setPatient(patientsService.getPatientById(Long.parseLong(request.getParameter("patientId"))));
+                surgery.setPatient(patientsService.getPatientById(Integer.parseInt(request.getParameter("patientId"))));
                 surgery.setSurgeon(doctorsService.getDoctorById(Integer.parseInt(request.getParameter("surgeonId"))));
                 
                 String anesthetistId = request.getParameter("anesthetistId");

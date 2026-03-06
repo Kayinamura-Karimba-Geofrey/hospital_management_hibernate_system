@@ -4,6 +4,8 @@ import com.example.Hospital_Management_System.dao.AppointmentDAO;
 import com.example.Hospital_Management_System.dao.PatientsDAO;
 import com.example.Hospital_Management_System.entity.Appointments;
 import com.example.Hospital_Management_System.entity.Patients;
+import com.example.Hospital_Management_System.entity.User;
+import com.example.Hospital_Management_System.entity.Notification;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

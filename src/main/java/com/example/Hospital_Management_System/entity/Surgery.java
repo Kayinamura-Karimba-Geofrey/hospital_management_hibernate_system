@@ -16,11 +16,11 @@ public class Surgery {
 
     @ManyToOne
     @JoinColumn(name = "surgeon_id", nullable = false)
-    private Doctor surgeon;
+    private Doctors surgeon;
 
     @ManyToOne
     @JoinColumn(name = "anesthetist_id")
-    private Doctor anesthetist;
+    private Doctors anesthetist;
 
     @Column(nullable = false)
     private String otRoomName;
@@ -39,10 +39,10 @@ public class Surgery {
     public void setId(Long id) { this.id = id; }
     public Patients getPatient() { return patient; }
     public void setPatient(Patients patient) { this.patient = patient; }
-    public Doctor getSurgeon() { return surgeon; }
-    public void setSurgeon(Doctor surgeon) { this.surgeon = surgeon; }
-    public Doctor getAnesthetist() { return anesthetist; }
-    public void setAnesthetist(Doctor anesthetist) { this.anesthetist = anesthetist; }
+    public Doctors getSurgeon() { return surgeon; }
+    public void setSurgeon(Doctors surgeon) { this.surgeon = surgeon; }
+    public Doctors getAnesthetist() { return anesthetist; }
+    public void setAnesthetist(Doctors anesthetist) { this.anesthetist = anesthetist; }
     public String getOtRoomName() { return otRoomName; }
     public void setOtRoomName(String otRoomName) { this.otRoomName = otRoomName; }
     public LocalDateTime getSurgeryDateTime() { return surgeryDateTime; }

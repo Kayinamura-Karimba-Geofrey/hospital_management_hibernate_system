@@ -34,6 +34,11 @@ public class Patients {
 
     public Patients() {}
 
+    public Patients(String name, String disease) {
+        this.name = name;
+        this.disease = disease;
+    }
+
     public Patients(String name, String disease, String email) {
         this.name = name;
         this.disease = disease;

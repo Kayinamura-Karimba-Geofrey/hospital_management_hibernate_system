@@ -46,8 +46,13 @@ public class PatientsService {
             }
         }
     }
+
+    public Patients getPatientById(int id){
+        return getPatient(id);
+    }
+
     //READ ALL
-    public List<Patients>getAllDoctors(){
+    public List<Patients> getAllPatients(){
         Session session= null;
         try{
             session= HibernateUtil.getSessionFactory().openSession();
@@ -64,7 +69,7 @@ public class PatientsService {
             }
         }
     }
-    public void updateDoctor(Patients patient){
+    public void updatePatient(Patients patient){
         Session session= null;
         Transaction tx= null;
         try{
@@ -86,7 +91,7 @@ public class PatientsService {
             }
         }
     }
-    public void deleteDoctors(int id ){
+    public void deletePatient(int id ){
         Session session= null;
         Transaction tx= null;
 

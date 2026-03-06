@@ -33,6 +33,7 @@ public class Invoice {
     public void setPatient(Patients patient) { this.patient = patient; }
 
     public double getAmount() { return amount; }
+    public double getTotalAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
 
     public String getStatus() { return status; }

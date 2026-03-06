@@ -46,6 +46,9 @@ public class DoctorsService {
             }
         }
     }
+    public Doctors getDoctorById(int id){
+        return getDoctors(id);
+    }
     //READ ALL
     public List<Doctors>getAllDoctors(){
         Session session= null;
