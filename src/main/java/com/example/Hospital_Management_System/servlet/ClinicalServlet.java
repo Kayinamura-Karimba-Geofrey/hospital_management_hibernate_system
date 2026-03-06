@@ -25,12 +25,14 @@ public class ClinicalServlet extends HttpServlet {
     private PatientRecordDAO recordDAO;
     private PrescriptionDAO prescriptionDAO;
     private LabTestDAO labTestDAO;
+    private com.example.Hospital_Management_System.dao.AuditLogDAO auditLogDAO;
 
     public void init() {
         patientsDAO = new PatientsDAO();
         recordDAO = new PatientRecordDAO();
         prescriptionDAO = new PrescriptionDAO();
         labTestDAO = new LabTestDAO();
+        auditLogDAO = new com.example.Hospital_Management_System.dao.AuditLogDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -89,6 +91,10 @@ public class ClinicalServlet extends HttpServlet {
         record.setTemperature(Double.parseDouble(request.getParameter("temperature")));
         record.setImmunizations(request.getParameter("immunizations"));
         recordDAO.saveOrUpdate(record);
+
+        // Audit Log
+        User user = (User) request.getSession().getAttribute("user");
+        auditLogDAO.save(new AuditLog(user, "UPDATE", "PatientRecord", String.valueOf(patientId), "Updated EHR data"));
     }
 
     private void addPrescription(HttpServletRequest request, int patientId) {
@@ -107,6 +113,9 @@ public class ClinicalServlet extends HttpServlet {
         p.setFrequency(request.getParameter("frequency"));
         p.setInstructions(request.getParameter("instructions"));
         prescriptionDAO.save(p);
+
+        // Audit Log
+        auditLogDAO.save(new AuditLog(user, "CREATE", "Prescription", String.valueOf(p.getId()), "Added prescription: " + p.getMedicationName()));
     }
 
     private void requestLab(HttpServletRequest request, int patientId) {
@@ -118,6 +127,10 @@ public class ClinicalServlet extends HttpServlet {
         lt.setDoctor(doctor);
         lt.setTestName(request.getParameter("testName"));
         labTestDAO.saveOrUpdate(lt);
+
+        // Audit Log
+        User user = (User) request.getSession().getAttribute("user");
+        auditLogDAO.save(new AuditLog(user, "CREATE", "LabTest", String.valueOf(lt.getId()), "Requested lab test: " + lt.getTestName()));
     }
 
     private void uploadLabResult(HttpServletRequest request) throws IOException, ServletException {

@@ -15,6 +15,9 @@ public class Patients {
     private String disease;
     private String email;
 
+    @Column(name = "created_at", updatable = false)
+    private java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
+
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")

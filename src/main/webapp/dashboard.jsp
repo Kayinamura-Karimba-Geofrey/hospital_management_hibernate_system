@@ -25,6 +25,8 @@
                     <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR'}">
                         <a href="${pageContext.request.contextPath}/doctors"><span>👨‍⚕️</span> <span>Doctors</span></a>
                         <a href="${pageContext.request.contextPath}/surgery"><span>🔪</span> <span>Surgeries</span></a>
+                        <a href="${pageContext.request.contextPath}/analytics"><span>📊</span>
+                            <span>Analytics</span></a>
                     </c:if>
 
                     <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'NURSE'}">

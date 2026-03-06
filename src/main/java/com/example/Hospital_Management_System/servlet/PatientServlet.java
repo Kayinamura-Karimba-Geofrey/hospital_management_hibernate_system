@@ -22,11 +22,13 @@ public class PatientServlet extends HttpServlet {
     private PatientsDAO patientsDAO;
     private DoctorDAO doctorDAO;
     private NurseDAO nurseDAO;
+    private com.example.Hospital_Management_System.dao.AuditLogDAO auditLogDAO;
 
     public void init() {
         patientsDAO = new PatientsDAO();
         doctorDAO = new DoctorDAO();
         nurseDAO = new NurseDAO();
+        auditLogDAO = new com.example.Hospital_Management_System.dao.AuditLogDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -36,6 +38,11 @@ public class PatientServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             patientsDAO.deletePatient(id);
+
+            // Audit Log
+            com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
+            auditLogDAO.save(new com.example.Hospital_Management_System.entity.AuditLog(user, "DELETE", "Patients", String.valueOf(id), "Deleted patient record"));
+
             response.sendRedirect(request.getContextPath() + "/patients");
             return;
         } else if ("edit".equals(action)) {
@@ -80,11 +87,19 @@ public class PatientServlet extends HttpServlet {
             if (idStr != null && !idStr.isEmpty()) {
                 patient.setId(Integer.parseInt(idStr));
                 session.merge(patient);
+                tx.commit();
+
+                // Audit Log
+                com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
+                auditLogDAO.save(new com.example.Hospital_Management_System.entity.AuditLog(user, "UPDATE", "Patients", idStr, "Updated patient details: " + name));
             } else {
                 session.persist(patient);
+                tx.commit();
+
+                // Audit Log
+                com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
+                auditLogDAO.save(new com.example.Hospital_Management_System.entity.AuditLog(user, "CREATE", "Patients", String.valueOf(patient.getId()), "Created new patient: " + name));
             }
-            
-            tx.commit();
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {
                 tx.rollback();
