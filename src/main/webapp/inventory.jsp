@@ -91,6 +91,8 @@
                     <a href="${pageContext.request.contextPath}/financial"><span>💰</span> <span>Billing</span></a>
                     <a href="${pageContext.request.contextPath}/inventory" class="active"><span>📦</span>
                         <span>Inventory</span></a>
+                    <a href="${pageContext.request.contextPath}/facility"><span>🏢</span> <span>Facility</span></a>
+                    <a href="${pageContext.request.contextPath}/surgery"><span>🔪</span> <span>Surgeries</span></a>
                     <a href="${pageContext.request.contextPath}/appointments"><span>📅</span>
                         <span>Appointments</span></a>
                     <a href="${pageContext.request.contextPath}/logout" class="logout-btn"><span>🚪</span>
