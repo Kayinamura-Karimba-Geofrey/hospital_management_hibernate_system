@@ -13,6 +13,7 @@ public class Patients {
 
     private String name;
     private String disease;
+    private String email;
 
 
     @ManyToOne
@@ -30,9 +31,10 @@ public class Patients {
 
     public Patients() {}
 
-    public Patients(String name, String disease) {
+    public Patients(String name, String disease, String email) {
         this.name = name;
         this.disease = disease;
+        this.email = email;
     }
 
     public int getId() { return id; }
@@ -51,6 +53,9 @@ public class Patients {
 
     public String getDisease() { return disease; }
     public void setDisease(String disease) { this.disease = disease; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public Doctors getDoctor() { return doctor; }
     public void setDoctor(Doctors doctor) { this.doctor = doctor; }

@@ -82,4 +82,12 @@ public class PatientsDAO {
             return session.get(Patients.class, id);
         }
     }
+
+    public Patients getPatientByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Patients where email = :email", Patients.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+        }
+    }
 }

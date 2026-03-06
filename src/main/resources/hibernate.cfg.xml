@@ -39,6 +39,6 @@
         <mapping class="com.example.Hospital_Management_System.entity.Bed" />
         <mapping class="com.example.Hospital_Management_System.entity.Admission" />
         <mapping class="com.example.Hospital_Management_System.entity.Surgery" />
-
+        <mapping class="com.example.Hospital_Management_System.entity.Notification"/>
     </session-factory>
 </hibernate-configuration>

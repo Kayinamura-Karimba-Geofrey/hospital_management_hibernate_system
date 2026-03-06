@@ -65,6 +65,17 @@ public class AppointmentServlet extends HttpServlet {
             appointmentDAO.updateAppointment(appointment);
         } else {
             appointmentDAO.saveAppointment(appointment);
+            
+            // Trigger Notification
+            if (patient != null && patient.getEmail() != null) {
+                com.example.Hospital_Management_System.dao.UserDAO userDAO = new com.example.Hospital_Management_System.dao.UserDAO();
+                User user = userDAO.getUserByEmail(patient.getEmail());
+                if (user != null) {
+                    Notification notification = new Notification(user, 
+                        "New appointment scheduled for " + dateStr + " at " + timeStr, "APPOINTMENT");
+                    new com.example.Hospital_Management_System.dao.NotificationDAO().save(notification);
+                }
+            }
         }
 
         response.sendRedirect(request.getContextPath() + "/appointments");
