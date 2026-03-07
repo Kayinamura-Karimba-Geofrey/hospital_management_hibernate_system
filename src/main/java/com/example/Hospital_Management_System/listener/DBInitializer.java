@@ -1,7 +1,9 @@
 package com.example.Hospital_Management_System.listener;
 
 import com.example.Hospital_Management_System.dao.DepartmentDAO;
+import com.example.Hospital_Management_System.dao.UserDAO;
 import com.example.Hospital_Management_System.entity.Department;
+import com.example.Hospital_Management_System.entity.User;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -25,10 +27,18 @@ public class DBInitializer implements ServletContextListener {
             departmentDAO.saveDepartment(new Department("General Medicine", "Block C, Floor 1"));
             System.out.println("Seeding complete.");
         }
+
+        UserDAO userDAO = new UserDAO();
+        if (!userDAO.existsByUsername("geofrey")) {
+            System.out.println("Seeding admin user...");
+            User admin = new User("geofrey", "geo654", "geofreykayin@gmail.com", "Geofrey", "ADMIN");
+            userDAO.saveUser(admin);
+            System.out.println("Admin user seeded.");
+        }
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        // Cleanup if needed
+        
     }
 }
