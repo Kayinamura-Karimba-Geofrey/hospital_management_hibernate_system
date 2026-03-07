@@ -8,6 +8,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebListener
 public class DBInitializer implements ServletContextListener {
@@ -29,11 +30,18 @@ public class DBInitializer implements ServletContextListener {
         }
 
         UserDAO userDAO = new UserDAO();
-        if (!userDAO.existsByUsername("geofrey")) {
+        User admin = userDAO.getUserByEmail("geofreykayin@gmail.com");
+        if (admin == null) {
             System.out.println("Seeding admin user...");
-            User admin = new User("geofrey", "geo654", "geofreykayin@gmail.com", "Geofrey", "ADMIN");
+            String hashedPass = BCrypt.hashpw("geo654", BCrypt.gensalt());
+            admin = new User("geofrey", hashedPass, "geofreykayin@gmail.com", "Geofrey", "ADMIN");
             userDAO.saveUser(admin);
             System.out.println("Admin user seeded.");
+        } else if ("geo654".equals(admin.getPassword())) {
+            System.out.println("Migrating plain-text admin password...");
+            admin.setPassword(BCrypt.hashpw("geo654", BCrypt.gensalt()));
+            userDAO.updateUser(admin);
+            System.out.println("Admin password migrated.");
         }
     }
 

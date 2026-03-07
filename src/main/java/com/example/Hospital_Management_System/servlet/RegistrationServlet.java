@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 
@@ -45,7 +46,8 @@ public class RegistrationServlet extends HttpServlet {
             }
         }
 
-        User user = new User(username, password, email, fullName, role);
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        User user = new User(username, hashedPassword, email, fullName, role);
         
         // Check if username already exists
         if (userDAO.existsByUsername(username)) {
@@ -68,6 +70,8 @@ public class RegistrationServlet extends HttpServlet {
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             tx = session.beginTransaction();
+            
+            System.out.println("Processing registration for: " + username + " with role: " + role);
             session.persist(user);
 
             if ("DOCTOR".equalsIgnoreCase(role)) {
@@ -89,11 +93,13 @@ public class RegistrationServlet extends HttpServlet {
                     session.persist(nurse);
                 }
             } else if ("PATIENT".equalsIgnoreCase(role)) {
-                Patients patient = new Patients(fullName, "Consultation");
+                Patients patient = new Patients(fullName, "Consultation", email);
                 session.persist(patient);
+                System.out.println("Patient persisted: " + fullName);
             }
 
             tx.commit();
+            System.out.println("Registration transaction committed successfully.");
             response.sendRedirect(request.getContextPath() + "/registration-success.jsp");
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {

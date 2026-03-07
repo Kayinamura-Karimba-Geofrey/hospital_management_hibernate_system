@@ -5,6 +5,8 @@ import com.example.Hospital_Management_System.entity.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class UserDAO {
 
     public void saveUser(User user) {
@@ -51,30 +53,11 @@ public class UserDAO {
     }
 
     public User validateUserByEmail(String email, String password) {
-        Transaction transaction = null;
-        Session session = null;
-        User user = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            transaction = session.beginTransaction();
-            
-            user = session.createQuery("FROM User WHERE email = :email AND password = :password", User.class)
-                    .setParameter("email", email)
-                    .setParameter("password", password)
-                    .uniqueResult();
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+        User user = getUserByEmail(email);
+        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+            return user;
         }
-        return user;
+        return null;
     }
 
     public boolean existsByUsername(String username) {

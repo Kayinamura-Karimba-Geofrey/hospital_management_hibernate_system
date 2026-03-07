@@ -39,6 +39,7 @@
                     </c:if>
 
                     <form action="register" method="post">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <div class="form-group">
                             <label>Username</label>
                             <input type="text" name="username" required placeholder="Choose a username">

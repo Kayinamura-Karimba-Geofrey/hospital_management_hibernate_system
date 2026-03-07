@@ -26,10 +26,16 @@ public class AuthFilter implements Filter {
         
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession(true); // Ensure session for CSRF
 
         String path = req.getServletPath();
+        String method = req.getMethod();
         
+        // 1. Generate CSRF token if missing
+        if (session.getAttribute("csrfToken") == null) {
+            session.setAttribute("csrfToken", java.util.UUID.randomUUID().toString());
+        }
+
         boolean isPublicPage = path.equals("/") ||
                                path.endsWith("index.jsp") ||
                                path.endsWith("login") || 
@@ -52,11 +58,23 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (session == null || session.getAttribute("user") == null) {
+        // 2. Auth Check
+        if (session.getAttribute("user") == null) {
             res.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
+        // 3. CSRF Protection for state-changing methods
+        if ("POST".equalsIgnoreCase(method)) {
+            String sessionToken = (String) session.getAttribute("csrfToken");
+            String requestToken = req.getParameter("csrfToken");
+            if (sessionToken == null || !sessionToken.equals(requestToken)) {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid or missing CSRF token");
+                return;
+            }
+        }
+
+        // 4. Role-based Authorization
         String userRole = (String) session.getAttribute("role");
         if (userRole == null || !hasAccess(userRole, path)) {
             res.sendRedirect(req.getContextPath() + "/dashboard.jsp?error=unauthorized");

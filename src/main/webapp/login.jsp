@@ -26,6 +26,7 @@
                     </c:if>
 
                     <form action="login" method="POST">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" id="email" name="email" required placeholder="Enter your email">

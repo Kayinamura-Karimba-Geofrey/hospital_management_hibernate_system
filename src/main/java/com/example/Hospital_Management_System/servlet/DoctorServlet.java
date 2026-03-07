@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet("/doctors")
 public class DoctorServlet extends HttpServlet {
@@ -76,7 +77,7 @@ public class DoctorServlet extends HttpServlet {
                 user.setEmail(email);
                 user.setFullName(name);
                 user.setUsername(email);
-                user.setPassword(name); // Specific request: password to be name
+                user.setPassword(BCrypt.hashpw(name, BCrypt.gensalt())); // Hashing registered name
                 userDAO.updateUser(user);
             }
         } else {
@@ -88,7 +89,8 @@ public class DoctorServlet extends HttpServlet {
 
             // Create User
             if (!userDAO.existsByEmail(email)) {
-                User user = new User(email, name, email, name, "DOCTOR");
+                String hashedPassword = BCrypt.hashpw(name, BCrypt.gensalt());
+                User user = new User(email, hashedPassword, email, name, "DOCTOR");
                 userDAO.saveUser(user);
             }
         }
