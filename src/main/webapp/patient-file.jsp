@@ -138,7 +138,8 @@
                 <!-- EHR TAB -->
                 <div id="ehr" class="tab-content active">
                     <form action="${pageContext.request.contextPath}/clinical?action=updateEHR" method="post"
-                        class="card">
+                        enctype="multipart/form-data" class="card">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <input type="hidden" name="patientId" value="${patient.id}">
 
                         <div class="record-section">
@@ -178,6 +179,16 @@
                                 <textarea name="immunizations" rows="3"
                                     placeholder="List of vaccines and dates...">${record.immunizations}</textarea>
                             </div>
+                            <div class="form-group">
+                                <label>Patient Document (Scan, X-Ray, etc.)</label>
+                                <input type="file" name="recordFile">
+                                <c:if test="${not empty record.filePath}">
+                                    <div style="margin-top: 10px;">
+                                        <a href="${pageContext.request.contextPath}/clinical?action=download&path=${record.filePath}"
+                                            class="btn btn-info btn-sm">📎 Download Current Attachment</a>
+                                    </div>
+                                </c:if>
+                            </div>
                         </div>
 
                         <div style="text-align: right;">
@@ -197,6 +208,7 @@
                             <form action="${pageContext.request.contextPath}/clinical?action=addPrescription"
                                 method="post" class="info-grid"
                                 style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                                <input type="hidden" name="csrfToken" value="${csrfToken}">
                                 <input type="hidden" name="patientId" value="${patient.id}">
                                 <div class="form-group">
                                     <label>Medication</label>
@@ -263,6 +275,7 @@
                             <h3>Request Lab Diagnostics</h3>
                             <form action="${pageContext.request.contextPath}/clinical?action=requestLab" method="post"
                                 style="display: flex; gap: 20px; align-items: flex-end;">
+                                <input type="hidden" name="csrfToken" value="${csrfToken}">
                                 <input type="hidden" name="patientId" value="${patient.id}">
                                 <div class="form-group" style="flex-grow: 1;">
                                     <label>Test Name</label>
@@ -313,6 +326,7 @@
                                                             action="${pageContext.request.contextPath}/clinical?action=uploadLabResult"
                                                             method="post" enctype="multipart/form-data"
                                                             style="display: flex; gap: 10px;">
+                                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                                             <input type="hidden" name="patientId" value="${patient.id}">
                                                             <input type="hidden" name="testId" value="${test.id}">
                                                             <input type="file" name="resultFile" required

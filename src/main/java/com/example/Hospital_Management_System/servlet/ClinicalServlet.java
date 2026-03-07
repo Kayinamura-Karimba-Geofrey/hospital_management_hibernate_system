@@ -2,6 +2,7 @@ package com.example.Hospital_Management_System.servlet;
 
 import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
+import com.example.Hospital_Management_System.service.AuditService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,19 +21,17 @@ import java.util.List;
                  maxFileSize = 1024 * 1024 * 10,      // 10MB
                  maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class ClinicalServlet extends HttpServlet {
-
     private PatientsDAO patientsDAO;
     private PatientRecordDAO recordDAO;
     private PrescriptionDAO prescriptionDAO;
+
     private LabTestDAO labTestDAO;
-    private com.example.Hospital_Management_System.dao.AuditLogDAO auditLogDAO;
 
     public void init() {
         patientsDAO = new PatientsDAO();
         recordDAO = new PatientRecordDAO();
         prescriptionDAO = new PrescriptionDAO();
         labTestDAO = new LabTestDAO();
-        auditLogDAO = new com.example.Hospital_Management_System.dao.AuditLogDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,6 +53,8 @@ public class ClinicalServlet extends HttpServlet {
             request.setAttribute("prescriptions", prescriptions);
             request.setAttribute("labTests", labTests);
             request.getRequestDispatcher("patient-file.jsp").forward(request, response);
+        } else if ("download".equals(request.getParameter("action"))) {
+            downloadFile(request, response);
         } else {
             List<Patients> patients = patientsDAO.getAllPatients();
             request.setAttribute("patients", patients);
@@ -97,11 +98,23 @@ public class ClinicalServlet extends HttpServlet {
         record.setHeartRate(Integer.parseInt(request.getParameter("heartRate")));
         record.setTemperature(Double.parseDouble(request.getParameter("temperature")));
         record.setImmunizations(request.getParameter("immunizations"));
-        recordDAO.saveOrUpdate(record);
+        
+        try {
+            Part filePart = request.getPart("recordFile");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = "Patient_" + patientId + "_" + System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) uploadDir.mkdir();
+                filePart.write(uploadPath + File.separator + fileName);
+                record.setFilePath("uploads/" + fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Audit Log
-        User user = (User) request.getSession().getAttribute("user");
-        auditLogDAO.save(new AuditLog(user, "UPDATE", "PatientRecord", String.valueOf(patientId), "Updated EHR data"));
+        recordDAO.saveOrUpdate(record);
+        AuditService.log(request.getSession(), "UPDATE", "PatientRecord", String.valueOf(patientId), "Updated EHR data");
     }
 
     private void addPrescription(HttpServletRequest request, int patientId) {
@@ -120,9 +133,7 @@ public class ClinicalServlet extends HttpServlet {
         p.setFrequency(request.getParameter("frequency"));
         p.setInstructions(request.getParameter("instructions"));
         prescriptionDAO.save(p);
-
-        // Audit Log
-        auditLogDAO.save(new AuditLog(user, "CREATE", "Prescription", String.valueOf(p.getId()), "Added prescription: " + p.getMedicationName()));
+        AuditService.log(request.getSession(), "CREATE", "Prescription", String.valueOf(p.getId()), "Added prescription: " + p.getMedicationName());
     }
 
     private void requestLab(HttpServletRequest request, int patientId) {
@@ -134,10 +145,7 @@ public class ClinicalServlet extends HttpServlet {
         lt.setDoctor(doctor);
         lt.setTestName(request.getParameter("testName"));
         labTestDAO.saveOrUpdate(lt);
-
-        // Audit Log
-        User user = (User) request.getSession().getAttribute("user");
-        auditLogDAO.save(new AuditLog(user, "CREATE", "LabTest", String.valueOf(lt.getId()), "Requested lab test: " + lt.getTestName()));
+        AuditService.log(request.getSession(), "CREATE", "LabTest", String.valueOf(lt.getId()), "Requested lab test: " + lt.getTestName());
     }
 
     private void uploadLabResult(HttpServletRequest request) throws IOException, ServletException {
@@ -158,5 +166,21 @@ public class ClinicalServlet extends HttpServlet {
             lt.setObservations(request.getParameter("observations"));
             labTestDAO.saveOrUpdate(lt);
         }
+    }
+
+    private void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String filePath = request.getParameter("path");
+        if (filePath == null || filePath.isEmpty()) return;
+
+        String fullPath = getServletContext().getRealPath("") + File.separator + filePath;
+        File file = new File(fullPath);
+        if (!file.exists()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        response.setContentType(getServletContext().getMimeType(fullPath));
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+        java.nio.file.Files.copy(file.toPath(), response.getOutputStream());
     }
 }

@@ -28,6 +28,9 @@ public class PatientRecord {
     @Column(columnDefinition = "TEXT")
     private String immunizations;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     private LocalDateTime lastUpdated;
 
     public PatientRecord() {}
@@ -67,6 +70,9 @@ public class PatientRecord {
 
     public String getImmunizations() { return immunizations; }
     public void setImmunizations(String immunizations) { this.immunizations = immunizations; }
+
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
 
     public LocalDateTime getLastUpdated() { return lastUpdated; }
     public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }

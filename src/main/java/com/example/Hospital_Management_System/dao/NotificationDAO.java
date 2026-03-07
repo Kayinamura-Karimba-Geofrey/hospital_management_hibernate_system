@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+import com.example.Hospital_Management_System.websocket.NotificationWebSocket;
+
 public class NotificationDAO {
 
     public void save(Notification notification) {
@@ -14,6 +16,9 @@ public class NotificationDAO {
             transaction = session.beginTransaction();
             session.persist(notification);
             transaction.commit();
+            
+            // Broadcast via WebSocket
+            NotificationWebSocket.sendNotification(notification.getUser().getId(), notification.getMessage());
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();

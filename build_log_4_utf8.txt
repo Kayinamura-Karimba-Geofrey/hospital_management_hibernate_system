@@ -1,0 +1,24 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< org.javaproject:School-Management >------------------
+[INFO] Building School-Management 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ School-Management ---
+[INFO] Deleting C:\Users\HP\hospital_management_hibernate_system\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ School-Management ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ School-Management ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 62 source files with javac [debug target 21] to target\classes
+[INFO] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/WardDAO.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/WardDAO.java: Recompile with -Xlint:deprecation for details.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.235 s
+[INFO] Finished at: 2026-03-07T12:29:37+02:00
+[INFO] ------------------------------------------------------------------------

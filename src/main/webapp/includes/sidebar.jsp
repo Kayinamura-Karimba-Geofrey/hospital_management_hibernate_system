@@ -63,4 +63,23 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <script>
+                (function () {
+                    var userId = "${sessionScope.user.id}";
+                    if (userId) {
+                        var protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+                        var wsUrl = protocol + "//" + window.location.host + "${pageContext.request.contextPath}/notifications/" + userId;
+                        var socket = new WebSocket(wsUrl);
+
+                        socket.onmessage = function (event) {
+                            alert("🔔 Notification: " + event.data);
+                        };
+
+                        socket.onclose = function () {
+                            console.log("Notification WebSocket closed.");
+                        };
+                    }
+                })();
+            </script>
         </div>

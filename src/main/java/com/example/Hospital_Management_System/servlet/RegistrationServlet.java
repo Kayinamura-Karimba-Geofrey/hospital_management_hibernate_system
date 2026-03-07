@@ -4,6 +4,7 @@ import com.example.Hospital_Management_System.dao.UserDAO;
 import com.example.Hospital_Management_System.dao.DepartmentDAO;
 import com.example.Hospital_Management_System.entity.*;
 import com.example.Hospital_Management_System.entity.util.HibernateUtil;
+import com.example.Hospital_Management_System.service.AuditService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -100,6 +101,7 @@ public class RegistrationServlet extends HttpServlet {
 
             tx.commit();
             System.out.println("Registration transaction committed successfully.");
+            AuditService.log(request.getSession(), "REGISTER", "User", username, "New " + role + " registration: " + fullName);
             response.sendRedirect(request.getContextPath() + "/registration-success.jsp");
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {

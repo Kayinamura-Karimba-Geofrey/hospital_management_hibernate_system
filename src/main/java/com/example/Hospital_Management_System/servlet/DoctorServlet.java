@@ -6,6 +6,7 @@ import com.example.Hospital_Management_System.dao.UserDAO;
 import com.example.Hospital_Management_System.entity.Doctors;
 import com.example.Hospital_Management_System.entity.Department;
 import com.example.Hospital_Management_System.entity.User;
+import com.example.Hospital_Management_System.service.AuditService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,6 +35,7 @@ public class DoctorServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             doctorDAO.deleteDoctor(id);
+            AuditService.log(request.getSession(), "DELETE", "Doctor", String.valueOf(id), "Deleted doctor with ID: " + id);
             response.sendRedirect(request.getContextPath() + "/doctors");
             return;
         } else if ("edit".equals(action)) {
@@ -79,6 +81,7 @@ public class DoctorServlet extends HttpServlet {
                 user.setUsername(email);
                 user.setPassword(BCrypt.hashpw(name, BCrypt.gensalt())); // Hashing registered name
                 userDAO.updateUser(user);
+                AuditService.log(request.getSession(), "UPDATE", "Doctor", idStr, "Updated doctor: " + name + " (" + email + ")");
             }
         } else {
             // Save
@@ -92,6 +95,7 @@ public class DoctorServlet extends HttpServlet {
                 String hashedPassword = BCrypt.hashpw(name, BCrypt.gensalt());
                 User user = new User(email, hashedPassword, email, name, "DOCTOR");
                 userDAO.saveUser(user);
+                AuditService.log(request.getSession(), "CREATE", "Doctor", String.valueOf(doctor.getId()), "Created new doctor: " + name + " (" + email + ")");
             }
         }
 
