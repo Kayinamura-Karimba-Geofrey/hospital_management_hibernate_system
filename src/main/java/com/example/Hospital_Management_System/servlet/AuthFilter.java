@@ -44,7 +44,7 @@ public class AuthFilter implements Filter {
                                path.endsWith("registration-success.jsp") || 
                                path.endsWith("login.jsp") ||
                                path.endsWith("register.jsp");
-                               
+                                
         boolean isStaticResource = path.endsWith(".css") || 
                                    path.endsWith(".js") || 
                                    path.endsWith(".png") || 
@@ -53,18 +53,12 @@ public class AuthFilter implements Filter {
                                    path.endsWith(".ico") ||
                                    path.endsWith(".woff2");
 
-        if (isPublicPage || isStaticResource) {
+        if (isStaticResource) {
             chain.doFilter(request, response);
             return;
         }
 
-        // 2. Auth Check
-        if (session.getAttribute("user") == null) {
-            res.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
-        // 3. CSRF Protection for state-changing methods
+        // 2. CSRF Protection for state-changing methods (including public ones like login/register)
         if ("POST".equalsIgnoreCase(method)) {
             String sessionToken = (String) session.getAttribute("csrfToken");
             String requestToken = req.getParameter("csrfToken");
@@ -72,6 +66,17 @@ public class AuthFilter implements Filter {
                 res.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid or missing CSRF token");
                 return;
             }
+        }
+
+        if (isPublicPage) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 3. Auth Check
+        if (session.getAttribute("user") == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
 
         // 4. Role-based Authorization

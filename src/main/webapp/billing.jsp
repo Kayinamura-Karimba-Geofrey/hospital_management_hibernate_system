@@ -27,7 +27,8 @@
                             <h2>Generate New Invoice</h2>
                         </div>
                         <form action="${pageContext.request.contextPath}/financial?action=generateInvoice"
-                            method="post">
+                            method="POST">
+                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                             <div class="form-group">
                                 <label>Select Patient</label>
                                 <select name="patientId" required>
@@ -70,7 +71,8 @@
 
                         <c:if test="${not empty selectedPatient}">
                             <form action="${pageContext.request.contextPath}/financial?action=updateInsurance"
-                                method="post">
+                                method="POST">
+                                <input type="hidden" name="csrfToken" value="${csrfToken}">
                                 <input type="hidden" name="patientId" value="${selectedPatient.id}">
                                 <div class="form-group">
                                     <label>Provider</label>

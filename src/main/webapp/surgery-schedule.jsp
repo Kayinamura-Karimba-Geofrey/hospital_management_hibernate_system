@@ -103,6 +103,7 @@
                     <div class="card">
                         <h3>Schedule Surgery</h3>
                         <form action="${pageContext.request.contextPath}/surgery?action=scheduleSurgery" method="post">
+                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                             <div class="form-group">
                                 <label>Patient</label>
                                 <select name="patientId" required>

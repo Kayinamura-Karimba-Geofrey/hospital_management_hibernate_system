@@ -91,6 +91,7 @@
                         <h3>Add To Inventory</h3>
                         <form action="${pageContext.request.contextPath}/inventory?action=addOrUpdateItem"
                             method="post">
+                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                                 <div class="form-group">
                                     <label>Item Name</label>

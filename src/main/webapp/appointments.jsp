@@ -18,6 +18,7 @@
                     <h3>${editableApp != null ? 'Edit' : 'Schedule New'} Appointment</h3>
                     <form action="appointments" method="post"
                         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <input type="hidden" name="id" value="${editableApp.id}">
                         <div class="form-group">
                             <label>Select Patient</label>

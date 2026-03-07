@@ -15,11 +15,10 @@
                 <h2>Patient Records</h2>
 
                 <div class="card">
-                    <h3>${editablePatient != null ? 'Edit' : 'Register New'} Patient</h3>
                     <form action="patients" method="post"
                         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
-                        <input type="hidden" name="id" value="${editablePatient.id}">
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
+                        <input type="hidden" name="id" value="${editablePatient.id}">
                         <div class="form-group">
                             <label>Patient Name</label>
                             <input type="text" name="name" required placeholder="John Doe"

@@ -1,0 +1,52 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< org.javaproject:School-Management >------------------
+[INFO] Building School-Management 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ School-Management ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ School-Management ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 64 source files with javac [debug target 21] to target\classes
+[INFO] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/WardDAO.java: Some input files use or override a deprecated API.
+[INFO] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/dao/WardDAO.java: Recompile with -Xlint:deprecation for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/service/UserService.java:[35,16] cannot find symbol
+  symbol:   method save(com.example.Hospital_Management_System.entity.User)
+  location: variable userDAO of type com.example.Hospital_Management_System.dao.UserDAO
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/AuthFilter.java:[48,13] cannot find symbol
+  symbol:   variable isStaticResource
+  location: class com.example.Hospital_Management_System.servlet.AuthFilter
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/listener/DBInitializer.java:[32,9] cannot find symbol
+  symbol:   method initializeDefaultAdmin()
+  location: class com.example.Hospital_Management_System.listener.DBInitializer
+[INFO] 3 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.711 s
+[INFO] Finished at: 2026-03-07T12:51:49+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project School-Management: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/service/UserService.java:[35,16] cannot find symbol
+[ERROR]   symbol:   method save(com.example.Hospital_Management_System.entity.User)
+[ERROR]   location: variable userDAO of type com.example.Hospital_Management_System.dao.UserDAO
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/servlet/AuthFilter.java:[48,13] cannot find symbol
+[ERROR]   symbol:   variable isStaticResource
+[ERROR]   location: class com.example.Hospital_Management_System.servlet.AuthFilter
+[ERROR] /C:/Users/HP/hospital_management_hibernate_system/src/main/java/com/example/Hospital_Management_System/listener/DBInitializer.java:[32,9] cannot find symbol
+[ERROR]   symbol:   method initializeDefaultAdmin()
+[ERROR]   location: class com.example.Hospital_Management_System.listener.DBInitializer
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

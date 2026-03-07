@@ -18,8 +18,8 @@
                     <h3>${editableDoc != null ? 'Edit' : 'Add New'} Doctor</h3>
                     <form action="doctors" method="post"
                         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
-                        <input type="hidden" name="id" value="${editableDoc.id}">
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
+                        <input type="hidden" name="id" value="${editableDoc.id}">
                         <div class="form-group">
                             <label>Full Name</label>
                             <input type="text" name="name" required placeholder="Dr. John Doe"

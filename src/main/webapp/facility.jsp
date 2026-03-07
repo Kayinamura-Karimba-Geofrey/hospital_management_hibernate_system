@@ -147,6 +147,7 @@
                 <div class="card" style="width: 400px;" onclick="event.stopPropagation()">
                     <h3 id="modalTitle">Admit Patient</h3>
                     <form action="${pageContext.request.contextPath}/facility?action=admit" method="post">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <input type="hidden" name="bedId" id="modalBedId">
                         <div class="form-group">
                             <label>Assigned Bed</label>
