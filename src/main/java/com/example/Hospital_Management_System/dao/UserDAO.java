@@ -30,7 +30,7 @@ public class UserDAO {
         }
     }
 
-    public User validateUser(String username, String password) {
+    public User validateUserByEmail(String email, String password) {
         Transaction transaction = null;
         Session session = null;
         User user = null;
@@ -38,8 +38,8 @@ public class UserDAO {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             
-            user = session.createQuery("FROM User WHERE username = :username AND password = :password", User.class)
-                    .setParameter("username", username)
+            user = session.createQuery("FROM User WHERE email = :email AND password = :password", User.class)
+                    .setParameter("email", email)
                     .setParameter("password", password)
                     .uniqueResult();
 
@@ -61,6 +61,18 @@ public class UserDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery("SELECT count(u) FROM User u WHERE u.username = :username", Long.class)
                     .setParameter("username", username)
+                    .uniqueResult();
+            return count != null && count > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean existsByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Long count = session.createQuery("SELECT count(u) FROM User u WHERE u.email = :email", Long.class)
+                    .setParameter("email", email)
                     .uniqueResult();
             return count != null && count > 0;
         } catch (Exception e) {

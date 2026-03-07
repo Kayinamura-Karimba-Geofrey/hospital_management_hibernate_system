@@ -55,6 +55,14 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
+        // Check if email already exists
+        if (userDAO.existsByEmail(email)) {
+            request.setAttribute("error", "Email already exists. Please use another.");
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         Transaction tx = null;
         Session session = null;
         try {

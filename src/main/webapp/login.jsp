@@ -27,8 +27,8 @@
 
                     <form action="login" method="POST">
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" required placeholder="Enter your username">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email">
                         </div>
 
                         <div class="form-group">
