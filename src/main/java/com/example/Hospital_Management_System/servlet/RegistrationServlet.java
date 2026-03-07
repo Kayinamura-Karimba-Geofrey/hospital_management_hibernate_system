@@ -46,6 +46,21 @@ public class RegistrationServlet extends HttpServlet {
             }
         }
 
+        // Server-side validation
+        if (!ValidationService.isValidEmail(email)) {
+            request.setAttribute("error", "Invalid email format.");
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        if (!ValidationService.isStrongPassword(password)) {
+            request.setAttribute("error", ValidationService.getPasswordStrengthRequirement());
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         // Check if username already exists
         if (userService.existsByUsername(username)) {
             request.setAttribute("error", "Username already exists. Please choose another.");

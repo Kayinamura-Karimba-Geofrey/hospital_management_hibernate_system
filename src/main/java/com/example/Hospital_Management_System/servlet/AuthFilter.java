@@ -14,10 +14,10 @@ public class AuthFilter implements Filter {
 
     static {
         roleAccess.put("ADMIN", new String[]{"*"});
-        roleAccess.put("DOCTOR", new String[]{"dashboard.jsp", "doctors", "patients", "clinical", "surgery", "appointments", "facility", "analytics"});
-        roleAccess.put("NURSE", new String[]{"dashboard.jsp", "nurses", "patients", "clinical", "facility", "appointments"});
-        roleAccess.put("ACCOUNTANT", new String[]{"dashboard.jsp", "financial", "inventory"});
-        roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard.jsp"});
+        roleAccess.put("DOCTOR", new String[]{"dashboard", "doctors", "patients", "clinical", "surgery", "appointments", "facility", "analytics"});
+        roleAccess.put("NURSE", new String[]{"dashboard", "nurses", "patients", "clinical", "facility", "appointments"});
+        roleAccess.put("ACCOUNTANT", new String[]{"dashboard", "financial", "inventory"});
+        roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard"});
     }
 
     @Override
@@ -82,7 +82,7 @@ public class AuthFilter implements Filter {
         // 4. Role-based Authorization
         String userRole = (String) session.getAttribute("role");
         if (userRole == null || !hasAccess(userRole, path)) {
-            res.sendRedirect(req.getContextPath() + "/dashboard.jsp?error=unauthorized");
+            res.sendRedirect(req.getContextPath() + "/dashboard?error=unauthorized");
             return;
         }
 

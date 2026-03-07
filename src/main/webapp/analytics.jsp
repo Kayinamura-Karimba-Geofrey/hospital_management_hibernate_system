@@ -110,16 +110,16 @@
                         <h2>${totalPatients}</h2>
                     </div>
                     <div class="stat-card">
-                        <p>Growth %</p>
-                        <h2>+12%</h2>
+                        <p>Doctors</p>
+                        <h2>${totalDoctors}</h2>
                     </div>
                     <div class="stat-card">
-                        <p>Billing Units</p>
-                        <h2>${totalInvoices}</h2>
+                        <p>Nurses</p>
+                        <h2>${totalNurses}</h2>
                     </div>
                     <div class="stat-card">
                         <p>Active Staff</p>
-                        <h2>24</h2>
+                        <h2>${activeStaff}</h2>
                     </div>
                 </div>
 
@@ -131,6 +131,10 @@
                     <div class="chart-container">
                         <h3>Revenue Distribution</h3>
                         <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="grid-column: span 2;">
+                        <h3>Bed Occupancy Status</h3>
+                        <canvas id="bedChart"></canvas>
                     </div>
                 </div>
 
@@ -204,6 +208,31 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } }
+                    }
+                });
+
+                // Bed Occupancy Chart
+                const bedCtx = document.getElementById('bedChart').getContext('2d');
+                new Chart(bedCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [<c:forEach var="entry" items="${bedData}">"${entry.key}",</c:forEach>],
+                        datasets: [{
+                            label: 'Beds',
+                            data: [<c:forEach var="entry" items="${bedData}">${entry.value},</c:forEach>],
+                            backgroundColor: ['#4facfe', '#00f2fe', '#ffa500'],
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } },
+                            x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                        }
                     }
                 });
             </script>

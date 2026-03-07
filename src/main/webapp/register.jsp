@@ -76,6 +76,10 @@
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" required placeholder="Create a strong password">
+                            <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                                At least 8 characters, one digit, one uppercase, one lowercase, and one special
+                                character.
+                            </small>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Complete
                             Registration</button>

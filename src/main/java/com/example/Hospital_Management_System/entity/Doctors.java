@@ -14,6 +14,7 @@ public class Doctors {
     private String name;
     private String specialisation;
     private String email;
+    private String phone;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -46,6 +47,9 @@ public class Doctors {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public Department getDepartment() { return department; }
     public void setDepartment(Department department) { this.department = department; }

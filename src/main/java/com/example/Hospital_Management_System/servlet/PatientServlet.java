@@ -61,10 +61,25 @@ public class PatientServlet extends HttpServlet {
         String idStr = request.getParameter("id");
         String name = request.getParameter("name");
         String disease = request.getParameter("disease");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         int doctorId = Integer.parseInt(request.getParameter("doctorId"));
         int nurseId = Integer.parseInt(request.getParameter("nurseId"));
 
-        Patients patient = new Patients(name, disease);
+        // Validation
+        if (!ValidationService.isValidEmail(email)) {
+             request.setAttribute("error", "Invalid email format.");
+             doGet(request, response);
+             return;
+        }
+        if (!ValidationService.isValidPhone(phone)) {
+             request.setAttribute("error", "Invalid phone number format.");
+             doGet(request, response);
+             return;
+        }
+
+        Patients patient = new Patients(name, disease, email);
+        patient.setPhone(phone);
         
         // Use a manual session here to fetch relations and save/update
         // Alternatively, update DAO to handle relations, but this is simpler for now

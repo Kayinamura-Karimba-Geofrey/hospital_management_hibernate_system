@@ -57,7 +57,20 @@ public class DoctorServlet extends HttpServlet {
         String name = request.getParameter("name");
         String specialisation = request.getParameter("specialisation");
         String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         int departmentId = Integer.parseInt(request.getParameter("departmentId"));
+
+        // Validation
+        if (!ValidationService.isValidEmail(email)) {
+            request.setAttribute("error", "Invalid email format.");
+            doGet(request, response);
+            return;
+        }
+        if (!ValidationService.isValidPhone(phone)) {
+            request.setAttribute("error", "Invalid phone number format.");
+            doGet(request, response);
+            return;
+        }
 
         Department dept = departmentDAO.getDepartmentById(departmentId);
         
@@ -71,6 +84,7 @@ public class DoctorServlet extends HttpServlet {
             doctor.setId(id);
             doctor.setDepartment(dept);
             doctor.setEmail(email);
+            doctor.setPhone(phone);
             doctorDAO.updateDoctor(doctor);
 
             // Sync User
@@ -88,6 +102,7 @@ public class DoctorServlet extends HttpServlet {
             Doctors doctor = new Doctors(name, specialisation);
             doctor.setDepartment(dept);
             doctor.setEmail(email);
+            doctor.setPhone(phone);
             doctorDAO.saveDoctor(doctor);
 
             // Create User

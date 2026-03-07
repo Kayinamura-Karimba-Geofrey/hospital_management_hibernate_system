@@ -63,9 +63,34 @@ public class AnalyticsServlet extends HttpServlet {
         revenueData.put("Pending", pending);
         request.setAttribute("revenueData", revenueData);
 
+        // Bed Occupancy
+        Map<String, Long> bedData = new HashMap<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Object[]> bedRes = session.createQuery(
+                "SELECT b.status, count(b) FROM Bed b GROUP BY b.status", Object[].class).list();
+            for (Object[] res : bedRes) {
+                bedData.put((String) res[0], (Long) res[1]);
+            }
+        } catch (Exception e) {
+            bedData.put("No Data", 0L);
+        }
+        request.setAttribute("bedData", bedData);
+
+        // Staff stats
+        long doctorCount = 0, nurseCount = 0;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            doctorCount = (Long) session.createQuery("select count(*) from Doctors").uniqueResult();
+            nurseCount = (Long) session.createQuery("select count(*) from Nurses").uniqueResult();
+        } catch (Exception e) {
+             doctorCount = (long) new DoctorDAO().getAllDoctors().size();
+             nurseCount = (long) new NurseDAO().getAllNurses().size();
+        }
 
         request.setAttribute("totalPatients", patientsDAO.getAllPatients().size());
         request.setAttribute("totalInvoices", invoices.size());
+        request.setAttribute("totalDoctors", doctorCount);
+        request.setAttribute("totalNurses", nurseCount);
+        request.setAttribute("activeStaff", doctorCount + nurseCount);
 
         request.getRequestDispatcher("analytics.jsp").forward(request, response);
     }

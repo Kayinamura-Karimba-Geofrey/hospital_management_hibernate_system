@@ -14,6 +14,7 @@ public class Patients {
     private String name;
     private String disease;
     private String email;
+    private String phone;
 
     @Column(name = "created_at", updatable = false)
     private java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
@@ -64,6 +65,9 @@ public class Patients {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public Doctors getDoctor() { return doctor; }
     public void setDoctor(Doctors doctor) { this.doctor = doctor; }

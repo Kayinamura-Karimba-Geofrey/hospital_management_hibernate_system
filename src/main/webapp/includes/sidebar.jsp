@@ -3,7 +3,7 @@
         <div class="sidebar">
             <div class="sidebar-header">HMSystem</div>
             <div class="sidebar-nav">
-                <a href="${pageContext.request.contextPath}/dashboard.jsp" id="nav-dashboard"><span>🏠</span>
+                <a href="${pageContext.request.contextPath}/dashboard" id="nav-dashboard"><span>🏠</span>
                     <span>Dashboard</span></a>
 
                 <c:if test="${sessionScope.role == 'ADMIN'}">

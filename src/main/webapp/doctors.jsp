@@ -15,6 +15,12 @@
                 <h2>Doctor Management</h2>
 
                 <div class="card">
+                    <c:if test="${not empty error}">
+                        <div class="error-alert"
+                            style="background: rgba(255, 75, 43, 0.1); color: #ff4b2b; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255, 75, 43, 0.2);">
+                            ${error}
+                        </div>
+                    </c:if>
                     <h3>${editableDoc != null ? 'Edit' : 'Add New'} Doctor</h3>
                     <form action="doctors" method="post"
                         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end;">
@@ -34,6 +40,10 @@
                             <label>Email Address</label>
                             <input type="email" name="email" required placeholder="email@hmsystem.com"
                                 value="${editableDoc.email}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" name="phone" placeholder="e.g. +1234567890" value="${editableDoc.phone}">
                         </div>
                         <div class="form-group">
                             <label>Department</label>
@@ -78,7 +88,10 @@
                                         <td>${doc.id}</td>
                                         <td>${doc.name}</td>
                                         <td>${doc.specialisation}</td>
-                                        <td>${doc.email}</td>
+                                        <td>
+                                            ${doc.email}<br>
+                                            <small style="opacity: 0.7">${doc.phone}</small>
+                                        </td>
                                         <td>${doc.department.name}</td>
                                         <td style="display: flex; gap: 10px;">
                                             <a href="doctors?action=edit&id=${doc.id}"

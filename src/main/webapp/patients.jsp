@@ -30,6 +30,15 @@
                                 value="${editablePatient.disease}">
                         </div>
                         <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" required placeholder="patient@example.com"
+                                value="${editablePatient.email}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" name="phone" placeholder="+1234567890" value="${editablePatient.phone}">
+                        </div>
+                        <div class="form-group">
                             <label>Assigned Doctor</label>
                             <select name="doctorId" required>
                                 <option value="" disabled>Select Doctor</option>
@@ -78,7 +87,10 @@
                                 <c:forEach var="p" items="${patients}">
                                     <tr>
                                         <td>${p.id}</td>
-                                        <td>${p.name}</td>
+                                        <td>
+                                            ${p.name}<br>
+                                            <small style="opacity: 0.7">${p.email} | ${p.phone}</small>
+                                        </td>
                                         <td>${p.disease}</td>
                                         <td>${p.doctor.name}</td>
                                         <td>${p.nurse.name}</td>
