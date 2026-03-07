@@ -74,14 +74,14 @@
                                 <tr>
                                     <td>
                                         <span class="room-tag">${s.otRoomName}</span>
-                                        <div style="font-weight: 600; font-size: 1.1rem;">${s.patient.fullName}</div>
+                                        <div style="font-weight: 600; font-size: 1.1rem;">${s.patient.name}</div>
                                         <div style="font-size: 0.8rem; opacity: 0.7;">Equipment: ${s.equipment}</div>
                                     </td>
                                     <td>
                                         <div style="font-size: 0.8rem; opacity: 0.6;">SURGEON</div>
-                                        <strong>Dr. ${s.surgeon.fullName}</strong>
+                                        <strong>Dr. ${s.surgeon.name}</strong>
                                         <div style="font-size: 0.75rem; color: var(--primary);">Anes: ${s.anesthetist !=
-                                            null ? s.anesthetist.fullName : 'N/A'}</div>
+                                            null ? s.anesthetist.name : 'N/A'}</div>
                                     </td>
                                     <td style="text-align: right;">
                                         <div class="time-badge">${s.surgeryDateTime}</div>
@@ -107,7 +107,7 @@
                                 <label>Patient</label>
                                 <select name="patientId" required>
                                     <c:forEach var="p" items="${patients}">
-                                        <option value="${p.id}">${p.fullName}</option>
+                                        <option value="${p.id}">${p.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -115,7 +115,16 @@
                                 <label>Lead Surgeon</label>
                                 <select name="surgeonId" required>
                                     <c:forEach var="d" items="${doctors}">
-                                        <option value="${d.id}">Dr. ${d.fullName}</option>
+                                        <option value="${d.id}">Dr. ${d.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Anesthetist</label>
+                                <select name="anesthetistId">
+                                    <option value="">Select Anesthetist (Optional)</option>
+                                    <c:forEach var="d" items="${doctors}">
+                                        <option value="${d.id}">Dr. ${d.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>

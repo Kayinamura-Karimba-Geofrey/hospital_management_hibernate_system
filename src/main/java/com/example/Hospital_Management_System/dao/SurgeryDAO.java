@@ -12,7 +12,7 @@ public class SurgeryDAO {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.saveOrUpdate(surgery);
+            session.merge(surgery);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
