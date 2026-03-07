@@ -49,6 +49,7 @@ public class DoctorServlet extends HttpServlet {
         String idStr = request.getParameter("id");
         String name = request.getParameter("name");
         String specialisation = request.getParameter("specialisation");
+        String email = request.getParameter("email");
         int departmentId = Integer.parseInt(request.getParameter("departmentId"));
 
         Department dept = departmentDAO.getDepartmentById(departmentId);
@@ -59,11 +60,13 @@ public class DoctorServlet extends HttpServlet {
             Doctors doctor = new Doctors(name, specialisation);
             doctor.setId(id);
             doctor.setDepartment(dept);
+            doctor.setEmail(email);
             doctorDAO.updateDoctor(doctor);
         } else {
             // Save
             Doctors doctor = new Doctors(name, specialisation);
             doctor.setDepartment(dept);
+            doctor.setEmail(email);
             doctorDAO.saveDoctor(doctor);
         }
 

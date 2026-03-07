@@ -30,6 +30,11 @@
                                 value="${editableDoc.specialisation}">
                         </div>
                         <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" required placeholder="email@hmsystem.com"
+                                value="${editableDoc.email}">
+                        </div>
+                        <div class="form-group">
                             <label>Department</label>
                             <select name="departmentId" required>
                                 <option value="" disabled>Select Dept</option>
@@ -61,6 +66,7 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Specialisation</th>
+                                    <th>Email</th>
                                     <th>Department</th>
                                     <th>Actions</th>
                                 </tr>
@@ -71,6 +77,7 @@
                                         <td>${doc.id}</td>
                                         <td>${doc.name}</td>
                                         <td>${doc.specialisation}</td>
+                                        <td>${doc.email}</td>
                                         <td>${doc.department.name}</td>
                                         <td style="display: flex; gap: 10px;">
                                             <a href="doctors?action=edit&id=${doc.id}"

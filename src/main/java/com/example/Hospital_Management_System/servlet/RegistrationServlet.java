@@ -77,6 +77,7 @@ public class RegistrationServlet extends HttpServlet {
                     Department dept = session.get(Department.class, deptId);
                     Doctors doctor = new Doctors(fullName, "General");
                     doctor.setDepartment(dept);
+                    doctor.setEmail(email);
                     session.persist(doctor);
                 }
             } else if ("NURSE".equalsIgnoreCase(role)) {
