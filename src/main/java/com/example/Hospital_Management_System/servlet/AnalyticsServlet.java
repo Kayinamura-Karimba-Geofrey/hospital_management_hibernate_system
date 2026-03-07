@@ -3,6 +3,7 @@ package com.example.Hospital_Management_System.servlet;
 import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
 import com.example.Hospital_Management_System.entity.util.HibernateUtil;
+import com.example.Hospital_Management_System.service.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,53 +21,57 @@ import java.util.TreeMap;
 public class AnalyticsServlet extends HttpServlet {
 
     private AuditLogDAO auditLogDAO;
-    private InvoiceDAO invoiceDAO;
-    private PatientsDAO patientsDAO;
+    private FinancialService financialService;
+    private PatientService patientService;
+    private DoctorService doctorService;
+    private NurseService nurseService;
 
     @Override
     public void init() {
         auditLogDAO = new AuditLogDAO();
-        invoiceDAO = new InvoiceDAO();
-        patientsDAO = new PatientsDAO();
+        financialService = new FinancialService();
+        patientService = new PatientService();
+        doctorService = new DoctorService();
+        nurseService = new NurseService();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-
+        // 1. Audit Logs
         List<AuditLog> recentLogs = auditLogDAO.getAllLogs();
         request.setAttribute("auditLogs", recentLogs);
 
-
+        // 2. Patient Inflow (using generic HQL/SQL)
         Map<String, Long> inflowData = new TreeMap<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Object[]> results = session.createQuery(
-                "SELECT function('monthname', p.createdAt), count(p) FROM Patients p GROUP BY function('monthname', p.createdAt)", Object[].class).list();
+            // Use native query or more portable HQL for patient inflow
+            List<Object[]> results = session.createNativeQuery(
+                "SELECT TO_CHAR(created_at, 'Month'), COUNT(*) FROM patients GROUP BY TO_CHAR(created_at, 'Month')", Object[].class).list();
             for (Object[] res : results) {
                 inflowData.put((String) res[0], (Long) res[1]);
             }
         } catch (Exception e) {
-
-            inflowData.put("March", (long) patientsDAO.getAllPatients().size());
+            inflowData.put("Current Month", (long) patientService.getAllPatients().size());
         }
         request.setAttribute("inflowData", inflowData);
 
-
+        // 3. Revenue Data
         Map<String, Double> revenueData = new HashMap<>();
-        List<Invoice> invoices = invoiceDAO.getAllInvoices();
+        List<Invoice> invoices = financialService.getAllInvoices();
         double paid = 0, pending = 0;
         for (Invoice inv : invoices) {
-            if ("PAID".equals(inv.getStatus())) paid += inv.getTotalAmount();
-            else pending += inv.getTotalAmount();
+            if ("PAID".equalsIgnoreCase(inv.getStatus())) paid += inv.getAmount();
+            else pending += inv.getAmount();
         }
         revenueData.put("Paid", paid);
         revenueData.put("Pending", pending);
         request.setAttribute("revenueData", revenueData);
 
-        // Bed Occupancy
+        // 4. Bed Occupancy
         Map<String, Long> bedData = new HashMap<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Object[]> bedRes = session.createQuery(
+             List<Object[]> bedRes = session.createQuery(
                 "SELECT b.status, count(b) FROM Bed b GROUP BY b.status", Object[].class).list();
             for (Object[] res : bedRes) {
                 bedData.put((String) res[0], (Long) res[1]);
@@ -77,16 +82,10 @@ public class AnalyticsServlet extends HttpServlet {
         request.setAttribute("bedData", bedData);
 
         // Staff stats
-        long doctorCount = 0, nurseCount = 0;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            doctorCount = (Long) session.createQuery("select count(*) from Doctors").uniqueResult();
-            nurseCount = (Long) session.createQuery("select count(*) from Nurses").uniqueResult();
-        } catch (Exception e) {
-             doctorCount = (long) new DoctorDAO().getAllDoctors().size();
-             nurseCount = (long) new NurseDAO().getAllNurses().size();
-        }
+        long doctorCount = doctorService.getAllDoctors().size();
+        long nurseCount = nurseService.getAllNurses().size();
 
-        request.setAttribute("totalPatients", patientsDAO.getAllPatients().size());
+        request.setAttribute("totalPatients", patientService.getAllPatients().size());
         request.setAttribute("totalInvoices", invoices.size());
         request.setAttribute("totalDoctors", doctorCount);
         request.setAttribute("totalNurses", nurseCount);

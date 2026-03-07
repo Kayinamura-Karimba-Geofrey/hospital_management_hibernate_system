@@ -1,30 +1,28 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.InventoryDAO;
 import com.example.Hospital_Management_System.entity.InventoryItem;
+import com.example.Hospital_Management_System.service.InventoryService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/inventory")
 public class InventoryServlet extends HttpServlet {
-
-    private InventoryDAO inventoryDAO;
+    private InventoryService inventoryService;
 
     public void init() {
-        inventoryDAO = new InventoryDAO();
+        inventoryService = new InventoryService();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<InventoryItem> allItems = inventoryDAO.getAllItems();
-        List<InventoryItem> lowStockItems = inventoryDAO.getLowStockItems();
+        List<InventoryItem> allItems = inventoryService.getAllItems();
+        List<InventoryItem> lowStockItems = inventoryService.getLowStockItems();
         
         request.setAttribute("items", allItems);
         request.setAttribute("lowStockItems", lowStockItems);
@@ -49,7 +47,7 @@ public class InventoryServlet extends HttpServlet {
         InventoryItem item = null;
         
         if (idStr != null && !idStr.isEmpty()) {
-            item = inventoryDAO.getById(Integer.parseInt(idStr));
+            item = inventoryService.getItemById(Integer.parseInt(idStr));
         }
         
         if (item == null) {
@@ -60,20 +58,18 @@ public class InventoryServlet extends HttpServlet {
         item.setType(request.getParameter("type"));
         item.setQuantity(Integer.parseInt(request.getParameter("quantity")));
         item.setUnitPrice(Double.parseDouble(request.getParameter("unitPrice")));
-        item.setExpiryDate(LocalDate.parse(request.getParameter("expiryDate")));
+        String expiryDateStr = request.getParameter("expiryDate");
+        if (expiryDateStr != null && !expiryDateStr.isEmpty()) {
+             item.setExpiryDate(LocalDate.parse(expiryDateStr));
+        }
         item.setMinThreshold(Integer.parseInt(request.getParameter("minThreshold")));
         
-        inventoryDAO.saveOrUpdate(item);
+        inventoryService.saveOrUpdateItem(item);
     }
 
     private void updateQuantity(HttpServletRequest request) {
         int itemId = Integer.parseInt(request.getParameter("itemId"));
-        int delta = Integer.parseInt(request.getParameter("delta")); // Positive to add, negative to consume
-        
-        InventoryItem item = inventoryDAO.getById(itemId);
-        if (item != null) {
-            item.setQuantity(item.getQuantity() + delta);
-            inventoryDAO.saveOrUpdate(item);
-        }
+        int delta = Integer.parseInt(request.getParameter("delta"));
+        inventoryService.updateQuantity(itemId, delta);
     }
 }

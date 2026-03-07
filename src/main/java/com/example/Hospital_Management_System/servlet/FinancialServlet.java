@@ -1,46 +1,43 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
+import com.example.Hospital_Management_System.service.FinancialService;
+import com.example.Hospital_Management_System.service.PatientService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/financial")
 public class FinancialServlet extends HttpServlet {
-
-    private InvoiceDAO invoiceDAO;
-    private InsuranceDAO insuranceDAO;
-    private PatientsDAO patientsDAO;
+    private FinancialService financialService;
+    private PatientService patientService;
 
     public void init() {
-        invoiceDAO = new InvoiceDAO();
-        insuranceDAO = new InsuranceDAO();
-        patientsDAO = new PatientsDAO();
+        financialService = new FinancialService();
+        patientService = new PatientService();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String patientIdStr = request.getParameter("patientId");
         
-        if (patientIdStr != null) {
+        if (patientIdStr != null && !patientIdStr.isEmpty()) {
             int patientId = Integer.parseInt(patientIdStr);
-            Patients patient = patientsDAO.getPatientById(patientId);
-            List<Invoice> patientInvoices = invoiceDAO.getByPatientId(patientId);
-            Insurance insurance = insuranceDAO.getByPatientId(patientId);
+            Patients patient = patientService.getPatientById(patientId);
+            List<Invoice> patientInvoices = financialService.getInvoicesByPatientId(patientId);
+            Insurance insurance = financialService.getInsuranceByPatientId(patientId);
             
             request.setAttribute("selectedPatient", patient);
             request.setAttribute("patientInvoices", patientInvoices);
             request.setAttribute("insurance", insurance);
         }
 
-        List<Invoice> allInvoices = invoiceDAO.getAllInvoices();
-        List<Patients> allPatients = patientsDAO.getAllPatients();
+        List<Invoice> allInvoices = financialService.getAllInvoices();
+        List<Patients> allPatients = patientService.getAllPatients();
         
         request.setAttribute("allInvoices", allInvoices);
         request.setAttribute("allPatients", allPatients);
@@ -51,54 +48,36 @@ public class FinancialServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("generateInvoice".equals(action)) {
-            generateInvoice(request);
-        } else if ("updatePaymentStatus".equals(action)) {
-            updatePaymentStatus(request);
-        } else if ("updateInsurance".equals(action)) {
-            updateInsurance(request);
+        try {
+            if ("generateInvoice".equals(action)) {
+                int patientId = Integer.parseInt(request.getParameter("patientId"));
+                double amount = Double.parseDouble(request.getParameter("amount"));
+                String description = request.getParameter("description");
+                financialService.generateInvoice(patientId, amount, description);
+            } else if ("updatePaymentStatus".equals(action)) {
+                int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
+                String status = request.getParameter("status");
+                financialService.updatePaymentStatus(invoiceId, status);
+            } else if ("updateInsurance".equals(action)) {
+                int patientId = Integer.parseInt(request.getParameter("patientId"));
+                String provider = request.getParameter("provider");
+                String policyNumber = request.getParameter("policyNumber");
+                double coverage = Double.parseDouble(request.getParameter("coveragePercentage"));
+
+                Insurance insurance = financialService.getInsuranceByPatientId(patientId);
+                if (insurance == null) {
+                    insurance = new Insurance();
+                    insurance.setPatient(patientService.getPatientById(patientId));
+                }
+                insurance.setProvider(provider);
+                insurance.setPolicyNumber(policyNumber);
+                insurance.setCoveragePercentage(coverage);
+                financialService.saveOrUpdateInsurance(insurance);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         response.sendRedirect(request.getContextPath() + "/financial");
-    }
-
-    private void generateInvoice(HttpServletRequest request) {
-        int patientId = Integer.parseInt(request.getParameter("patientId"));
-        double amount = Double.parseDouble(request.getParameter("amount"));
-        String description = request.getParameter("description");
-
-        Invoice invoice = new Invoice();
-        invoice.setPatient(patientsDAO.getPatientById(patientId));
-        invoice.setAmount(amount);
-        invoice.setDescription(description);
-        invoiceDAO.save(invoice);
-    }
-
-    private void updatePaymentStatus(HttpServletRequest request) {
-        int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
-        String status = request.getParameter("status");
-        
-        Invoice invoice = invoiceDAO.getById(invoiceId);
-        if (invoice != null) {
-            invoice.setStatus(status);
-            invoiceDAO.update(invoice);
-        }
-    }
-
-    private void updateInsurance(HttpServletRequest request) {
-        int patientId = Integer.parseInt(request.getParameter("patientId"));
-        String provider = request.getParameter("provider");
-        String policyNumber = request.getParameter("policyNumber");
-        double coverage = Double.parseDouble(request.getParameter("coveragePercentage"));
-
-        Insurance insurance = insuranceDAO.getByPatientId(patientId);
-        if (insurance == null) {
-            insurance = new Insurance();
-            insurance.setPatient(patientsDAO.getPatientById(patientId));
-        }
-        insurance.setProvider(provider);
-        insurance.setPolicyNumber(policyNumber);
-        insurance.setCoveragePercentage(coverage);
-        insuranceDAO.saveOrUpdate(insurance);
     }
 }

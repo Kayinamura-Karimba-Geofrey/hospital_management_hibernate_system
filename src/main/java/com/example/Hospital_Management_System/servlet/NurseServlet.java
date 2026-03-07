@@ -1,9 +1,10 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.NurseDAO;
 import com.example.Hospital_Management_System.dao.DepartmentDAO;
 import com.example.Hospital_Management_System.entity.Nurses;
 import com.example.Hospital_Management_System.entity.Department;
+import com.example.Hospital_Management_System.service.NurseService;
+import com.example.Hospital_Management_System.service.AuditService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,11 +15,11 @@ import java.util.List;
 
 @WebServlet("/nurses")
 public class NurseServlet extends HttpServlet {
-    private NurseDAO nurseDAO;
+    private NurseService nurseService;
     private DepartmentDAO departmentDAO;
 
     public void init() {
-        nurseDAO = new NurseDAO();
+        nurseService = new NurseService();
         departmentDAO = new DepartmentDAO();
     }
 
@@ -28,16 +29,17 @@ public class NurseServlet extends HttpServlet {
 
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            nurseDAO.deleteNurse(id);
+            nurseService.deleteNurse(id);
+            AuditService.log(request.getSession(), "DELETE", "Nurse", String.valueOf(id), "Deleted nurse with ID: " + id);
             response.sendRedirect(request.getContextPath() + "/nurses");
             return;
         } else if ("edit".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            Nurses nurse = nurseDAO.getNurseById(id);
+            Nurses nurse = nurseService.getNurseById(id);
             request.setAttribute("editableNurse", nurse);
         }
 
-        List<Nurses> nurses = nurseDAO.getAllNurses();
+        List<Nurses> nurses = nurseService.getAllNurses();
         List<Department> departments = departmentDAO.getAllDepartments();
         request.setAttribute("nurses", nurses);
         request.setAttribute("departments", departments);
@@ -48,20 +50,26 @@ public class NurseServlet extends HttpServlet {
             throws ServletException, IOException {
         String idStr = request.getParameter("id");
         String name = request.getParameter("name");
+        String email = request.getParameter("email");
         int departmentId = Integer.parseInt(request.getParameter("departmentId"));
 
         Department dept = departmentDAO.getDepartmentById(departmentId);
+        Nurses nurse = new Nurses(name, dept);
+        nurse.setEmail(email);
         
         if (idStr != null && !idStr.isEmpty()) {
             // Update
             int id = Integer.parseInt(idStr);
-            Nurses nurse = new Nurses(name, dept);
+            Nurses oldNurse = nurseService.getNurseById(id);
+            String oldEmail = (oldNurse != null) ? oldNurse.getEmail() : null;
+            
             nurse.setId(id);
-            nurseDAO.updateNurse(nurse);
+            nurseService.updateNurse(nurse, oldEmail);
+            AuditService.log(request.getSession(), "UPDATE", "Nurse", idStr, "Updated nurse: " + name + " (" + email + ")");
         } else {
             // Save
-            Nurses nurse = new Nurses(name, dept);
-            nurseDAO.saveNurse(nurse);
+            nurseService.saveNurse(nurse);
+            AuditService.log(request.getSession(), "CREATE", "Nurse", String.valueOf(nurse.getId()), "Created new nurse: " + name + " (" + email + ")");
         }
 
         response.sendRedirect(request.getContextPath() + "/nurses");

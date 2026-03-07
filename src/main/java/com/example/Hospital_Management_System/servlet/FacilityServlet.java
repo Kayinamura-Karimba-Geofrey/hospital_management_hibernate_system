@@ -1,9 +1,9 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
-import com.example.Hospital_Management_System.service.PatientsService;
-import com.example.Hospital_Management_System.service.DoctorsService;
+import com.example.Hospital_Management_System.service.PatientService;
+import com.example.Hospital_Management_System.service.DoctorService;
+import com.example.Hospital_Management_System.service.FacilityService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,26 +16,29 @@ import java.util.List;
 
 @WebServlet(name = "FacilityServlet", urlPatterns = {"/facility", "/surgery"})
 public class FacilityServlet extends HttpServlet {
-    private WardDAO wardDAO = new WardDAO();
-    private BedDAO bedDAO = new BedDAO();
-    private AdmissionDAO admissionDAO = new AdmissionDAO();
-    private SurgeryDAO surgeryDAO = new SurgeryDAO();
-    private PatientsService patientsService = new PatientsService();
-    private DoctorsService doctorsService = new DoctorsService();
+    private FacilityService facilityService;
+    private PatientService patientService;
+    private DoctorService doctorService;
+
+    public void init() {
+        facilityService = new FacilityService();
+        patientService = new PatientService();
+        doctorService = new DoctorService();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
         
         if (path.equals("/facility")) {
-            List<Ward> wards = wardDAO.getAllWards();
-            List<Patients> patients = patientsService.getAllPatients();
+            List<Ward> wards = facilityService.getAllWards();
+            List<Patients> patients = patientService.getAllPatients();
             request.setAttribute("wards", wards);
             request.setAttribute("patients", patients);
             request.getRequestDispatcher("facility.jsp").forward(request, response);
         } else if (path.equals("/surgery")) {
-            List<Surgery> surgeries = surgeryDAO.getAllSurgeries();
-            List<Patients> patients = patientsService.getAllPatients();
-            List<Doctors> doctors = doctorsService.getAllDoctors();
+            List<Surgery> surgeries = facilityService.getAllSurgeries();
+            List<Patients> patients = patientService.getAllPatients();
+            List<Doctors> doctors = doctorService.getAllDoctors();
             request.setAttribute("surgeries", surgeries);
             request.setAttribute("patients", patients);
             request.setAttribute("doctors", doctors);
@@ -51,29 +54,25 @@ public class FacilityServlet extends HttpServlet {
                 int patientId = Integer.parseInt(request.getParameter("patientId"));
                 Long bedId = Long.parseLong(request.getParameter("bedId"));
                 
-                Patients patient = patientsService.getPatientById(patientId);
-                Bed bed = bedDAO.getBedById(bedId);
+                Patients patient = patientService.getPatientById(patientId);
+                Bed bed = facilityService.getBedById(bedId);
                 
-                if (patient != null && bed != null && "AVAILABLE".equals(bed.getStatus())) {
-                    Admission admission = new Admission(patient, bed, LocalDateTime.now());
-                    admissionDAO.save(admission);
-                    bedDAO.updateBedStatus(bedId, "OCCUPIED");
-                }
+                facilityService.admitPatient(patient, bed);
                 response.sendRedirect("facility");
                 
             } else if ("discharge".equals(action)) {
                 Long admissionId = Long.parseLong(request.getParameter("admissionId"));
-                admissionDAO.discharge(admissionId);
+                facilityService.dischargePatient(admissionId);
                 response.sendRedirect("facility");
                 
             } else if ("scheduleSurgery".equals(action)) {
                 Surgery surgery = new Surgery();
-                surgery.setPatient(patientsService.getPatientById(Integer.parseInt(request.getParameter("patientId"))));
-                surgery.setSurgeon(doctorsService.getDoctorById(Integer.parseInt(request.getParameter("surgeonId"))));
+                surgery.setPatient(patientService.getPatientById(Integer.parseInt(request.getParameter("patientId"))));
+                surgery.setSurgeon(doctorService.getDoctorById(Integer.parseInt(request.getParameter("surgeonId"))));
                 
                 String anesthetistId = request.getParameter("anesthetistId");
                 if (anesthetistId != null && !anesthetistId.isEmpty()) {
-                    surgery.setAnesthetist(doctorsService.getDoctorById(Integer.parseInt(anesthetistId)));
+                    surgery.setAnesthetist(doctorService.getDoctorById(Integer.parseInt(anesthetistId)));
                 }
                 
                 surgery.setOtRoomName(request.getParameter("otRoomName"));
@@ -81,7 +80,7 @@ public class FacilityServlet extends HttpServlet {
                 surgery.setDurationMinutes(Integer.parseInt(request.getParameter("duration")));
                 surgery.setEquipment(request.getParameter("equipment"));
                 
-                surgeryDAO.saveOrUpdate(surgery);
+                facilityService.scheduleSurgery(surgery);
                 response.sendRedirect("surgery");
             }
         } catch (Exception e) {

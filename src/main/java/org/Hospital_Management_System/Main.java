@@ -8,38 +8,38 @@ import java.time.LocalTime;
 public class Main {
     public static void main(String[] args) {
 
-        DoctorsService doctorsService = new DoctorsService();
-        PatientsService patientsService = new PatientsService();
-        NursesServices nursesServices = new NursesServices();
-        AppointmentsService appointmentsService = new AppointmentsService();
+        DoctorService doctorService = new DoctorService();
+        PatientService patientService = new PatientService();
+        NurseService nurseService = new NurseService();
+        AppointmentService appointmentService = new AppointmentService();
 
         // Create a default department
         Department generalDept = new Department("General", "Wing A");
 
         Doctors d1 = new Doctors("Mr. John", "Cardiologist");
         d1.setDepartment(generalDept);
-        doctorsService.saveDoctors(d1);
+        doctorService.saveDoctor(d1);
 
 
-        Patients p1 = new Patients("James", "Malaria");
+        Patients p1 = new Patients("James", "Malaria", "james@example.com");
         p1.setDoctor(d1);
-        patientsService.createPatient(p1);
+        patientService.savePatient(p1, d1.getId(), 0);
 
 
         Nurses n1 = new Nurses("Jane", generalDept);
-        nursesServices.createNurses(n1);
+        nurseService.saveNurse(n1);
 
 
         Appointments a1 = new Appointments(LocalDate.of(2025, 10, 11), LocalTime.of(10, 37));
-        appointmentsService.createAppointments(a1);
+        appointmentService.saveAppointment(a1);
 
 
-        Doctors fetched = doctorsService.getDoctors(d1.getId());
+        Doctors fetched = doctorService.getDoctorById(d1.getId());
         System.out.println("Fetched Doctor: " + fetched.getName() + " (" + fetched.getSpecialisation() + ")");
 
 
         fetched.setName("Alice N.");
-        doctorsService.updateDoctor(fetched);
+        doctorService.updateDoctor(fetched, fetched.getEmail());
 
         System.out.println(" All operations completed successfully!");
     }

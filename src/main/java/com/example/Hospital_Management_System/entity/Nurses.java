@@ -12,6 +12,7 @@ public class Nurses {
     private int id;
 
     private String name;
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -47,6 +48,14 @@ public class Nurses {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Department getDepartment() {

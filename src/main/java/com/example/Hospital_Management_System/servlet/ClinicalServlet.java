@@ -1,8 +1,10 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
 import com.example.Hospital_Management_System.service.AuditService;
+import com.example.Hospital_Management_System.service.ClinicalService;
+import com.example.Hospital_Management_System.service.DoctorService;
+import com.example.Hospital_Management_System.service.PatientService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,21 +19,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet("/clinical")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-                 maxFileSize = 1024 * 1024 * 10,      // 10MB
-                 maxRequestSize = 1024 * 1024 * 50)   // 50MB
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,
+                 maxFileSize = 1024 * 1024 * 10,
+                 maxRequestSize = 1024 * 1024 * 50)
 public class ClinicalServlet extends HttpServlet {
-    private PatientsDAO patientsDAO;
-    private PatientRecordDAO recordDAO;
-    private PrescriptionDAO prescriptionDAO;
-
-    private LabTestDAO labTestDAO;
+    private ClinicalService clinicalService;
+    private PatientService patientService;
+    private DoctorService doctorService;
 
     public void init() {
-        patientsDAO = new PatientsDAO();
-        recordDAO = new PatientRecordDAO();
-        prescriptionDAO = new PrescriptionDAO();
-        labTestDAO = new LabTestDAO();
+        clinicalService = new ClinicalService();
+        patientService = new PatientService();
+        doctorService = new DoctorService();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,13 +39,13 @@ public class ClinicalServlet extends HttpServlet {
 
         if (idStr != null && !idStr.isEmpty()) {
             int patientId = Integer.parseInt(idStr);
-            Patients patient = patientsDAO.getPatientById(patientId);
-            PatientRecord record = recordDAO.getByPatientId(patientId);
+            Patients patient = patientService.getPatientById(patientId);
+            PatientRecord record = clinicalService.getRecordByPatientId(patientId);
             if (record == null) {
                 record = new PatientRecord(patient);
             }
-            List<Prescription> prescriptions = prescriptionDAO.getByPatientId(patientId);
-            List<LabTest> labTests = labTestDAO.getByPatientId(patientId);
+            List<Prescription> prescriptions = clinicalService.getPrescriptionsByPatientId(patientId);
+            List<LabTest> labTests = clinicalService.getLabTestsByPatientId(patientId);
 
             request.setAttribute("patient", patient);
             request.setAttribute("record", record);
@@ -56,7 +55,7 @@ public class ClinicalServlet extends HttpServlet {
         } else if ("download".equals(request.getParameter("action"))) {
             downloadFile(request, response);
         } else {
-            List<Patients> patients = patientsDAO.getAllPatients();
+            List<Patients> patients = patientService.getAllPatients();
             request.setAttribute("patients", patients);
             request.getRequestDispatcher("clinical-records.jsp").forward(request, response);
         }
@@ -65,8 +64,12 @@ public class ClinicalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        int patientId = Integer.parseInt(request.getParameter("patientId"));
-
+        String patientIdStr = request.getParameter("patientId");
+        if (patientIdStr == null) {
+             response.sendRedirect(request.getContextPath() + "/clinical");
+             return;
+        }
+        int patientId = Integer.parseInt(patientIdStr);
         String userRole = (String) request.getSession().getAttribute("role");
 
         if ("updateEHR".equals(action)) {
@@ -80,7 +83,6 @@ public class ClinicalServlet extends HttpServlet {
                 requestLab(request, patientId);
             }
         } else if ("uploadLabResult".equals(action)) {
-            // Lab results can be uploaded by staff (Nurses included)
             uploadLabResult(request);
         }
 
@@ -88,15 +90,20 @@ public class ClinicalServlet extends HttpServlet {
     }
 
     private void updateEHR(HttpServletRequest request, int patientId) {
-        PatientRecord record = recordDAO.getByPatientId(patientId);
+        PatientRecord record = clinicalService.getRecordByPatientId(patientId);
         if (record == null) {
-            record = new PatientRecord(patientsDAO.getPatientById(patientId));
+            record = new PatientRecord(patientService.getPatientById(patientId));
         }
         record.setMedicalHistory(request.getParameter("medicalHistory"));
         record.setAllergies(request.getParameter("allergies"));
         record.setBloodPressure(request.getParameter("bloodPressure"));
-        record.setHeartRate(Integer.parseInt(request.getParameter("heartRate")));
-        record.setTemperature(Double.parseDouble(request.getParameter("temperature")));
+        
+        String hrStr = request.getParameter("heartRate");
+        if (hrStr != null && !hrStr.isEmpty()) record.setHeartRate(Integer.parseInt(hrStr));
+        
+        String tempStr = request.getParameter("temperature");
+        if (tempStr != null && !tempStr.isEmpty()) record.setTemperature(Double.parseDouble(tempStr));
+        
         record.setImmunizations(request.getParameter("immunizations"));
         
         try {
@@ -113,44 +120,46 @@ public class ClinicalServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        recordDAO.saveOrUpdate(record);
+        clinicalService.saveOrUpdateRecord(record);
         AuditService.log(request.getSession(), "UPDATE", "PatientRecord", String.valueOf(patientId), "Updated EHR data");
     }
 
     private void addPrescription(HttpServletRequest request, int patientId) {
-        User user = (User) request.getSession().getAttribute("user");
-        // We need a way to get the Doctor entity associated with this user
-        // For now, let's assume the first doctor for simplicity if we can't find a better way
-        // In a real app, User would have a link to Doctor/Nurse
-        DoctorDAO doctorDAO = new DoctorDAO();
-        Doctors doctor = doctorDAO.getAllDoctors().get(0); 
-
+        List<Doctors> doctors = doctorService.getAllDoctors();
+        if (doctors.isEmpty()) return;
+        
+        Doctors doctor = doctors.get(0); 
         Prescription p = new Prescription();
-        p.setPatient(patientsDAO.getPatientById(patientId));
+        p.setPatient(patientService.getPatientById(patientId));
         p.setDoctor(doctor);
         p.setMedicationName(request.getParameter("medicationName"));
         p.setDosage(request.getParameter("dosage"));
         p.setFrequency(request.getParameter("frequency"));
         p.setInstructions(request.getParameter("instructions"));
-        prescriptionDAO.save(p);
+        clinicalService.savePrescription(p);
         AuditService.log(request.getSession(), "CREATE", "Prescription", String.valueOf(p.getId()), "Added prescription: " + p.getMedicationName());
     }
 
     private void requestLab(HttpServletRequest request, int patientId) {
-        DoctorDAO doctorDAO = new DoctorDAO();
-        Doctors doctor = doctorDAO.getAllDoctors().get(0);
-
+        List<Doctors> doctors = doctorService.getAllDoctors();
+        if (doctors.isEmpty()) return;
+        
+        Doctors doctor = doctors.get(0);
         LabTest lt = new LabTest();
-        lt.setPatient(patientsDAO.getPatientById(patientId));
+        lt.setPatient(patientService.getPatientById(patientId));
         lt.setDoctor(doctor);
         lt.setTestName(request.getParameter("testName"));
-        labTestDAO.saveOrUpdate(lt);
+        clinicalService.saveOrUpdateLabTest(lt);
         AuditService.log(request.getSession(), "CREATE", "LabTest", String.valueOf(lt.getId()), "Requested lab test: " + lt.getTestName());
     }
 
     private void uploadLabResult(HttpServletRequest request) throws IOException, ServletException {
-        int testId = Integer.parseInt(request.getParameter("testId"));
-        LabTest lt = labTestDAO.getById(testId);
+        String testIdStr = request.getParameter("testId");
+        if (testIdStr == null || testIdStr.isEmpty()) return;
+        
+        int testId = Integer.parseInt(testIdStr);
+        LabTest lt = clinicalService.getLabTestById(testId);
+        if (lt == null) return;
         
         Part filePart = request.getPart("resultFile");
         if (filePart != null && filePart.getSize() > 0) {
@@ -164,7 +173,7 @@ public class ClinicalServlet extends HttpServlet {
             lt.setStatus("COMPLETED");
             lt.setCompletedDate(LocalDateTime.now());
             lt.setObservations(request.getParameter("observations"));
-            labTestDAO.saveOrUpdate(lt);
+            clinicalService.saveOrUpdateLabTest(lt);
         }
     }
 

@@ -1,31 +1,29 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.PatientsDAO;
 import com.example.Hospital_Management_System.dao.DoctorDAO;
 import com.example.Hospital_Management_System.dao.NurseDAO;
 import com.example.Hospital_Management_System.entity.Patients;
 import com.example.Hospital_Management_System.entity.Doctors;
 import com.example.Hospital_Management_System.entity.Nurses;
-import com.example.Hospital_Management_System.entity.util.HibernateUtil;
 import com.example.Hospital_Management_System.service.AuditService;
+import com.example.Hospital_Management_System.service.PatientService;
+import com.example.Hospital_Management_System.service.ValidationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/patients")
 public class PatientServlet extends HttpServlet {
-    private PatientsDAO patientsDAO;
+    private PatientService patientService;
     private DoctorDAO doctorDAO;
     private NurseDAO nurseDAO;
 
     public void init() {
-        patientsDAO = new PatientsDAO();
+        patientService = new PatientService();
         doctorDAO = new DoctorDAO();
         nurseDAO = new NurseDAO();
     }
@@ -36,18 +34,17 @@ public class PatientServlet extends HttpServlet {
 
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            patientsDAO.deletePatient(id);
+            patientService.deletePatient(id);
             AuditService.log(request.getSession(), "DELETE", "Patients", String.valueOf(id), "Deleted patient record");
-
             response.sendRedirect(request.getContextPath() + "/patients");
             return;
         } else if ("edit".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            Patients patient = patientsDAO.getPatientById(id);
+            Patients patient = patientService.getPatientById(id);
             request.setAttribute("editablePatient", patient);
         }
 
-        List<Patients> patients = patientsDAO.getAllPatients();
+        List<Patients> patients = patientService.getAllPatients();
         List<Doctors> doctors = doctorDAO.getAllDoctors();
         List<Nurses> nurses = nurseDAO.getAllNurses();
         request.setAttribute("patients", patients);
@@ -81,39 +78,19 @@ public class PatientServlet extends HttpServlet {
         Patients patient = new Patients(name, disease, email);
         patient.setPhone(phone);
         
-        // Use a manual session here to fetch relations and save/update
-        // Alternatively, update DAO to handle relations, but this is simpler for now
-        Transaction tx = null;
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            tx = session.beginTransaction();
+        if (idStr != null && !idStr.isEmpty()) {
+            // Update
+            int id = Integer.parseInt(idStr);
+            Patients oldPatient = patientService.getPatientById(id);
+            String oldEmail = (oldPatient != null) ? oldPatient.getEmail() : null;
             
-            Doctors doctor = session.get(Doctors.class, doctorId);
-            Nurses nurse = session.get(Nurses.class, nurseId);
-            
-            patient.setDoctor(doctor);
-            patient.setNurse(nurse);
-
-            if (idStr != null && !idStr.isEmpty()) {
-                patient.setId(Integer.parseInt(idStr));
-                session.merge(patient);
-                tx.commit();
-                AuditService.log(request.getSession(), "UPDATE", "Patients", idStr, "Updated patient details: " + name);
-            } else {
-                session.persist(patient);
-                tx.commit();
-                AuditService.log(request.getSession(), "CREATE", "Patients", String.valueOf(patient.getId()), "Created new patient: " + name);
-            }
-        } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            patient.setId(id);
+            patientService.updatePatient(patient, doctorId, nurseId, oldEmail);
+            AuditService.log(request.getSession(), "UPDATE", "Patients", idStr, "Updated patient details: " + name);
+        } else {
+            // Save
+            patientService.savePatient(patient, doctorId, nurseId);
+            AuditService.log(request.getSession(), "CREATE", "Patients", String.valueOf(patient.getId()), "Created new patient: " + name);
         }
 
         response.sendRedirect(request.getContextPath() + "/patients");

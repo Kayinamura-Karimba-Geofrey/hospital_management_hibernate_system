@@ -90,4 +90,12 @@ public class AppointmentDAO {
                     .list();
         }
     }
+
+    public List<Appointments> getAppointmentsByDoctorId(int doctorId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Appointments where doctor.id = :doctorId", Appointments.class)
+                    .setParameter("doctorId", doctorId)
+                    .list();
+        }
+    }
 }

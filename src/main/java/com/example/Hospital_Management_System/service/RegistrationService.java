@@ -35,6 +35,7 @@ public class RegistrationService {
                 if (departmentId != null) {
                     Department dept = session.get(Department.class, departmentId);
                     Nurses nurse = new Nurses(fullName, dept);
+                    nurse.setEmail(email);
                     session.persist(nurse);
                 }
             } else if ("PATIENT".equalsIgnoreCase(role)) {

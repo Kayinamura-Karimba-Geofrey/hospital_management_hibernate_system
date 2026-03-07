@@ -1,11 +1,10 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.AppointmentDAO;
 import com.example.Hospital_Management_System.dao.PatientsDAO;
 import com.example.Hospital_Management_System.entity.Appointments;
 import com.example.Hospital_Management_System.entity.Patients;
-import com.example.Hospital_Management_System.entity.User;
-import com.example.Hospital_Management_System.entity.Notification;
+import com.example.Hospital_Management_System.service.AppointmentService;
+import com.example.Hospital_Management_System.service.AuditService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,11 +17,11 @@ import java.util.List;
 
 @WebServlet("/appointments")
 public class AppointmentServlet extends HttpServlet {
-    private AppointmentDAO appointmentDAO;
+    private AppointmentService appointmentService;
     private PatientsDAO patientsDAO;
 
     public void init() {
-        appointmentDAO = new AppointmentDAO();
+        appointmentService = new AppointmentService();
         patientsDAO = new PatientsDAO();
     }
 
@@ -32,16 +31,17 @@ public class AppointmentServlet extends HttpServlet {
 
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            appointmentDAO.deleteAppointment(id);
+            appointmentService.deleteAppointment(id);
+            AuditService.log(request.getSession(), "DELETE", "Appointment", String.valueOf(id), "Deleted appointment record");
             response.sendRedirect(request.getContextPath() + "/appointments");
             return;
         } else if ("edit".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            Appointments appointment = appointmentDAO.getAppointmentById(id);
+            Appointments appointment = appointmentService.getAppointmentById(id);
             request.setAttribute("editableApp", appointment);
         }
 
-        List<Appointments> appointments = appointmentDAO.getAllAppointments();
+        List<Appointments> appointments = appointmentService.getAllAppointments();
         List<Patients> patients = patientsDAO.getAllPatients();
         request.setAttribute("appointments", appointments);
         request.setAttribute("patients", patients);
@@ -64,20 +64,11 @@ public class AppointmentServlet extends HttpServlet {
 
         if (idStr != null && !idStr.isEmpty()) {
             appointment.setId(Integer.parseInt(idStr));
-            appointmentDAO.updateAppointment(appointment);
+            appointmentService.updateAppointment(appointment);
+            AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated appointment for patient: " + (patient != null ? patient.getName() : "Unknown"));
         } else {
-            appointmentDAO.saveAppointment(appointment);
-            
-            // Trigger Notification
-            if (patient != null && patient.getEmail() != null) {
-                com.example.Hospital_Management_System.dao.UserDAO userDAO = new com.example.Hospital_Management_System.dao.UserDAO();
-                User user = userDAO.getUserByEmail(patient.getEmail());
-                if (user != null) {
-                    Notification notification = new Notification(user, 
-                        "New appointment scheduled for " + dateStr + " at " + timeStr, "APPOINTMENT");
-                    new com.example.Hospital_Management_System.dao.NotificationDAO().save(notification);
-                }
-            }
+            appointmentService.saveAppointment(appointment);
+            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created new appointment for patient: " + (patient != null ? patient.getName() : "Unknown"));
         }
 
         response.sendRedirect(request.getContextPath() + "/appointments");

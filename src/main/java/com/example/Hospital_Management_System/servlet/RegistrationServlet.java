@@ -5,6 +5,7 @@ import com.example.Hospital_Management_System.entity.*;
 import com.example.Hospital_Management_System.service.AuditService;
 import com.example.Hospital_Management_System.service.RegistrationService;
 import com.example.Hospital_Management_System.service.UserService;
+import com.example.Hospital_Management_System.service.ValidationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

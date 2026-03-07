@@ -26,6 +26,11 @@
                                 value="${editableNurse.name}">
                         </div>
                         <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" required placeholder="jane.smith@hospital.com"
+                                value="${editableNurse.email}">
+                        </div>
+                        <div class="form-group">
                             <label>Department</label>
                             <select name="departmentId" required>
                                 <option value="" disabled>Select Dept</option>
@@ -56,6 +61,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
                                     <th>Department</th>
                                     <th>Actions</th>
                                 </tr>
@@ -65,6 +71,7 @@
                                     <tr>
                                         <td>${nurse.id}</td>
                                         <td>${nurse.name}</td>
+                                        <td>${nurse.email}</td>
                                         <td>${nurse.department.name}</td>
                                         <td style="display: flex; gap: 10px;">
                                             <a href="nurses?action=edit&id=${nurse.id}"

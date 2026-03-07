@@ -1,7 +1,7 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.*;
 import com.example.Hospital_Management_System.entity.*;
+import com.example.Hospital_Management_System.service.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,17 +15,20 @@ import java.util.List;
 @WebServlet("/patient-portal")
 public class PatientPortalServlet extends HttpServlet {
 
-    private PatientsDAO patientsDAO;
-    private AppointmentDAO appointmentDAO;
-    private InvoiceDAO invoiceDAO;
+    private PatientService patientService;
+    private AppointmentService appointmentService;
+    private FinancialService financialService;
+    private ClinicalService clinicalService;
 
     @Override
     public void init() {
-        patientsDAO = new PatientsDAO();
-        appointmentDAO = new AppointmentDAO();
-        invoiceDAO = new InvoiceDAO();
+        patientService = new PatientService();
+        appointmentService = new AppointmentService();
+        financialService = new FinancialService();
+        clinicalService = new ClinicalService();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -33,28 +36,26 @@ public class PatientPortalServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user == null || !"PATIENT".equals(session.getAttribute("role"))) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         // Link User to Patient by Email
-        Patients patient = patientsDAO.getPatientByEmail(user.getEmail());
+        Patients patient = patientService.getPatientByEmail(user.getEmail());
 
         if (patient != null) {
             request.setAttribute("patient", patient);
             
             // Get Appointments for this patient
-            List<Appointments> appointments = appointmentDAO.getAppointmentsByPatientId(patient.getId());
+            List<Appointments> appointments = appointmentService.getAppointmentsByPatientId(patient.getId());
             request.setAttribute("appointments", appointments);
             
             // Get Invoices for this patient
-            List<Invoice> invoices = invoiceDAO.getByPatientId(patient.getId());
+            List<Invoice> invoices = financialService.getInvoicesByPatientId(patient.getId());
             request.setAttribute("invoices", invoices);
             
-            // Note: Clinical records are usually part of the patient object or a separate DAO
-            // Assuming clinical records are managed via PatientRecordDAO
-            PatientRecordDAO recordDAO = new PatientRecordDAO();
-            PatientRecord record = recordDAO.getByPatientId(patient.getId());
+            // Get Medical Record
+            PatientRecord record = clinicalService.getRecordByPatientId(patient.getId());
             request.setAttribute("record", record);
         }
 

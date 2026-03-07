@@ -38,6 +38,18 @@ public class AdmissionDAO {
         }
     }
 
+    public Admission getById(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Admission.class, id);
+        }
+    }
+
+    public List<Admission> getAllAdmissions() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Admission", Admission.class).list();
+        }
+    }
+
     public List<Admission> getActiveAdmissions() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Admission where dischargeDate is null", Admission.class).list();
