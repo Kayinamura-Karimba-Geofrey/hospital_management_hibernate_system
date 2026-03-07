@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">Password (Registered Name for Doctors)</label>
                             <input type="password" id="password" name="password" required placeholder="••••••••">
                         </div>
 

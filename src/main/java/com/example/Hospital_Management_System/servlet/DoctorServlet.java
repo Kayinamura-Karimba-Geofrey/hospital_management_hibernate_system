@@ -2,8 +2,10 @@ package com.example.Hospital_Management_System.servlet;
 
 import com.example.Hospital_Management_System.dao.DoctorDAO;
 import com.example.Hospital_Management_System.dao.DepartmentDAO;
+import com.example.Hospital_Management_System.dao.UserDAO;
 import com.example.Hospital_Management_System.entity.Doctors;
 import com.example.Hospital_Management_System.entity.Department;
+import com.example.Hospital_Management_System.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,10 +18,12 @@ import java.util.List;
 public class DoctorServlet extends HttpServlet {
     private DoctorDAO doctorDAO;
     private DepartmentDAO departmentDAO;
+    private UserDAO userDAO;
 
     public void init() {
         doctorDAO = new DoctorDAO();
         departmentDAO = new DepartmentDAO();
+        userDAO = new UserDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -57,17 +61,36 @@ public class DoctorServlet extends HttpServlet {
         if (idStr != null && !idStr.isEmpty()) {
             // Update
             int id = Integer.parseInt(idStr);
+            Doctors oldDoc = doctorDAO.getDoctorById(id);
+            String oldEmail = oldDoc.getEmail();
+
             Doctors doctor = new Doctors(name, specialisation);
             doctor.setId(id);
             doctor.setDepartment(dept);
             doctor.setEmail(email);
             doctorDAO.updateDoctor(doctor);
+
+            // Sync User
+            User user = userDAO.getUserByEmail(oldEmail);
+            if (user != null) {
+                user.setEmail(email);
+                user.setFullName(name);
+                user.setUsername(email);
+                user.setPassword(name); // Specific request: password to be name
+                userDAO.updateUser(user);
+            }
         } else {
             // Save
             Doctors doctor = new Doctors(name, specialisation);
             doctor.setDepartment(dept);
             doctor.setEmail(email);
             doctorDAO.saveDoctor(doctor);
+
+            // Create User
+            if (!userDAO.existsByEmail(email)) {
+                User user = new User(email, name, email, name, "DOCTOR");
+                userDAO.saveUser(user);
+            }
         }
 
         response.sendRedirect(request.getContextPath() + "/doctors");

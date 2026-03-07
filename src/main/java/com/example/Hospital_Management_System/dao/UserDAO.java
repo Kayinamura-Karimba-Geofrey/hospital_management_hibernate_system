@@ -30,6 +30,26 @@ public class UserDAO {
         }
     }
 
+    public void updateUser(User user) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+            session.merge(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     public User validateUserByEmail(String email, String password) {
         Transaction transaction = null;
         Session session = null;
