@@ -29,8 +29,10 @@
                             <select name="departmentId" required>
                                 <option value="" disabled>Select Dept</option>
                                 <c:forEach var="dept" items="${departments}">
-                                    <option value="${dept.id}" ${(editableNurse !=null &&
-                                        editableNurse.department.id==dept.id) ? 'selected' : '' }>${dept.name}</option>
+                                    <option value="${dept.id}" ${ (editableNurse !=null && editableNurse.department
+                                        !=null && editableNurse.department.id==dept.id) ? 'selected' : '' }>
+                                        ${dept.name}
+                                    </option>
                                 </c:forEach>
                             </select>
                         </div>
