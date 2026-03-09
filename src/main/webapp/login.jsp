@@ -8,6 +8,19 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Login - HMSystem</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <script
+                src="https://www.google.com/recaptcha/api.js?render=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></script>
+            <script>
+                function onLoginSubmit(e) {
+                    e.preventDefault();
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', { action: 'login' }).then(function (token) {
+                            document.getElementById("g-recaptcha-response").value = token;
+                            document.getElementById("login-form").submit();
+                        });
+                    });
+                }
+            </script>
         </head>
 
         <body>
@@ -25,8 +38,9 @@
                         </div>
                     </c:if>
 
-                    <form action="login" method="POST">
+                    <form id="login-form" action="login" method="POST">
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" id="email" name="email" required placeholder="Enter your email">
@@ -37,8 +51,8 @@
                             <input type="password" id="password" name="password" required placeholder="••••••••">
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Sign
-                            In</button>
+                        <button type="button" class="btn btn-primary" onclick="onLoginSubmit(event)"
+                            style="width: 100%; margin-top: 10px;">Sign In</button>
                     </form>
 
                     <div style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-secondary);">

@@ -29,6 +29,15 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String recaptchaToken = request.getParameter("g-recaptcha-response");
+
+        // Advanced reCAPTCHA v3 Validation
+        boolean isHuman = com.example.Hospital_Management_System.service.ReCaptchaService.verify(recaptchaToken);
+        if (!isHuman) {
+            request.setAttribute("error", "Security check failed. Automated activity detected.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
 
         User user = userDAO.validateUserByEmail(email, password);
 
