@@ -46,17 +46,27 @@ public class DashboardServlet extends HttpServlet {
 
         String email = user.getEmail();
 
+        String jspPage = null;
+
         if ("ADMIN".equals(role)) {
             fetchAdminStats(request);
+            jspPage = "admin_dashboard.jsp";
         } else if ("DOCTOR".equals(role)) {
             fetchDoctorStats(request, email);
+            jspPage = "doctor_dashboard.jsp";
         } else if ("NURSE".equals(role)) {
             fetchNurseStats(request, email);
+            jspPage = "nurse_dashboard.jsp";
         } else if ("PATIENT".equals(role)) {
             fetchPatientStats(request, email);
+            jspPage = "patient_dashboard.jsp";
         }
 
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        if (jspPage != null) {
+            request.getRequestDispatcher(jspPage).forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
     }
 
     private void fetchAdminStats(HttpServletRequest request) {

@@ -12,7 +12,7 @@ public class HibernateUtil {
         try {
             Configuration cfg = new Configuration().configure();
 
-            // Allow overriding DB connection via environment variables (no secrets in code)
+    
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
             String pass = System.getenv("DB_PASSWORD");
