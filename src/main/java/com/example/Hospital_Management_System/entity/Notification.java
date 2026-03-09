@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a system notification.
+ * Alerts users about appointments, billing, or general system updates.
+ */
 @Entity
 @Table(name = "notifications")
 public class Notification {
@@ -27,8 +31,15 @@ public class Notification {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    /** Default constructor for JPA. */
     public Notification() {}
 
+    /**
+     * Constructs a new Notification.
+     * @param user The user who will receive the notification.
+     * @param message The alert message content.
+     * @param type The category of the notification (e.g., APPOINTMENT).
+     */
     public Notification(User user, String message, String type) {
         this.user = user;
         this.message = message;

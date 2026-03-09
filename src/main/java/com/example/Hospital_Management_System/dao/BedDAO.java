@@ -6,7 +6,15 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing Bed entities.
+ * Handles bed availability and status updates within wards.
+ */
 public class BedDAO {
+    /**
+     * Saves or updates a bed record in the database.
+     * @param bed The bed entity to save or update.
+     */
     public void saveOrUpdate(Bed bed) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -19,12 +27,22 @@ public class BedDAO {
         }
     }
 
+    /**
+     * Retrieves a bed by its ID.
+     * @param id The ID of the bed.
+     * @return The Bed entity, or null if not found.
+     */
     public Bed getBedById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Bed.class, id);
         }
     }
 
+    /**
+     * Retrieves all beds associated with a specific ward.
+     * @param wardId The ID of the ward.
+     * @return A list of beds in the ward.
+     */
     public List<Bed> getBedsByWard(Long wardId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Bed where ward.id = :wardId", Bed.class)
@@ -33,6 +51,11 @@ public class BedDAO {
         }
     }
 
+    /**
+     * Updates the status (e.g., OCCUPIED, AVAILABLE) of a specific bed.
+     * @param bedId The ID of the bed.
+     * @param status The new status string.
+     */
     public void updateBedStatus(Long bedId, String status) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

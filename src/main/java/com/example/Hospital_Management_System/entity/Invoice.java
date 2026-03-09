@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a patient invoice.
+ * Tracks billing amounts, status (PAID/UNPAID), and issuance date.
+ */
 @Entity
 @Table(name = "invoices")
 public class Invoice {
@@ -20,6 +24,10 @@ public class Invoice {
     private String description;
     private LocalDateTime invoiceDate;
 
+    /**
+     * Default constructor for JPA. 
+     * Initializes status to UNPAID and sets the current timestamp.
+     */
     public Invoice() {
         this.status = "UNPAID";
         this.invoiceDate = LocalDateTime.now();

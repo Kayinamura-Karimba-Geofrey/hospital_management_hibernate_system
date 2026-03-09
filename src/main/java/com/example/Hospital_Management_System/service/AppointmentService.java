@@ -7,6 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * Service class for managing patient appointments.
+ * Orchestrates business logic for scheduling, updating, and retrieving appointments.
+ */
 public class AppointmentService {
     private final AppointmentDAO appointmentDAO;
 
@@ -14,6 +18,10 @@ public class AppointmentService {
         this.appointmentDAO = new AppointmentDAO();
     }
 
+    /**
+     * Saves a new appointment.
+     * @param appointment The appointment entity to persist.
+     */
     public void saveAppointment(Appointments appointment) {
         appointmentDAO.saveAppointment(appointment);
     }
@@ -38,6 +46,11 @@ public class AppointmentService {
         return appointmentDAO.getAppointmentsByDoctorId(doctorId);
     }
 
+    /**
+     * Retrieves all appointments for a specific patient.
+     * @param patientId The ID of the patient.
+     * @return A list of appointments associated with the patient.
+     */
     public List<Appointments> getAppointmentsByPatientId(int patientId) {
         return appointmentDAO.getAppointmentsByPatientId(patientId);
     }

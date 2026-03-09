@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ * Entity representing a hospital ward.
+ * Grouping of beds for specific medical purposes (e.g., ICU, Pediatric).
+ */
 @Entity
 @Table(name = "wards")
 public class Ward {
@@ -19,8 +23,14 @@ public class Ward {
     @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
     private List<Bed> beds;
 
+    /** Default constructor for JPA. */
     public Ward() {}
 
+    /**
+     * Constructs a new Ward.
+     * @param name The name of the ward.
+     * @param type The functional type of the ward.
+     */
     public Ward(String name, String type) {
         this.name = name;
         this.type = type;

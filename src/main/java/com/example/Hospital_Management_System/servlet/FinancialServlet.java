@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for managing hospital finances.
+ * Handles invoice generation, payment status updates, and patient insurance details.
+ */
 @WebServlet("/financial")
 public class FinancialServlet extends HttpServlet {
     private FinancialService financialService;
@@ -21,6 +25,10 @@ public class FinancialServlet extends HttpServlet {
         patientService = new PatientService();
     }
 
+    /**
+     * Handles GET requests to view billing information.
+     * Can display all invoices or filter by a specific patient to show their billing history and insurance.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String patientIdStr = request.getParameter("patientId");

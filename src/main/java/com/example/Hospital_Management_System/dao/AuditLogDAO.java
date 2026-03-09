@@ -6,8 +6,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing AuditLog entities.
+ * Tracks system activities and enables activity searching.
+ */
 public class AuditLogDAO {
 
+    /**
+     * Saves a new audit log entry to the database.
+     * @param log The audit log record to save.
+     */
     public void save(AuditLog log) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -20,6 +28,10 @@ public class AuditLogDAO {
         }
     }
 
+    /**
+     * Retrieves the most recent 100 audit log entries.
+     * @return A list of recent audit logs.
+     */
     public List<AuditLog> getAllLogs() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM AuditLog ORDER BY timestamp DESC", AuditLog.class)
@@ -28,6 +40,12 @@ public class AuditLogDAO {
         }
     }
 
+    /**
+     * Retrieves audit logs filtered by entity name and ID.
+     * @param entityName The name of the entity being audited.
+     * @param entityId The ID of the specific entity.
+     * @return A list of matching audit logs.
+     */
     public List<AuditLog> getLogsByEntity(String entityName, String entityId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM AuditLog WHERE entityName = :entityName AND entityId = :entityId ORDER BY timestamp DESC", AuditLog.class)

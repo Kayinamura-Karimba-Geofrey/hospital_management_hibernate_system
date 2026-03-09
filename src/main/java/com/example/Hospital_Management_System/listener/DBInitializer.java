@@ -10,9 +10,17 @@ import jakarta.servlet.annotation.WebListener;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * Servlet Context Listener for database initialization and data seeding.
+ * Executes Flyway migrations and seeds default admin and departments on application startup.
+ */
 @WebListener
 public class DBInitializer implements ServletContextListener {
 
+    /**
+     * Called when the servlet context is initialized.
+     * Triggers database migrations and default data setup.
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Initializing Database and running migrations...");

@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a laboratory test request.
+ * Links patients to doctors and tracks the test lifecycle from request to completion.
+ */
 @Entity
 @Table(name = "lab_tests")
 public class LabTest {
@@ -29,6 +33,10 @@ public class LabTest {
     private LocalDateTime requestedDate;
     private LocalDateTime completedDate;
 
+    /**
+     * Default constructor for JPA.
+     * Initializes status to REQUESTED and sets the current timestamp.
+     */
     public LabTest() {
         this.status = "REQUESTED";
         this.requestedDate = LocalDateTime.now();

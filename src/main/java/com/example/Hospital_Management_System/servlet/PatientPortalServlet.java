@@ -12,6 +12,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for the patient-facing portal.
+ * Provides patients with access to their own appointments, invoices, and medical records.
+ */
 @WebServlet("/patient-portal")
 public class PatientPortalServlet extends HttpServlet {
 
@@ -29,6 +33,10 @@ public class PatientPortalServlet extends HttpServlet {
     }
 
     @Override
+    /**
+     * Handles GET requests to display the patient portal dashboard.
+     * Restricts access to users with the PATIENT role.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

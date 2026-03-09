@@ -5,8 +5,16 @@ import com.example.Hospital_Management_System.entity.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+/**
+ * DAO class for managing PatientRecord entities.
+ * Handles extensive medical histories, diagnoses, and treatments for patients.
+ */
 public class PatientRecordDAO {
 
+    /**
+     * Saves or updates a patient's medical record.
+     * @param record The patient record entity to save or update.
+     */
     public void saveOrUpdate(PatientRecord record) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -19,6 +27,11 @@ public class PatientRecordDAO {
         }
     }
 
+    /**
+     * Retrieves the medical record for a specific patient.
+     * @param patientId The ID of the patient.
+     * @return The PatientRecord entity, or null if not found.
+     */
     public PatientRecord getByPatientId(int patientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM PatientRecord WHERE patient.id = :patientId", PatientRecord.class)

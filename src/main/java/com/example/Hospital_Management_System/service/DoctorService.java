@@ -9,6 +9,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * Service class for managing doctors and their associated user accounts.
+ * Handles synchronization between doctor profiles and application users.
+ */
 public class DoctorService {
     private final DoctorDAO doctorDAO;
     private final UserDAO userDAO;
@@ -25,11 +29,20 @@ public class DoctorService {
         syncUser(doctor, null);
     }
 
+    /**
+     * Updates doctor information and synchronizes the associated user account.
+     * @param doctor The doctor entity with updated info.
+     * @param oldEmail The doctor's previous email (if it changed).
+     */
     public void updateDoctor(Doctors doctor, String oldEmail) {
         doctorDAO.updateDoctor(doctor);
         syncUser(doctor, oldEmail);
     }
 
+    /**
+     * Synchronizes a doctor's profile with their system user account.
+     * Creates a new user if none exists, or updates the existing one.
+     */
     private void syncUser(Doctors doctor, String oldEmail) {
         String emailToFind = (oldEmail != null) ? oldEmail : doctor.getEmail();
         User user = userDAO.getUserByEmail(emailToFind);

@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing an audit log entry.
+ * Records actions performed on other entities for security and tracking purposes.
+ */
 @Entity
 @Table(name = "audit_logs")
 public class AuditLog {
@@ -30,8 +34,17 @@ public class AuditLog {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
+    /** Default constructor for JPA. */
     public AuditLog() {}
 
+    /**
+     * Constructs a new AuditLog entry.
+     * @param user The user who performed the action.
+     * @param action The type of action (e.g., CREATE, UPDATE, DELETE).
+     * @param entityName The name of the affected entity.
+     * @param entityId The ID of the affected entity.
+     * @param details Additional descriptive details.
+     */
     public AuditLog(User user, String action, String entityName, String entityId, String details) {
         this.user = user;
         this.action = action;

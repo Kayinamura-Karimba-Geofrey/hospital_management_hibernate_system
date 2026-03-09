@@ -12,6 +12,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for redirecting users to their role-specific dashboards.
+ * Fetches relevant statistics and profiles for Admins, Doctors, Nurses, and Patients.
+ */
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
 
@@ -32,6 +36,10 @@ public class DashboardServlet extends HttpServlet {
         clinicalService = new ClinicalService();
     }
 
+    /**
+     * Handles GET requests to identify user role and display the correct dashboard.
+     * Redirects to login if the session is invalid.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

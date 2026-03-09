@@ -7,8 +7,16 @@ import org.hibernate.Transaction;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * DAO class for managing User entities.
+ * Handles authentication, user registration, and security-related operations.
+ */
 public class UserDAO {
 
+    /**
+     * Persists a new user to the database.
+     * @param user The user entity to save.
+     */
     public void saveUser(User user) {
         Transaction transaction = null;
         Session session = null;
@@ -32,6 +40,10 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Updates an existing user's profile and settings.
+     * @param user The user entity to update.
+     */
     public void updateUser(User user) {
         Transaction transaction = null;
         Session session = null;
@@ -52,6 +64,12 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Validates user credentials by email and password.
+     * @param email The user's email address.
+     * @param password The raw password to check.
+     * @return The User entity if valid, null otherwise.
+     */
     public User validateUserByEmail(String email, String password) {
         User user = getUserByEmail(email);
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
@@ -60,6 +78,11 @@ public class UserDAO {
         return null;
     }
 
+    /**
+     * Checks if a username is already taken.
+     * @param username The username to check.
+     * @return true if it exists, false otherwise.
+     */
     public boolean existsByUsername(String username) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery("SELECT count(u) FROM User u WHERE u.username = :username", Long.class)
@@ -72,6 +95,11 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Checks if an email address is already registered.
+     * @param email The email to check.
+     * @return true if it exists, false otherwise.
+     */
     public boolean existsByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery("SELECT count(u) FROM User u WHERE u.email = :email", Long.class)
@@ -84,6 +112,11 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Retrieves a user by their email address.
+     * @param email The email of the user.
+     * @return The User entity, or null if not found.
+     */
     public User getUserByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from User where email = :email", User.class)
@@ -95,6 +128,10 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Deletes a user record by ID.
+     * @param id The ID of the user to delete.
+     */
     public void deleteUser(Long id) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

@@ -2,6 +2,10 @@ package com.example.Hospital_Management_System.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing an application user.
+ * Stores authentication credentials, roles, and 2FA settings.
+ */
 @Entity
 @Table(name = "app_users")
 public class User {
@@ -31,8 +35,17 @@ public class User {
     @Column(name = "is_two_factor_enabled", nullable = false)
     private boolean isTwoFactorEnabled = false;
 
+    /** Default constructor for JPA. */
     public User() {}
 
+    /**
+     * Constructs a new User with full details.
+     * @param username The unique login name.
+     * @param password The hashed password.
+     * @param email The contact email.
+     * @param fullName The user's display name.
+     * @param role The security role (e.g., ADMIN, DOCTOR).
+     */
     public User(String username, String password, String email, String fullName, String role) {
         this.username = username;
         this.password = password;

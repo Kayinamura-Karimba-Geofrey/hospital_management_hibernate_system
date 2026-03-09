@@ -8,6 +8,10 @@ import org.hibernate.Transaction;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service class for hospital facility management.
+ * Handles wards, beds, patient admissions/discharges, and surgery scheduling.
+ */
 public class FacilityService {
     private final WardDAO wardDAO;
     private final BedDAO bedDAO;
@@ -31,6 +35,12 @@ public class FacilityService {
     }
 
     // Admission Management
+    /**
+     * Admits a patient to a specific bed.
+     * Checks if the bed is available and updates its status to OCCUPIED.
+     * @param patient The patient to admit.
+     * @param bed The bed to assign.
+     */
     public void admitPatient(Patients patient, Bed bed) {
         if (patient != null && bed != null && "AVAILABLE".equals(bed.getStatus())) {
             Admission admission = new Admission(patient, bed, LocalDateTime.now());
@@ -39,6 +49,10 @@ public class FacilityService {
         }
     }
 
+    /**
+     * Discharges a patient and marks their bed as AVAILABLE.
+     * @param admissionId The ID of the admission record to close.
+     */
     public void dischargePatient(Long admissionId) {
         Admission admission = admissionDAO.getById(admissionId);
         if (admission != null) {

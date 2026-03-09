@@ -5,6 +5,10 @@ package com.example.Hospital_Management_System.entity.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Utility class for managing Hibernate SessionFactory.
+ * Configures the database connection using hibernate.cfg.xml and environment variables.
+ */
 public class HibernateUtil {
     private static final SessionFactory sessionFactory;
 
@@ -33,6 +37,10 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Provides the singleton SessionFactory instance.
+     * @return The configured SessionFactory.
+     */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }

@@ -24,6 +24,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Servlet for handling Two-Factor Authentication (2FA) setup and verification.
+ * Manages TOTP secret generation, QR code display, and OTP code validation.
+ */
 @WebServlet("/2fa")
 public class TwoFactorServlet extends HttpServlet {
 
@@ -33,6 +37,9 @@ public class TwoFactorServlet extends HttpServlet {
     private CodeVerifier codeVerifier;
 
     @Override
+    /**
+     * Initializes the DAO and generators for 2FA.
+     */
     public void init() {
         userDAO = new UserDAO();
         secretGenerator = new DefaultSecretGenerator();
@@ -44,6 +51,9 @@ public class TwoFactorServlet extends HttpServlet {
     }
 
     @Override
+    /**
+     * Handles GET requests to display the 2FA setup (QR code) or verification form.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -87,6 +97,9 @@ public class TwoFactorServlet extends HttpServlet {
     }
 
     @Override
+    /**
+     * Handles POST requests to verify the 6-digit TOTP code.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();

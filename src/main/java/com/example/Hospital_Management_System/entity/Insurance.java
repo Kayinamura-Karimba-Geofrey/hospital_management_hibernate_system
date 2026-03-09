@@ -2,6 +2,10 @@ package com.example.Hospital_Management_System.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing patient insurance details.
+ * Links a patient to their insurance provider and policy specifics.
+ */
 @Entity
 @Table(name = "insurance_details")
 public class Insurance {

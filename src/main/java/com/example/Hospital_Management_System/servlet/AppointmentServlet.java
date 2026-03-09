@@ -15,6 +15,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Servlet for managing patient appointments.
+ * Handles listing, editing, deleting, and creating new appointments.
+ */
 @WebServlet("/appointments")
 public class AppointmentServlet extends HttpServlet {
     private AppointmentService appointmentService;
@@ -25,6 +29,10 @@ public class AppointmentServlet extends HttpServlet {
         patientsDAO = new PatientsDAO();
     }
 
+    /**
+     * Handles GET requests for listing and managing appointments.
+     * Supports "edit" and "delete" actions via query parameters.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -48,6 +56,10 @@ public class AppointmentServlet extends HttpServlet {
         request.getRequestDispatcher("appointments.jsp").forward(request, response);
     }
 
+    /**
+     * Handles POST requests for saving or updating appointments.
+     * Redirects back to the appointments list upon success.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idStr = request.getParameter("id");

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a hospital department.
+ * Departments are used to categorize doctors and organize hospital locations.
+ */
 @Entity
 @Table(name = "departments")
 public class Department {
@@ -21,8 +25,14 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Doctors> doctors = new ArrayList<>();
 
+    /** Default constructor for JPA. */
     public Department() {}
 
+    /**
+     * Constructs a new Department.
+     * @param name The name of the department (e.g., Cardiology).
+     * @param location The physical location or wing in the hospital.
+     */
     public Department(String name, String location) {
         this.name = name;
         this.location = location;

@@ -16,6 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for managing general patient records.
+ * Handles patient registration, profile updates, and record deletions.
+ */
 @WebServlet("/patients")
 public class PatientServlet extends HttpServlet {
     private PatientService patientService;
@@ -28,6 +32,10 @@ public class PatientServlet extends HttpServlet {
         nurseDAO = new NurseDAO();
     }
 
+    /**
+     * Handles GET requests to list patients, doctors, and nurses.
+     * Prepares data for the patient management interface.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

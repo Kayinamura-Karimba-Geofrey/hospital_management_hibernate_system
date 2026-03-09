@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servlet for clinical record management (EHR).
+ * Handles patient files, prescriptions, lab results, and file uploads.
+ */
 @WebServlet("/clinical")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,
                  maxFileSize = 1024 * 1024 * 10,
@@ -33,6 +37,10 @@ public class ClinicalServlet extends HttpServlet {
         doctorService = new DoctorService();
     }
 
+    /**
+     * Handles GET requests to view clinical records.
+     * Can display a specific patient's file or the general records list.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idStr = request.getParameter("id");
@@ -61,6 +69,10 @@ public class ClinicalServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST requests for updating EHR, adding prescriptions, or lab results.
+     * Supports file uploads for medical records and lab reports.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

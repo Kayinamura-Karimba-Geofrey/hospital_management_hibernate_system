@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Servlet for handling user login and session initiation.
+ * Includes reCAPTCHA v3 verification and redirects to 2FA if enabled.
+ */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
@@ -20,11 +24,19 @@ public class LoginServlet extends HttpServlet {
         userDAO = new UserDAO();
     }
 
+    @Override
+    /**
+     * Handles GET requests to display the login page.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
+    @Override
+    /**
+     * Authenticates user credentials and verifies reCAPTCHA.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");

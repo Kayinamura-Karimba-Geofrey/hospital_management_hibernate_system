@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for managing doctor profiles.
+ * Handles registration, profile updates, and doctor deletions.
+ */
 @WebServlet("/doctors")
 public class DoctorServlet extends HttpServlet {
     private DoctorService doctorsService;
@@ -24,6 +28,10 @@ public class DoctorServlet extends HttpServlet {
         departmentDAO = new DepartmentDAO();
     }
 
+    /**
+     * Handles GET requests to list doctors and departments.
+     * Prepares data for the doctor management interface.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

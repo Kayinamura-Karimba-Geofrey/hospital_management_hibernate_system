@@ -4,6 +4,10 @@ import com.example.Hospital_Management_System.dao.UserDAO;
 import com.example.Hospital_Management_System.entity.User;
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * Service class for management of system users.
+ * Handles password hashing, credential verification, and account existence checks.
+ */
 public class UserService {
     private final UserDAO userDAO;
 
@@ -15,6 +19,11 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
+    /**
+     * Hashes a raw password using BCrypt.
+     * @param password The raw password string.
+     * @return The resulting hashed password.
+     */
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }

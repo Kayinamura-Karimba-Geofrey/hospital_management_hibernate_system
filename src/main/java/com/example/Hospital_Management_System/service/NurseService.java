@@ -9,6 +9,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * Service class for managing nursing staff and their associated user accounts.
+ * Handles synchronization between nurse profiles and application users.
+ */
 public class NurseService {
     private final NurseDAO nurseDAO;
     private final UserDAO userDAO;
@@ -25,11 +29,20 @@ public class NurseService {
         syncUser(nurse, null);
     }
 
+    /**
+     * Updates nurse information and synchronizes the associated user account.
+     * @param nurse The nurse entity with updated info.
+     * @param oldEmail The nurse's previous email (if it changed).
+     */
     public void updateNurse(Nurses nurse, String oldEmail) {
         nurseDAO.updateNurse(nurse);
         syncUser(nurse, oldEmail);
     }
 
+    /**
+     * Synchronizes a nurse's profile with their system user account.
+     * Creates a new user if none exists, or updates the existing one.
+     */
     private void syncUser(Nurses nurse, String oldEmail) {
         String emailToFind = (oldEmail != null) ? oldEmail : nurse.getEmail();
         User user = userDAO.getUserByEmail(emailToFind);

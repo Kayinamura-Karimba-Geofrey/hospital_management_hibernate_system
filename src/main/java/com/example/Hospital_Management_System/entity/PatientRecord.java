@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a patient's comprehensive medical record.
+ * Stores history, allergies, vitals (blood pressure, temperature), and immunizations.
+ */
 @Entity
 @Table(name = "patient_records")
 public class PatientRecord {
@@ -33,8 +37,13 @@ public class PatientRecord {
 
     private LocalDateTime lastUpdated;
 
+    /** Default constructor for JPA. */
     public PatientRecord() {}
 
+    /**
+     * Constructs a new PatientRecord for a specific patient.
+     * @param patient The patient this record belongs to.
+     */
     public PatientRecord(Patients patient) {
         this.patient = patient;
         this.lastUpdated = LocalDateTime.now();

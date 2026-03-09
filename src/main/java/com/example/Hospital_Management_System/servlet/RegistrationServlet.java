@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * Servlet for handling user registration.
+ * Includes RBAC checks and reCAPTCHA v2/v3 verification.
+ */
 @WebServlet("/register")
 public class RegistrationServlet extends HttpServlet {
 
@@ -27,6 +31,11 @@ public class RegistrationServlet extends HttpServlet {
         departmentDAO = new DepartmentDAO();
     }
 
+    @Override
+    /**
+     * Processes registration data, performs validations, and verifies reCAPTCHA.
+     * Handles POST requests to register new users.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -110,6 +119,10 @@ public class RegistrationServlet extends HttpServlet {
         }
     }
 
+    @Override
+    /**
+     * Displays the registration form with available departments.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("departments", departmentDAO.getAllDepartments());

@@ -13,6 +13,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for managing nursing staff profiles.
+ * Handles registration, profile updates, and nurse deletions.
+ */
 @WebServlet("/nurses")
 public class NurseServlet extends HttpServlet {
     private NurseService nurseService;
@@ -23,6 +27,10 @@ public class NurseServlet extends HttpServlet {
         departmentDAO = new DepartmentDAO();
     }
 
+    /**
+     * Handles GET requests to list nurses and departments.
+     * Prepares data for the nurse management interface.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

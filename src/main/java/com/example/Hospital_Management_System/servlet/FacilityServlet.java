@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servlet for managing hospital facilities and surgeries.
+ * Maps to multiple endpoints: /facility for ward/bed management and /surgery for scheduling.
+ */
 @WebServlet(name = "FacilityServlet", urlPatterns = {"/facility", "/surgery"})
 public class FacilityServlet extends HttpServlet {
     private FacilityService facilityService;
@@ -26,6 +30,9 @@ public class FacilityServlet extends HttpServlet {
         doctorService = new DoctorService();
     }
 
+    /**
+     * Handles GET requests for facility or surgery views based on the servlet path.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
         

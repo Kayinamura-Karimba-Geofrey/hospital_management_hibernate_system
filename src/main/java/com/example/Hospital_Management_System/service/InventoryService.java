@@ -4,6 +4,10 @@ import com.example.Hospital_Management_System.dao.InventoryDAO;
 import com.example.Hospital_Management_System.entity.InventoryItem;
 import java.util.List;
 
+/**
+ * Service class for inventory management.
+ * Handles stock levels for medicines and hospital supplies.
+ */
 public class InventoryService {
     private final InventoryDAO inventoryDAO;
 
@@ -27,6 +31,11 @@ public class InventoryService {
         inventoryDAO.saveOrUpdate(item);
     }
 
+    /**
+     * Updates the quantity of an inventory item.
+     * @param itemId The ID of the item.
+     * @param delta The change in quantity (positive for restock, negative for use).
+     */
     public void updateQuantity(int itemId, int delta) {
         InventoryItem item = inventoryDAO.getById(itemId);
         if (item != null) {

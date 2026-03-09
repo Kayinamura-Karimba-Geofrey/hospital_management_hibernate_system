@@ -7,7 +7,15 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
+/**
+ * Demonstration class for Hibernate Query Language (HQL).
+ * Used to test doctor retrieval and query caching.
+ */
 public class HQLDemo {
+    /**
+     * Main entry point to run the HQL demo.
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 

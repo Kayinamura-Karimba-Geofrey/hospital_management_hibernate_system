@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a medical doctor.
+ * Contains professional details, contact info, and associations with departments and patients.
+ */
 @Entity
 public class Doctors {
 
@@ -28,8 +32,14 @@ public class Doctors {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointments> appointments = new ArrayList<>();
 
+    /** Default constructor for JPA. */
     public Doctors() {}
 
+    /**
+     * Constructs a new Doctor entry.
+     * @param name The full name of the doctor.
+     * @param specialisation The doctor's area of medical expertise.
+     */
     public Doctors(String name, String specialisation) {
         this.name = name;
         this.specialisation = specialisation;

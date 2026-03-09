@@ -8,6 +8,10 @@ import com.example.Hospital_Management_System.entity.Invoice;
 import com.example.Hospital_Management_System.entity.Patients;
 import java.util.List;
 
+/**
+ * Service class for financial operations.
+ * Manages billing (invoices) and patient insurance details.
+ */
 public class FinancialService {
     private final InvoiceDAO invoiceDAO;
     private final InsuranceDAO insuranceDAO;
@@ -47,6 +51,12 @@ public class FinancialService {
         insuranceDAO.saveOrUpdate(insurance);
     }
 
+    /**
+     * Generates a new invoice for a patient.
+     * @param patientId The ID of the patient.
+     * @param amount The billing amount.
+     * @param description A brief description of the charges.
+     */
     public void generateInvoice(int patientId, double amount, String description) {
         Patients patient = patientsDAO.getPatientById(patientId);
         if (patient != null) {

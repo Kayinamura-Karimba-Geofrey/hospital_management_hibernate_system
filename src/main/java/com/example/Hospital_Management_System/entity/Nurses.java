@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a member of the nursing staff.
+ * Contains contact info and associations with departments, patients, and appointments.
+ */
 @Entity
 public class Nurses {
 
@@ -27,8 +31,14 @@ public class Nurses {
     private List<Appointments> appointments = new ArrayList<>();
 
 
+    /** Default constructor for JPA. */
     public Nurses() {}
 
+    /**
+     * Constructs a new Nurse entry.
+     * @param name The full name of the nurse.
+     * @param department The department the nurse is assigned to.
+     */
     public Nurses(String name, Department department) {
         this.name = name;
         this.department = department;

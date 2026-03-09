@@ -6,8 +6,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing Doctors entities.
+ * Handles database operations for medical staff (doctors).
+ */
 public class DoctorDAO {
 
+    /**
+     * Saves a new doctor record to the database.
+     * @param doctor The doctor entity to save.
+     */
     public void saveDoctor(Doctors doctor) {
         Transaction transaction = null;
         Session session = null;
@@ -28,6 +36,10 @@ public class DoctorDAO {
         }
     }
 
+    /**
+     * Updates an existing doctor's profile.
+     * @param doctor The doctor entity to update.
+     */
     public void updateDoctor(Doctors doctor) {
         Transaction transaction = null;
         Session session = null;
@@ -48,6 +60,10 @@ public class DoctorDAO {
         }
     }
 
+    /**
+     * Deletes a doctor record from the database by ID.
+     * @param id The ID of the doctor to delete.
+     */
     public void deleteDoctor(int id) {
         Transaction transaction = null;
         Session session = null;
@@ -71,18 +87,32 @@ public class DoctorDAO {
         }
     }
 
+    /**
+     * Retrieves all doctors from the database.
+     * @return A list of all Doctors entities.
+     */
     public List<Doctors> getAllDoctors() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Doctors", Doctors.class).list();
         }
     }
 
+    /**
+     * Retrieves a doctor by their ID.
+     * @param id The ID of the doctor.
+     * @return The Doctors entity, or null if not found.
+     */
     public Doctors getDoctorById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Doctors.class, id);
         }
     }
 
+    /**
+     * Retrieves a doctor record based on their email address.
+     * @param email The email of the doctor.
+     * @return The Doctors entity, or null if not found.
+     */
     public Doctors getDoctorByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Doctors where email = :email", Doctors.class)

@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Servlet for displaying hospital analytics and statistics.
+ * Aggregates data from audit logs, finance, and staffing for the dashboard.
+ */
 @WebServlet("/analytics")
 public class AnalyticsServlet extends HttpServlet {
 
@@ -35,6 +39,10 @@ public class AnalyticsServlet extends HttpServlet {
         nurseService = new NurseService();
     }
 
+    /**
+     * Handles GET requests to display the analytics dashboard.
+     * Fetches audit logs, patient inflow, revenue, and staff statistics.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

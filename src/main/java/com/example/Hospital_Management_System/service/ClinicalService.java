@@ -8,6 +8,10 @@ import com.example.Hospital_Management_System.entity.PatientRecord;
 import com.example.Hospital_Management_System.entity.Prescription;
 import java.util.List;
 
+/**
+ * Service class for clinical operations.
+ * Manages patient records, prescriptions, and lab test results.
+ */
 public class ClinicalService {
     private final PatientRecordDAO recordDAO;
     private final PrescriptionDAO prescriptionDAO;
@@ -23,6 +27,10 @@ public class ClinicalService {
         return recordDAO.getByPatientId(patientId);
     }
 
+    /**
+     * Saves or updates a patient's medical record.
+     * @param record The PatientRecord entity to persist.
+     */
     public void saveOrUpdateRecord(PatientRecord record) {
         recordDAO.saveOrUpdate(record);
     }

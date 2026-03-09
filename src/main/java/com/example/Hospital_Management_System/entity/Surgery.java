@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a surgical procedure.
+ * Schedules surgery in an operating theater with a surgeon and anesthetist.
+ */
 @Entity
 @Table(name = "surgeries")
 public class Surgery {
@@ -33,6 +37,7 @@ public class Surgery {
 
     private String equipment;
 
+    /** Default constructor for JPA. */
     public Surgery() {}
 
     public Long getId() { return id; }

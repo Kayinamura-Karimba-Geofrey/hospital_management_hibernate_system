@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Filter for authentication, role-based authorization, and CSRF protection.
+ * intercepts all requests to ensure users are logged in and have appropriate permissions.
+ */
 @WebFilter("/*")
 public class AuthFilter implements Filter {
     private static final java.util.Map<String, String[]> roleAccess = new java.util.HashMap<>();
@@ -20,6 +24,10 @@ public class AuthFilter implements Filter {
         roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard"});
     }
 
+    /**
+     * Filters requests to enforce security policies.
+     * Generates CSRF tokens, validates POST request tokens, and checks user roles.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {

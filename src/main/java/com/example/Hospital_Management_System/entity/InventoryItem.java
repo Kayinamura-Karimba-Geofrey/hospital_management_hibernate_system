@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entity representing an item in the hospital inventory.
+ * Tracks stock levels, pricing, and expiry dates for medicines and supplies.
+ */
 @Entity
 @Table(name = "inventory_items")
 public class InventoryItem {

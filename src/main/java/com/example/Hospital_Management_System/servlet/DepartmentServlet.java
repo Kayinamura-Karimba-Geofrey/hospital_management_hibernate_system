@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet for managing hospital departments.
+ * Handles listing, creating, updating, and deleting department entries.
+ */
 @WebServlet("/departments")
 public class DepartmentServlet extends HttpServlet {
     private DepartmentDAO departmentDAO;
@@ -18,6 +22,10 @@ public class DepartmentServlet extends HttpServlet {
         departmentDAO = new DepartmentDAO();
     }
 
+    /**
+     * Handles GET requests to list departments or prepare for editing.
+     * Supports "edit" and "delete" operations via parameters.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

@@ -6,8 +6,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing Department entities.
+ * Handles departments within the hospital, including medical and administrative units.
+ */
 public class DepartmentDAO {
 
+    /**
+     * Saves a new department to the database.
+     * @param department The department entity to save.
+     */
     public void saveDepartment(Department department) {
         Transaction transaction = null;
         Session session = null;
@@ -28,6 +36,10 @@ public class DepartmentDAO {
         }
     }
 
+    /**
+     * Updates an existing department record.
+     * @param department The department entity to update.
+     */
     public void updateDepartment(Department department) {
         Transaction transaction = null;
         Session session = null;
@@ -48,6 +60,10 @@ public class DepartmentDAO {
         }
     }
 
+    /**
+     * Deletes a department from the database by its ID.
+     * @param id The ID of the department to delete.
+     */
     public void deleteDepartment(int id) {
         Transaction transaction = null;
         Session session = null;
@@ -71,12 +87,21 @@ public class DepartmentDAO {
         }
     }
 
+    /**
+     * Retrieves all departments from the database.
+     * @return A list of all Department entities.
+     */
     public List<Department> getAllDepartments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Department", Department.class).list();
         }
     }
 
+    /**
+     * Retrieves a department by its ID.
+     * @param id The ID of the department.
+     * @return The Department entity, or null if not found.
+     */
     public Department getDepartmentById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Department.class, id);

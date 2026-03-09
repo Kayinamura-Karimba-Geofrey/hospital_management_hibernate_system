@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a patient's admission to the hospital.
+ * Records the patient, their assigned bed, and timing of admission/discharge.
+ */
 @Entity
 @Table(name = "admissions")
 public class Admission {
@@ -23,8 +27,15 @@ public class Admission {
 
     private LocalDateTime dischargeDate;
 
+    /** Default constructor for JPA. */
     public Admission() {}
 
+    /**
+     * Constructs a new Admission record.
+     * @param patient The patient being admitted.
+     * @param bed The bed assigned to the patient.
+     * @param admissionDate The date and time of admission.
+     */
     public Admission(Patients patient, Bed bed, LocalDateTime admissionDate) {
         this.patient = patient;
         this.bed = bed;

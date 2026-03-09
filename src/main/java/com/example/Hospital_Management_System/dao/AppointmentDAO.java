@@ -6,8 +6,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing Appointments entities.
+ * Handles CRUD operations and specialized queries for appointments.
+ */
 public class AppointmentDAO {
 
+    /**
+     * Saves a new appointment to the database.
+     * @param appointment The appointment record to save.
+     */
     public void saveAppointment(Appointments appointment) {
         Transaction transaction = null;
         Session session = null;
@@ -28,6 +36,10 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * Updates an existing appointment in the database.
+     * @param appointment The appointment record to update.
+     */
     public void updateAppointment(Appointments appointment) {
         Transaction transaction = null;
         Session session = null;
@@ -48,6 +60,10 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * Deletes an appointment from the database by its ID.
+     * @param id The ID of the appointment to delete.
+     */
     public void deleteAppointment(int id) {
         Transaction transaction = null;
         Session session = null;
@@ -71,18 +87,32 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * Retrieves all appointments from the database.
+     * @return A list of all Appointments entities.
+     */
     public List<Appointments> getAllAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Appointments", Appointments.class).list();
         }
     }
 
+    /**
+     * Retrieves an appointment by its ID.
+     * @param id The ID of the appointment.
+     * @return The Appointments entity, or null if not found.
+     */
     public Appointments getAppointmentById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Appointments.class, id);
         }
     }
 
+    /**
+     * Retrieves all appointments for a specific patient.
+     * @param patientId The ID of the patient.
+     * @return A list of appointments associated with the patient.
+     */
     public List<Appointments> getAppointmentsByPatientId(int patientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Appointments where patient.id = :patientId", Appointments.class)
@@ -91,6 +121,11 @@ public class AppointmentDAO {
         }
     }
 
+    /**
+     * Retrieves all appointments for a specific doctor.
+     * @param doctorId The ID of the doctor.
+     * @return A list of appointments associated with the doctor.
+     */
     public List<Appointments> getAppointmentsByDoctorId(int doctorId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Appointments where doctor.id = :doctorId", Appointments.class)

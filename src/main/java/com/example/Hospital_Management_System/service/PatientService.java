@@ -11,6 +11,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * Service class for managing patient data and associated user accounts.
+ * Orchestrates business logic for patient registration, updates, and staffing assignments.
+ */
 public class PatientService {
     private final PatientsDAO patientsDAO;
     private final UserDAO userDAO;
@@ -22,6 +26,13 @@ public class PatientService {
         this.userService = new UserService();
     }
 
+    /**
+     * Saves a new patient and assigns a doctor and nurse.
+     * Automatically synchronizes with the system user account.
+     * @param patient The patient entity to save.
+     * @param doctorId The ID of the assigned doctor.
+     * @param nurseId The ID of the assigned nurse.
+     */
     public void savePatient(Patients patient, int doctorId, int nurseId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -56,6 +67,10 @@ public class PatientService {
         }
     }
 
+    /**
+     * Synchronizes a patient's profile with their system user account.
+     * Creates a new user if none exists, or updates the existing one.
+     */
     private void syncUser(Patients patient, String oldEmail) {
         String emailToFind = (oldEmail != null) ? oldEmail : patient.getEmail();
         User user = userDAO.getUserByEmail(emailToFind);

@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Servlet for managing hospital inventory.
+ * Handles tracking, adding, and updating stock levels for medicines and supplies.
+ */
 @WebServlet("/inventory")
 public class InventoryServlet extends HttpServlet {
     private InventoryService inventoryService;
@@ -19,6 +23,9 @@ public class InventoryServlet extends HttpServlet {
         inventoryService = new InventoryService();
     }
 
+    /**
+     * Handles GET requests to list all inventory items and highlight low stock items.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<InventoryItem> allItems = inventoryService.getAllItems();

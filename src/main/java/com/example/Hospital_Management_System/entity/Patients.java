@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a patient in the hospital system.
+ * Contains demographic details and links to medical staff and appointments.
+ */
 @Entity
 public class Patients {
 
@@ -33,13 +37,25 @@ public class Patients {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Appointments> appointments = new ArrayList<>();
 
+    /** Default constructor for JPA. */
     public Patients() {}
 
+    /**
+     * Constructs a new Patient with basic details.
+     * @param name The full name of the patient.
+     * @param disease The primary reason for visiting or diagnosis.
+     */
     public Patients(String name, String disease) {
         this.name = name;
         this.disease = disease;
     }
 
+    /**
+     * Constructs a new Patient with email contact.
+     * @param name The full name of the patient.
+     * @param disease The primary reason for visiting or diagnosis.
+     * @param email The patient's email address.
+     */
     public Patients(String name, String disease, String email) {
         this.name = name;
         this.disease = disease;

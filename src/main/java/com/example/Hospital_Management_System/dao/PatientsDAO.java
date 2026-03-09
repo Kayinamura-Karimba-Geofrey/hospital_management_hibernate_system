@@ -6,8 +6,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
+/**
+ * DAO class for managing Patients entities.
+ * Handles database operations for patient demographic and contact information.
+ */
 public class PatientsDAO {
 
+    /**
+     * Saves a new patient record to the database.
+     * @param patient The patient entity to save.
+     */
     public void savePatient(Patients patient) {
         Transaction transaction = null;
         Session session = null;
@@ -28,6 +36,10 @@ public class PatientsDAO {
         }
     }
 
+    /**
+     * Updates an existing patient's details.
+     * @param patient The patient entity to update.
+     */
     public void updatePatient(Patients patient) {
         Transaction transaction = null;
         Session session = null;
@@ -48,6 +60,10 @@ public class PatientsDAO {
         }
     }
 
+    /**
+     * Deletes a patient record from the database by ID.
+     * @param id The ID of the patient to delete.
+     */
     public void deletePatient(int id) {
         Transaction transaction = null;
         Session session = null;
@@ -71,18 +87,32 @@ public class PatientsDAO {
         }
     }
 
+    /**
+     * Retrieves all registered patients.
+     * @return A list of all Patients entities.
+     */
     public List<Patients> getAllPatients() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Patients", Patients.class).list();
         }
     }
 
+    /**
+     * Retrieves a patient by their ID.
+     * @param id The ID of the patient.
+     * @return The Patients entity, or null if not found.
+     */
     public Patients getPatientById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Patients.class, id);
         }
     }
 
+    /**
+     * Retrieves a patient record by their email address.
+     * @param email The email of the patient.
+     * @return The Patients entity, or null if not found.
+     */
     public Patients getPatientByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("from Patients where email = :email", Patients.class)

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Entity representing a medical appointment.
+ * Links patients with doctors and optional nursing staff for scheduled visits.
+ */
 @Entity
 public class Appointments {
 
@@ -29,8 +33,14 @@ public class Appointments {
     private Nurses nurse;
 
 
+    /** Default constructor for JPA. */
     public Appointments() {}
 
+    /**
+     * Constructs a new Appointment with specified timing.
+     * @param appointmentDate The scheduled date.
+     * @param appointmentTime The scheduled time.
+     */
     public Appointments(LocalDate appointmentDate, LocalTime appointmentTime) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;

@@ -3,6 +3,10 @@ package com.example.Hospital_Management_System.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a medical prescription.
+ * Details the medication, dosage, and instructions provided by a doctor to a patient.
+ */
 @Entity
 @Table(name = "prescriptions")
 public class Prescription {
@@ -25,6 +29,10 @@ public class Prescription {
     private String instructions;
     private LocalDateTime prescribedDate;
 
+    /**
+     * Default constructor for JPA.
+     * Initializes the prescribed date to current timestamp.
+     */
     public Prescription() {
         this.prescribedDate = LocalDateTime.now();
     }
