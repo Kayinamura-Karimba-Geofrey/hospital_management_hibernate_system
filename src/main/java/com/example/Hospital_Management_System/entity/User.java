@@ -25,6 +25,12 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(name = "two_factor_secret")
+    private String twoFactorSecret;
+
+    @Column(name = "is_two_factor_enabled", nullable = false)
+    private boolean isTwoFactorEnabled = false;
+
     public User() {}
 
     public User(String username, String password, String email, String fullName, String role) {
@@ -53,4 +59,10 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getTwoFactorSecret() { return twoFactorSecret; }
+    public void setTwoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; }
+
+    public boolean isTwoFactorEnabled() { return isTwoFactorEnabled; }
+    public void setTwoFactorEnabled(boolean isTwoFactorEnabled) { this.isTwoFactorEnabled = isTwoFactorEnabled; }
 }

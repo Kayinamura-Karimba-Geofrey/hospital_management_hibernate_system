@@ -145,6 +145,13 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- ✅ Google Authenticator TOTP -->
+        <dependency>
+            <groupId>dev.samstevens.totp</groupId>
+            <artifactId>totp</artifactId>
+            <version>1.7.1</version>
+        </dependency>
     </dependencies>
 
     <build>
