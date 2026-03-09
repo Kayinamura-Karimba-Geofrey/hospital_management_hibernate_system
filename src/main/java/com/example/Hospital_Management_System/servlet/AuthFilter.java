@@ -43,7 +43,9 @@ public class AuthFilter implements Filter {
                                path.endsWith("register") || 
                                path.endsWith("registration-success.jsp") || 
                                path.endsWith("login.jsp") ||
-                               path.endsWith("register.jsp");
+                               path.endsWith("register.jsp") ||
+                               path.endsWith("2fa") ||
+                               path.endsWith("2fa.jsp");
                                 
         boolean isStaticResource = path.endsWith(".css") || 
                                    path.endsWith(".js") || 

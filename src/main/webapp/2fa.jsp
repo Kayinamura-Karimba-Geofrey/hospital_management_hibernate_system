@@ -155,6 +155,7 @@
                     </c:if>
 
                     <form action="${pageContext.request.contextPath}/2fa" method="POST">
+                        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                         <div class="form-group">
                             <label>Authentication Code</label>
                             <input type="text" name="code" class="form-control" placeholder="000000" maxlength="6"
