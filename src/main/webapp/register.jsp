@@ -21,6 +21,19 @@
                     }
                 }
             </script>
+            <script
+                src="https://www.google.com/recaptcha/api.js?render=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></script>
+            <script>
+                function onSubmit(e) {
+                    e.preventDefault();
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', { action: 'submit' }).then(function (token) {
+                            document.getElementById("g-recaptcha-response").value = token;
+                            document.getElementById("register-form").submit();
+                        });
+                    });
+                }
+            </script>
         </head>
 
         <body>
@@ -38,8 +51,9 @@
                         </div>
                     </c:if>
 
-                    <form action="register" method="post">
+                    <form id="register-form" action="register" method="post">
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
                         <div class="form-group">
                             <label>Username</label>
                             <input type="text" name="username" required placeholder="Choose a username">
@@ -81,8 +95,8 @@
                                 character.
                             </small>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Complete
-                            Registration</button>
+                        <button type="button" class="btn btn-primary" onclick="onSubmit(event)"
+                            style="width: 100%; margin-top: 10px;">Complete Registration</button>
                     </form>
 
                     <div style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-secondary);">

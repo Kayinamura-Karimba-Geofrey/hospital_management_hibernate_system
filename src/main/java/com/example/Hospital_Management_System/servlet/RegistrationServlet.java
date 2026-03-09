@@ -62,6 +62,16 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
+        // Advanced reCAPTCHA v3 Validation
+        String recaptchaToken = request.getParameter("g-recaptcha-response");
+        boolean isHuman = com.example.Hospital_Management_System.service.ReCaptchaService.verify(recaptchaToken);
+        if (!isHuman) {
+            request.setAttribute("error", "Security check failed. Our systems flagged this registration attempt as automated bot activity. If you're a human, please try again.");
+            request.setAttribute("departments", departmentDAO.getAllDepartments());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         // Check if username already exists
         if (userService.existsByUsername(username)) {
             request.setAttribute("error", "Username already exists. Please choose another.");
