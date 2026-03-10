@@ -138,14 +138,14 @@
                                 </c:forEach>
 
                                 <div class="bed-card ${bed.status}"
-                                    onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}', '${activeAdm.id}', '${activeAdm.patient.fullName}')">
+                                    onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}', '${activeAdm.id}', '${activeAdm.patient.name}')">
                                     <span class="bed-icon">🛏️</span>
                                     <div style="font-weight: 600;">Bed ${bed.bedNumber}</div>
                                     <span class="status-badge status-${bed.status.toLowerCase()}">${bed.status}</span>
                                     <c:if test="${not empty activeAdm}">
                                         <div
                                             style="font-size: 0.7rem; margin-top: 5px; color: var(--text-secondary); font-weight: 600;">
-                                            ${activeAdm.patient.fullName}
+                                            ${activeAdm.patient.name}
                                         </div>
                                     </c:if>
                                 </div>
@@ -170,7 +170,7 @@
                             <label>Select Patient</label>
                             <select name="patientId" required>
                                 <c:forEach var="p" items="${patients}">
-                                    <option value="${p.id}">${p.fullName} (ID: ${p.id})</option>
+                                    <option value="${p.id}">${p.name} (ID: ${p.id})</option>
                                 </c:forEach>
                             </select>
                         </div>
