@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
+        String identifier = request.getParameter("email"); // Still named 'email' in HTML for now
         String password = request.getParameter("password");
         String recaptchaToken = request.getParameter("g-recaptcha-response");
 
@@ -51,14 +51,14 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        User user = userDAO.validateUserByEmail(email, password);
+        User user = userDAO.validateUser(identifier, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("tempUser", user);
             response.sendRedirect(request.getContextPath() + "/2fa");
         } else {
-            request.setAttribute("error", "Invalid email or password");
+            request.setAttribute("error", "Invalid email/username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

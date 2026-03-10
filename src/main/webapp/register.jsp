@@ -15,9 +15,15 @@
                     if (role === "DOCTOR" || role === "NURSE") {
                         deptDiv.style.display = "block";
                         document.getElementById("dept-select").required = true;
+                        document.getElementById("staff-pwd-note").style.display = "block";
+                        document.getElementById("reg-password").required = false;
+                        document.getElementById("reg-password").placeholder = "Leave blank for registered name";
                     } else {
                         deptDiv.style.display = "none";
                         document.getElementById("dept-select").required = false;
+                        document.getElementById("staff-pwd-note").style.display = "none";
+                        document.getElementById("reg-password").required = true;
+                        document.getElementById("reg-password").placeholder = "Create a strong password";
                     }
                 }
             </script>
@@ -76,10 +82,14 @@
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" name="password" required placeholder="Create a strong password">
-                            <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                            <input type="password" name="password" id="reg-password" placeholder="Create a password">
+                            <small id="pwd-hint" style="color: var(--text-secondary); display: block; margin-top: 5px;">
                                 At least 8 characters, one digit, one uppercase, one lowercase, and one special
                                 character.
+                            </small>
+                            <small id="staff-pwd-note"
+                                style="color: #4CAF50; display: none; margin-top: 5px; font-weight: 600;">
+                                Note: Log in using password as the username if left blank.
                             </small>
                         </div>
                         <div class="form-group" style="margin: 20px 0;">

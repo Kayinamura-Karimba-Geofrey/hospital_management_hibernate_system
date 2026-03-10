@@ -64,11 +64,27 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
-        if (!ValidationService.isStrongPassword(password)) {
-            request.setAttribute("error", ValidationService.getPasswordStrengthRequirement());
-            request.setAttribute("departments", departmentDAO.getAllDepartments());
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-            return;
+        // Special handling for staff passwords (Admin can leave blank for name-as-password)
+        boolean isStaff = "DOCTOR".equalsIgnoreCase(role) || "NURSE".equalsIgnoreCase(role);
+        boolean isAdminInitiated = (currentUser != null && "ADMIN".equalsIgnoreCase(currentRole));
+        
+        if (password == null || password.trim().isEmpty()) {
+            if (isStaff && isAdminInitiated) {
+                password = username; // Default to username if blank for staff
+            } else {
+                request.setAttribute("error", "Password is required.");
+                request.setAttribute("departments", departmentDAO.getAllDepartments());
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
+            }
+        } else if (!ValidationService.isStrongPassword(password)) {
+            // Bypass strong password requirement for Admin-led staff registration
+            if (!isStaff || !isAdminInitiated) {
+                request.setAttribute("error", ValidationService.getPasswordStrengthRequirement());
+                request.setAttribute("departments", departmentDAO.getAllDepartments());
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
+            }
         }
 
         // Advanced reCAPTCHA v3 Validation

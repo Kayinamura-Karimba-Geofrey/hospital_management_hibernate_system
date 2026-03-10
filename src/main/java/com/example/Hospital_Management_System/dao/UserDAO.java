@@ -65,17 +65,28 @@ public class UserDAO {
     }
 
     /**
-     * Validates user credentials by email and password.
-     * @param email The user's email address.
+     * Validates user credentials by email or username.
+     * @param identifier The user's email address or username.
      * @param password The raw password to check.
      * @return The User entity if valid, null otherwise.
      */
-    public User validateUserByEmail(String email, String password) {
-        User user = getUserByEmail(email);
+    public User validateUser(String identifier, String password) {
+        User user = getUserByIdentifier(identifier);
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         }
         return null;
+    }
+
+    private User getUserByIdentifier(String identifier) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from User where email = :id or username = :id", User.class)
+                    .setParameter("id", identifier)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

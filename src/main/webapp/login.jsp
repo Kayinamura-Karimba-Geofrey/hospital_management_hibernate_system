@@ -42,13 +42,18 @@
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
                         <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
                         <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required placeholder="Enter your email">
+                            <label for="identifier">Email or Username</label>
+                            <input type="text" id="identifier" name="email" required
+                                placeholder="Enter email or username">
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password (Registered Name for Doctors)</label>
+                            <label for="password">Password</label>
                             <input type="password" id="password" name="password" required placeholder="••••••••">
+                            <small
+                                style="color: var(--text-secondary); display: block; margin-top: 5px; font-style: italic;">
+                                Hint: Default staff password is your Registered Name.
+                            </small>
                         </div>
 
                         <button type="button" class="btn btn-primary" onclick="onLoginSubmit(event)"
