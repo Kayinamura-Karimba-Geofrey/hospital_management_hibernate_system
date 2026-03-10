@@ -77,4 +77,23 @@ public class InvoiceDAO {
             return session.get(Invoice.class, id);
         }
     }
+
+    /**
+     * Deletes an invoice from the database.
+     * @param id The ID of the invoice to delete.
+     */
+    public void delete(int id) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Invoice invoice = session.get(Invoice.class, id);
+            if (invoice != null) {
+                session.remove(invoice);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+    }
 }

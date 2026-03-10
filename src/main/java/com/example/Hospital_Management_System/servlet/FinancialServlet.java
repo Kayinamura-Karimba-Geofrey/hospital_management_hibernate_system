@@ -58,14 +58,14 @@ public class FinancialServlet extends HttpServlet {
 
         try {
             if ("generateInvoice".equals(action)) {
-                int patientId = Integer.parseInt(request.getParameter("patientId"));
-                double amount = Double.parseDouble(request.getParameter("amount"));
-                String description = request.getParameter("description");
-                financialService.generateInvoice(patientId, amount, description);
+                saveOrUpdateInvoice(request);
             } else if ("updatePaymentStatus".equals(action)) {
                 int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
                 String status = request.getParameter("status");
                 financialService.updatePaymentStatus(invoiceId, status);
+            } else if ("deleteInvoice".equals(action)) {
+                int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
+                financialService.deleteInvoice(invoiceId);
             } else if ("updateInsurance".equals(action)) {
                 int patientId = Integer.parseInt(request.getParameter("patientId"));
                 String provider = request.getParameter("provider");
@@ -87,5 +87,25 @@ public class FinancialServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/financial");
+    }
+
+    private void saveOrUpdateInvoice(HttpServletRequest request) {
+        String idStr = request.getParameter("invoiceId");
+        Invoice invoice = null;
+        
+        if (idStr != null && !idStr.isEmpty()) {
+            invoice = financialService.getInvoiceById(Integer.parseInt(idStr));
+        }
+        
+        if (invoice == null) {
+            invoice = new Invoice();
+            int patientId = Integer.parseInt(request.getParameter("patientId"));
+            invoice.setPatient(patientService.getPatientById(patientId));
+        }
+
+        invoice.setAmount(Double.parseDouble(request.getParameter("amount")));
+        invoice.setDescription(request.getParameter("description"));
+        
+        financialService.saveOrUpdateInvoice(invoice);
     }
 }

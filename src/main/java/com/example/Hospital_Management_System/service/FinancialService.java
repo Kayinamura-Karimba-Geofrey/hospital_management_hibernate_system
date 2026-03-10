@@ -75,4 +75,24 @@ public class FinancialService {
             invoiceDAO.update(invoice);
         }
     }
+
+    /**
+     * Deletes an invoice from the system.
+     * @param invoiceId The ID of the invoice to delete.
+     */
+    public void deleteInvoice(int invoiceId) {
+        invoiceDAO.delete(invoiceId);
+    }
+
+    /**
+     * Saves or updates an invoice.
+     * @param invoice The invoice to save or update.
+     */
+    public void saveOrUpdateInvoice(Invoice invoice) {
+        if (invoice.getId() > 0) {
+            invoiceDAO.update(invoice);
+        } else {
+            invoiceDAO.save(invoice);
+        }
+    }
 }
