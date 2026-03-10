@@ -87,4 +87,8 @@ public class NurseService {
     public Nurses getNurseByEmail(String email) {
         return nurseDAO.getNurseByEmail(email);
     }
+
+    public long getPatientsCount(int nurseId) {
+        return nurseDAO.getPatientsCount(nurseId);
+    }
 }

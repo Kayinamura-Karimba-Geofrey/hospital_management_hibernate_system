@@ -87,4 +87,8 @@ public class DoctorService {
     public Doctors getDoctorByEmail(String email) {
         return doctorDAO.getDoctorByEmail(email);
     }
+
+    public long getPatientsCount(int doctorId) {
+        return doctorDAO.getPatientsCount(doctorId);
+    }
 }

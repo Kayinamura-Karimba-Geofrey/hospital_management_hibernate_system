@@ -133,4 +133,17 @@ public class AppointmentDAO {
                     .list();
         }
     }
+
+    /**
+     * Retrieves all appointments for a specific nurse.
+     * @param nurseId The ID of the nurse.
+     * @return A list of appointments associated with the nurse.
+     */
+    public List<Appointments> getAppointmentsByNurseId(int nurseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Appointments where nurse.id = :nurseId", Appointments.class)
+                    .setParameter("nurseId", nurseId)
+                    .list();
+        }
+    }
 }

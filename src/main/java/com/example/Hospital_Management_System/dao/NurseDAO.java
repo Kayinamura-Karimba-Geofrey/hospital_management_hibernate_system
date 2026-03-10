@@ -120,4 +120,17 @@ public class NurseDAO {
                     .uniqueResult();
         }
     }
+
+    /**
+     * Counts the number of patients assigned to a specific nurse.
+     * @param nurseId The ID of the nurse.
+     * @return The count of patients.
+     */
+    public long getPatientsCount(int nurseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT count(p) FROM Patients p WHERE p.nurse.id = :id", Long.class)
+                    .setParameter("id", nurseId)
+                    .uniqueResult();
+        }
+    }
 }

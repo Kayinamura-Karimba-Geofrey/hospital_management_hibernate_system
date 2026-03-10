@@ -94,7 +94,7 @@ public class DashboardServlet extends HttpServlet {
         Doctors doctor = doctorService.getDoctorByEmail(email);
         if (doctor != null) {
             request.setAttribute("doctor", doctor);
-            request.setAttribute("myPatientsCount", doctor.getPatients().size());
+            request.setAttribute("myPatientsCount", doctorService.getPatientsCount(doctor.getId()));
             request.setAttribute("myAppointments", appointmentService.getAppointmentsByDoctorId(doctor.getId()));
         }
     }
@@ -103,8 +103,8 @@ public class DashboardServlet extends HttpServlet {
         Nurses nurse = nurseService.getNurseByEmail(email);
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
-            request.setAttribute("myPatientsCount", nurse.getPatients().size());
-            request.setAttribute("deptAppointments", nurse.getAppointments());
+            request.setAttribute("myPatientsCount", nurseService.getPatientsCount(nurse.getId()));
+            request.setAttribute("deptAppointments", appointmentService.getAppointmentsByNurseId(nurse.getId()));
         }
     }
 
