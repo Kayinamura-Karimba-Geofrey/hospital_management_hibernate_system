@@ -28,6 +28,27 @@ public class SurgeryDAO {
         }
     }
 
+    public Surgery getById(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Surgery.class, id);
+        }
+    }
+
+    public void delete(Long id) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Surgery surgery = session.get(Surgery.class, id);
+            if (surgery != null) {
+                session.remove(surgery);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Retrieves all scheduled surgeries.
      * @return A list of all Surgery entities.

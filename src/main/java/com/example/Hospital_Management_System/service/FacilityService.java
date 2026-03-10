@@ -71,7 +71,19 @@ public class FacilityService {
         surgeryDAO.saveOrUpdate(surgery);
     }
 
+    public void deleteSurgery(Long id) {
+        surgeryDAO.delete(id);
+    }
+
     public List<Admission> getAllAdmissions() {
         return admissionDAO.getAllAdmissions();
+    }
+
+    public List<Admission> getActiveAdmissions() {
+        return admissionDAO.getActiveAdmissions();
+    }
+
+    public Admission getAdmissionByBedId(Long bedId) {
+        return admissionDAO.getActiveByBedId(bedId);
     }
 }

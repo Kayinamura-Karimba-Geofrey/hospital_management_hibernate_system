@@ -130,11 +130,24 @@
 
                         <div class="bed-grid">
                             <c:forEach var="bed" items="${ward.beds}">
+                                <c:set var="activeAdm" value="${null}" />
+                                <c:forEach var="adm" items="${activeAdmissions}">
+                                    <c:if test="${adm.bed.id == bed.id}">
+                                        <c:set var="activeAdm" value="${adm}" />
+                                    </c:if>
+                                </c:forEach>
+
                                 <div class="bed-card ${bed.status}"
-                                    onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}')">
+                                    onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}', '${activeAdm.id}', '${activeAdm.patient.fullName}')">
                                     <span class="bed-icon">🛏️</span>
                                     <div style="font-weight: 600;">Bed ${bed.bedNumber}</div>
                                     <span class="status-badge status-${bed.status.toLowerCase()}">${bed.status}</span>
+                                    <c:if test="${not empty activeAdm}">
+                                        <div
+                                            style="font-size: 0.7rem; margin-top: 5px; color: var(--text-secondary); font-weight: 600;">
+                                            ${activeAdm.patient.fullName}
+                                        </div>
+                                    </c:if>
                                 </div>
                             </c:forEach>
                         </div>
@@ -143,7 +156,7 @@
             </div>
 
             <!-- ADMISSION MODAL -->
-            <div id="admissionModal" class="form-overlay" onclick="closeModal(event)">
+            <div id="admissionModal" class="form-overlay" onclick="closeModal(event, 'admissionModal')">
                 <div class="card" style="width: 400px;" onclick="event.stopPropagation()">
                     <h3 id="modalTitle">Admit Patient</h3>
                     <form action="${pageContext.request.contextPath}/facility?action=admit" method="post">
@@ -170,21 +183,58 @@
                 </div>
             </div>
 
+            <!-- DISCHARGE/MAINTENANCE MODAL -->
+            <div id="statusModal" class="form-overlay" onclick="closeModal(event, 'statusModal')">
+                <div class="card" style="width: 400px;" onclick="event.stopPropagation()">
+                    <h3 id="statusModalTitle">Bed Management</h3>
+                    <div id="statusDetails" style="margin-bottom: 20px; font-size: 0.9rem;"></div>
+
+                    <form id="statusForm" method="post" action="">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
+                        <input type="hidden" name="admissionId" id="statusAdmissionId">
+                        <input type="hidden" name="bedId" id="statusBedId">
+                        <input type="hidden" name="action" id="statusAction">
+
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" class="btn btn-secondary" style="flex: 1;"
+                                onclick="document.getElementById('statusModal').style.display='none'">Close</button>
+                            <button type="submit" id="statusSubmitBtn" class="btn btn-primary"
+                                style="flex: 1;">Action</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <script>
-                function handleBedClick(id, num, status) {
+                function handleBedClick(id, num, status, admId, patientName) {
                     if (status === 'AVAILABLE') {
                         document.getElementById('modalBedId').value = id;
                         document.getElementById('displayBedNum').value = "Bed " + num;
                         document.getElementById('admissionModal').style.display = 'flex';
                     } else if (status === 'OCCUPIED') {
-                        alert("Bed is already occupied. Redirecting to patient file...");
-                    } else {
-                        alert("Bed is currently being cleaned and sanitized.");
+                        document.getElementById('statusModalTitle').innerText = "Bed " + num + " (Occupied)";
+                        document.getElementById('statusDetails').innerHTML = "Patient: <strong>" + patientName + "</strong><br>Currently admitted.";
+                        document.getElementById('statusAdmissionId').value = admId;
+                        document.getElementById('statusAction').value = "discharge";
+                        document.getElementById('statusForm').action = "${pageContext.request.contextPath}/facility?action=discharge";
+                        document.getElementById('statusSubmitBtn').innerText = "Discharge Patient";
+                        document.getElementById('statusSubmitBtn').className = "btn btn-danger";
+                        document.getElementById('statusModal').style.display = 'flex';
+                    } else if (status === 'CLEANING') {
+                        document.getElementById('statusModalTitle').innerText = "Bed " + num + " (Maintenance)";
+                        document.getElementById('statusDetails').innerText = "This bed is currently being cleaned.";
+                        document.getElementById('statusBedId').value = id;
+                        document.getElementById('statusAction').value = "markReady";
+                        document.getElementById('statusForm').action = "${pageContext.request.contextPath}/facility?action=markReady";
+                        document.getElementById('statusSubmitBtn').innerText = "Mark as Ready";
+                        document.getElementById('statusSubmitBtn').className = "btn btn-primary";
+                        document.getElementById('statusModal').style.display = 'flex';
                     }
                 }
-                function closeModal(e) {
-                    if (e.target.id === 'admissionModal') {
-                        document.getElementById('admissionModal').style.display = 'none';
+
+                function closeModal(e, modalId) {
+                    if (e.target.id === modalId) {
+                        document.getElementById(modalId).style.display = 'none';
                     }
                 }
             </script>

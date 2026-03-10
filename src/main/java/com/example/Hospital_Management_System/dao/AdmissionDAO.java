@@ -80,4 +80,17 @@ public class AdmissionDAO {
             return session.createQuery("from Admission where dischargeDate is null", Admission.class).list();
         }
     }
+
+    /**
+     * Retrieves an active admission for a specific bed.
+     * @param bedId The ID of the bed.
+     * @return The active Admission entity, or null if none.
+     */
+    public Admission getActiveByBedId(Long bedId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Admission where bed.id = :bedId and dischargeDate is null", Admission.class)
+                    .setParameter("bedId", bedId)
+                    .uniqueResult();
+        }
+    }
 }

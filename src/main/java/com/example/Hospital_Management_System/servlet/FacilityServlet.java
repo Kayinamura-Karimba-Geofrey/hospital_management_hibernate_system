@@ -39,8 +39,10 @@ public class FacilityServlet extends HttpServlet {
         if (path.equals("/facility")) {
             List<Ward> wards = facilityService.getAllWards();
             List<Patients> patients = patientService.getAllPatients();
+            List<Admission> activeAdmissions = facilityService.getActiveAdmissions();
             request.setAttribute("wards", wards);
             request.setAttribute("patients", patients);
+            request.setAttribute("activeAdmissions", activeAdmissions);
             request.getRequestDispatcher("facility.jsp").forward(request, response);
         } else if (path.equals("/surgery")) {
             List<Surgery> surgeries = facilityService.getAllSurgeries();
@@ -72,27 +74,54 @@ public class FacilityServlet extends HttpServlet {
                 facilityService.dischargePatient(admissionId);
                 response.sendRedirect("facility");
                 
+            } else if ("markReady".equals(action)) {
+                Long bedId = Long.parseLong(request.getParameter("bedId"));
+                com.example.Hospital_Management_System.dao.BedDAO bedDAO = new com.example.Hospital_Management_System.dao.BedDAO();
+                bedDAO.updateBedStatus(bedId, "AVAILABLE");
+                response.sendRedirect("facility");
+
             } else if ("scheduleSurgery".equals(action)) {
-                Surgery surgery = new Surgery();
-                surgery.setPatient(patientService.getPatientById(Integer.parseInt(request.getParameter("patientId"))));
-                surgery.setSurgeon(doctorService.getDoctorById(Integer.parseInt(request.getParameter("surgeonId"))));
-                
-                String anesthetistId = request.getParameter("anesthetistId");
-                if (anesthetistId != null && !anesthetistId.isEmpty()) {
-                    surgery.setAnesthetist(doctorService.getDoctorById(Integer.parseInt(anesthetistId)));
-                }
-                
-                surgery.setOtRoomName(request.getParameter("otRoomName"));
-                surgery.setSurgeryDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
-                surgery.setDurationMinutes(Integer.parseInt(request.getParameter("duration")));
-                surgery.setEquipment(request.getParameter("equipment"));
-                
-                facilityService.scheduleSurgery(surgery);
+                saveOrUpdateSurgery(request);
+                response.sendRedirect("surgery");
+
+            } else if ("deleteSurgery".equals(action)) {
+                Long surgeryId = Long.parseLong(request.getParameter("surgeryId"));
+                facilityService.deleteSurgery(surgeryId);
                 response.sendRedirect("surgery");
             }
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
         }
+    }
+
+    private void saveOrUpdateSurgery(HttpServletRequest request) {
+        String idStr = request.getParameter("surgeryId");
+        Surgery surgery = null;
+        
+        if (idStr != null && !idStr.isEmpty()) {
+            surgery = new com.example.Hospital_Management_System.dao.SurgeryDAO().getById(Integer.parseInt(idStr));
+        }
+        
+        if (surgery == null) {
+            surgery = new Surgery();
+        }
+
+        surgery.setPatient(patientService.getPatientById(Integer.parseInt(request.getParameter("patientId"))));
+        surgery.setSurgeon(doctorService.getDoctorById(Integer.parseInt(request.getParameter("surgeonId"))));
+        
+        String anesthetistId = request.getParameter("anesthetistId");
+        if (anesthetistId != null && !anesthetistId.isEmpty()) {
+            surgery.setAnesthetist(doctorService.getDoctorById(Integer.parseInt(anesthetistId)));
+        } else {
+            surgery.setAnesthetist(null);
+        }
+        
+        surgery.setOtRoomName(request.getParameter("otRoomName"));
+        surgery.setSurgeryDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
+        surgery.setDurationMinutes(Integer.parseInt(request.getParameter("duration")));
+        surgery.setEquipment(request.getParameter("equipment"));
+        
+        facilityService.scheduleSurgery(surgery);
     }
 }

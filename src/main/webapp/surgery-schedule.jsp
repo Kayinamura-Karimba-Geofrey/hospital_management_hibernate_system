@@ -87,6 +87,25 @@
                                         <div class="time-badge">${s.surgeryDateTime}</div>
                                         <div style="font-size: 0.8rem; margin-top: 5px; opacity: 0.6;">Duration:
                                             ${s.durationMinutes} min</div>
+                                        <div
+                                            style="margin-top: 10px; display: flex; gap: 5px; justify-content: flex-end;">
+                                            <button class="btn btn-secondary"
+                                                style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255,255,255,0.1);"
+                                                onclick="editSurgery('${s.id}', '${s.patient.id}', '${s.surgeon.id}', '${s.anesthetist.id}', '${s.otRoomName}', '${s.surgeryDateTime}', '${s.durationMinutes}', '${s.equipment}')">
+                                                Edit
+                                            </button>
+                                            <form
+                                                action="${pageContext.request.contextPath}/surgery?action=deleteSurgery"
+                                                method="post" style="margin: 0;"
+                                                onsubmit="return confirm('Are you sure?')">
+                                                <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                                <input type="hidden" name="surgeryId" value="${s.id}">
+                                                <button type="submit" class="btn btn-danger"
+                                                    style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.3);">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -101,9 +120,11 @@
                     </div>
 
                     <div class="card">
-                        <h3>Schedule Surgery</h3>
-                        <form action="${pageContext.request.contextPath}/surgery?action=scheduleSurgery" method="post">
+                        <h3 id="form-title">Schedule Surgery</h3>
+                        <form id="surgery-form"
+                            action="${pageContext.request.contextPath}/surgery?action=scheduleSurgery" method="post">
                             <input type="hidden" name="csrfToken" value="${csrfToken}">
+                            <input type="hidden" name="surgeryId" id="form-surgeryId">
                             <div class="form-group">
                                 <label>Patient</label>
                                 <select name="patientId" required>
@@ -149,12 +170,47 @@
                                 <label>Special Equipment</label>
                                 <input type="text" name="equipment" placeholder="Laser, Robotic Arm, etc.">
                             </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Confirm
-                                Schedule</button>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button type="submit" id="submit-btn" class="btn btn-primary" style="flex: 1;">Confirm
+                                    Schedule</button>
+                                <button type="button" id="cancel-btn" class="btn btn-secondary"
+                                    style="display: none; flex: 1;" onclick="resetForm()">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <script>
+                function editSurgery(id, patientId, surgeonId, anesthetistId, room, dateTime, duration, equipment) {
+                    document.getElementById('form-title').innerText = 'Update Surgery';
+                    document.getElementById('form-surgeryId').value = id;
+                    document.querySelector('select[name="patientId"]').value = patientId;
+                    document.querySelector('select[name="surgeonId"]').value = surgeonId;
+                    document.querySelector('select[name="anesthetistId"]').value = anesthetistId || "";
+                    document.querySelector('select[name="otRoomName"]').value = room;
+
+                    // Format dateTime for input (remove 'T' if present or fix format)
+                    if (dateTime) {
+                        // The value from EL might be '2026-03-10T08:00'
+                        document.querySelector('input[name="dateTime"]').value = dateTime;
+                    }
+
+                    document.querySelector('input[name="duration"]').value = duration;
+                    document.querySelector('input[name="equipment"]').value = equipment === 'null' ? "" : equipment;
+
+                    document.getElementById('submit-btn').innerText = 'Update Schedule';
+                    document.getElementById('cancel-btn').style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
+                function resetForm() {
+                    document.getElementById('form-title').innerText = 'Schedule Surgery';
+                    document.getElementById('form-surgeryId').value = '';
+                    document.getElementById('surgery-form').reset();
+                    document.getElementById('submit-btn').innerText = 'Confirm Schedule';
+                    document.getElementById('cancel-btn').style.display = 'none';
+                }
+            </script>
         </body>
 
         </html>
