@@ -88,10 +88,11 @@
                 <div style="display: flex; gap: 30px; margin-bottom: 40px;">
                     <!-- ADD ITEM FORM -->
                     <div class="card" style="flex: 1;">
-                        <h3>Add To Inventory</h3>
-                        <form action="${pageContext.request.contextPath}/inventory?action=addOrUpdateItem"
-                            method="post">
+                        <h3 id="form-title">Add To Inventory</h3>
+                        <form id="inventory-form"
+                            action="${pageContext.request.contextPath}/inventory?action=addOrUpdateItem" method="post">
                             <input type="hidden" name="csrfToken" value="${csrfToken}">
+                            <input type="hidden" name="itemId" id="form-itemId">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                                 <div class="form-group">
                                     <label>Item Name</label>
@@ -123,7 +124,12 @@
                                 <label>Unit Price ($)</label>
                                 <input type="number" step="0.01" name="unitPrice" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">Add Item</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="submit" id="submit-btn" class="btn btn-primary" style="flex: 1;">Add
+                                    Item</button>
+                                <button type="button" id="cancel-btn" class="btn btn-secondary"
+                                    style="display: none; flex: 1;" onclick="resetForm()">Cancel</button>
+                            </div>
                         </form>
                     </div>
 
@@ -172,6 +178,7 @@
                             <div style="margin-top: 20px; display: flex; gap: 10px;">
                                 <form action="${pageContext.request.contextPath}/inventory?action=updateQuantity"
                                     method="post" style="flex: 1; display: flex; gap: 5px;">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="itemId" value="${item.id}">
                                     <input type="hidden" name="delta" value="10">
                                     <button type="submit" class="btn btn-secondary"
@@ -179,10 +186,29 @@
                                 </form>
                                 <form action="${pageContext.request.contextPath}/inventory?action=updateQuantity"
                                     method="post" style="flex: 1; display: flex; gap: 5px;">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="itemId" value="${item.id}">
                                     <input type="hidden" name="delta" value="-1">
                                     <button type="submit" class="btn btn-primary"
-                                        style="padding: 5px; flex-grow: 1; font-size: 0.75rem;">Use 1</button>
+                                        style="padding: 5px; flex-grow: 1; font-size: 0.75rem;" ${item.quantity <=0
+                                        ? 'disabled' : '' }>Use 1</button>
+                                </form>
+                            </div>
+
+                            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                                <button class="btn btn-secondary"
+                                    style="flex: 1; padding: 5px; font-size: 0.75rem; background: rgba(255,255,255,0.1);"
+                                    onclick="editItem('${item.id}', '${item.name}', '${item.type}', '${item.quantity}', '${item.minThreshold}', '${item.expiryDate}', '${item.unitPrice}')">
+                                    Edit
+                                </button>
+                                <form action="${pageContext.request.contextPath}/inventory?action=delete" method="post"
+                                    style="flex: 1;" onsubmit="return confirm('Are you sure?')">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                    <input type="hidden" name="itemId" value="${item.id}">
+                                    <button type="submit" class="btn btn-danger"
+                                        style="width: 100%; padding: 5px; font-size: 0.75rem; background: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.3);">
+                                        Delete
+                                    </button>
                                 </form>
                             </div>
                         </div>

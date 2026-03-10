@@ -58,4 +58,23 @@ public class InventoryDAO {
             return session.createQuery("FROM InventoryItem WHERE quantity <= minThreshold", InventoryItem.class).list();
         }
     }
+
+    /**
+     * Deletes an inventory item by ID.
+     * @param id The ID of the item to delete.
+     */
+    public void deleteItem(int id) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            InventoryItem item = session.get(InventoryItem.class, id);
+            if (item != null) {
+                session.remove(item);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+    }
 }

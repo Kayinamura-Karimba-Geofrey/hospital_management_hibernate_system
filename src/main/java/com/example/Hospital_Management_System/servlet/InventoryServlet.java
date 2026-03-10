@@ -44,9 +44,18 @@ public class InventoryServlet extends HttpServlet {
             addOrUpdateItem(request);
         } else if ("updateQuantity".equals(action)) {
             updateQuantity(request);
+        } else if ("delete".equals(action)) {
+            deleteItem(request);
         }
 
         response.sendRedirect(request.getContextPath() + "/inventory");
+    }
+
+    private void deleteItem(HttpServletRequest request) {
+        String idStr = request.getParameter("itemId");
+        if (idStr != null && !idStr.isEmpty()) {
+            inventoryService.deleteItem(Integer.parseInt(idStr));
+        }
     }
 
     private void addOrUpdateItem(HttpServletRequest request) {

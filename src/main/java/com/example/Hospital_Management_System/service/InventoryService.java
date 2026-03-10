@@ -39,8 +39,20 @@ public class InventoryService {
     public void updateQuantity(int itemId, int delta) {
         InventoryItem item = inventoryDAO.getById(itemId);
         if (item != null) {
-            item.setQuantity(item.getQuantity() + delta);
+            int newQuantity = item.getQuantity() + delta;
+            if (newQuantity < 0) {
+                newQuantity = 0;
+            }
+            item.setQuantity(newQuantity);
             inventoryDAO.saveOrUpdate(item);
         }
+    }
+
+    /**
+     * Deletes an inventory item from the system.
+     * @param id The ID of the item to delete.
+     */
+    public void deleteItem(int id) {
+        inventoryDAO.deleteItem(id);
     }
 }
