@@ -32,15 +32,14 @@
 
         <body>
             <div class="auth-container">
-                <div class="auth-card" style="max-width: 500px;">
+                <div class="auth-card">
                     <div class="auth-header">
                         <h1>System Registration</h1>
                         <p>Join Advanced Health Management System</p>
                     </div>
 
                     <c:if test="${not empty error}">
-                        <div class="btn-danger"
-                            style="padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; text-align: center;">
+                        <div class="btn-danger" style="padding: 15px; border-radius: 12px; font-size: 0.9rem; margin-bottom: 25px; text-align: center; width: 100%; border: none;">
                             ${error}
                         </div>
                     </c:if>
@@ -88,14 +87,14 @@
                                 character.
                             </small>
                             <small id="staff-pwd-note"
-                                style="color: #4CAF50; display: none; margin-top: 5px; font-weight: 600;">
+                                style="color: var(--success); display: none; margin-top: 5px; font-weight: 600;">
                                 Note: Log in using password as the username if left blank.
                             </small>
                         </div>
                         <div class="form-group" style="margin: 20px 0;">
                             <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Complete
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 14px;">Complete
                             Registration</button>
                     </form>
 

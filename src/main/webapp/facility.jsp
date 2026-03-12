@@ -17,74 +17,81 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 15px;
-                    padding: 10px 20px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border-radius: 12px;
-                    border-left: 4px solid var(--primary);
+                    margin-bottom: 20px;
+                    padding: 20px 30px;
+                    background: var(--surface-solid);
+                    border-radius: 20px;
+                    border: 1px solid var(--border);
+                    border-left: 6px solid var(--primary);
+                    box-shadow: var(--card-shadow);
                 }
 
                 .bed-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                    gap: 15px;
+                    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 40px;
                 }
 
                 .bed-card {
-                    background: rgba(255, 255, 255, 0.03);
-                    border: 1px solid var(--glass-border);
-                    padding: 15px;
-                    border-radius: 12px;
+                    background: var(--surface-solid);
+                    border: 1px solid var(--border);
+                    padding: 20px 15px;
+                    border-radius: 20px;
                     text-align: center;
-                    transition: all 0.3s ease;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     cursor: pointer;
+                    box-shadow: var(--card-shadow);
                 }
 
                 .bed-card:hover {
-                    transform: translateY(-3px);
-                    background: rgba(255, 255, 255, 0.07);
+                    transform: translateY(-8px);
+                    border-color: var(--primary);
+                    box-shadow: var(--card-shadow-hover);
                 }
 
                 .bed-icon {
-                    font-size: 1.5rem;
-                    margin-bottom: 8px;
+                    font-size: 1.8rem;
+                    margin-bottom: 12px;
                     display: block;
                 }
 
                 .status-badge {
-                    font-size: 0.7rem;
+                    font-size: 0.75rem;
                     font-weight: 800;
-                    padding: 2px 8px;
-                    border-radius: 4px;
+                    padding: 4px 12px;
+                    border-radius: 8px;
                     display: inline-block;
-                    margin-top: 5px;
+                    margin-top: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
                 }
 
                 .status-available {
-                    border-color: #4CAF50;
-                    color: #4CAF50;
+                    background: rgba(50, 215, 75, 0.1);
+                    color: #32d74b;
                 }
 
                 .status-occupied {
-                    border-color: var(--danger);
+                    background: rgba(255, 69, 58, 0.1);
                     color: var(--danger);
                 }
 
                 .status-cleaning {
-                    border-color: #FFC107;
-                    color: #FFC107;
+                    background: rgba(255, 159, 10, 0.1);
+                    color: #ff9f0a;
                 }
 
                 .bed-card.AVAILABLE {
-                    border-top: 4px solid #4CAF50;
+                    border-top: 5px solid #32d74b;
                 }
 
                 .bed-card.OCCUPIED {
-                    border-top: 4px solid var(--danger);
+                    border-top: 5px solid var(--danger);
                 }
 
                 .bed-card.CLEANING {
-                    border-top: 4px solid #FFC107;
+                    border-top: 5px solid #ff9f0a;
                 }
 
                 .form-overlay {
@@ -94,8 +101,8 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.8);
-                    backdrop-filter: blur(8px);
+                    background: rgba(10, 132, 255, 0.1);
+                    backdrop-filter: blur(12px);
                     z-index: 1000;
                     justify-content: center;
                     align-items: center;

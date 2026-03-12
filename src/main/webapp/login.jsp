@@ -32,8 +32,7 @@
                     </div>
 
                     <c:if test="${not empty error}">
-                        <div class="btn-danger"
-                            style="padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; text-align: center;">
+                        <div class="btn-danger" style="padding: 15px; border-radius: 12px; font-size: 0.9rem; margin-bottom: 25px; text-align: center; width: 100%; border: none;">
                             ${error}
                         </div>
                     </c:if>
@@ -57,7 +56,7 @@
                         </div>
 
                         <button type="button" class="btn btn-primary" onclick="onLoginSubmit(event)"
-                            style="width: 100%; margin-top: 10px;">Sign In</button>
+                            style="width: 100%; margin-top: 15px; padding: 14px;">Sign In</button>
                     </form>
 
                     <div style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--text-secondary);">

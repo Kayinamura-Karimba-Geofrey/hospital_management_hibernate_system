@@ -3,7 +3,7 @@
 :root {
     --bg-dark: #ffffff;
     --surface: #ffffff;
-    --surface-solid: #f8fbff;
+    --surface-solid: #edf5ff;
     --surface-hover: rgba(10, 132, 255, 0.05);
     --primary: #0a84ff;
     --primary-glow: rgba(10, 132, 255, 0.15);
@@ -139,7 +139,7 @@ h3,
 
 /* Cards */
 .card {
-    background: var(--surface);
+    background: var(--surface-solid);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 30px;
@@ -161,7 +161,7 @@ h3,
 }
 
 .stat-card {
-    background: var(--surface);
+    background: var(--surface-solid);
     border: 1.5px solid var(--border);
     border-radius: 20px;
     padding: 32px 24px;
@@ -320,13 +320,24 @@ select:focus {
 }
 
 .btn-secondary {
-    background: var(--surface-hover);
-    color: white;
-    border: 1px solid var(--glass-border);
+    background: rgba(10, 132, 255, 0.1);
+    color: var(--primary);
+    border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(10, 132, 255, 0.2);
+}
+
+.btn-black {
+    background: #000000;
+    color: #ffffff !important;
+}
+
+.btn-black:hover {
+    background: #333333;
 }
 
 .btn-danger {
@@ -358,18 +369,19 @@ select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at top right, rgba(124, 77, 255, 0.15), transparent 40%),
-        radial-gradient(circle at bottom left, rgba(0, 188, 212, 0.15), transparent 40%);
+    background: radial-gradient(circle at top right, rgba(10, 132, 255, 0.1), transparent 50%),
+                radial-gradient(circle at bottom left, rgba(94, 92, 230, 0.1), transparent 50%),
+                #ffffff;
 }
 
 .auth-card {
-    width: 400px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    padding: 48px;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    border-radius: 32px;
+    box-shadow: 0 30px 60px -12px rgba(10, 132, 255, 0.15);
 }
 
 .auth-header {
@@ -621,13 +633,14 @@ select:focus {
 }
 
 .feature-card {
-    background: rgba(0, 0, 0, 0.01);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
     padding: 48px;
     border-radius: 32px;
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--card-shadow);
 }
 
 .feature-card::before {
@@ -643,10 +656,9 @@ select:focus {
 }
 
 .feature-card:hover {
-    transform: translateY(-12px);
-    background: rgba(0, 0, 0, 0.03);
-    border-color: rgba(0, 0, 0, 0.2);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-12px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .feature-card:hover::before {
@@ -659,7 +671,7 @@ select:focus {
     display: flex;
     width: 64px;
     height: 64px;
-    background: rgba(124, 77, 255, 0.1);
+    background: var(--primary-glow);
     border-radius: 16px;
     align-items: center;
     justify-content: center;
@@ -672,6 +684,7 @@ select:focus {
     margin-bottom: 16px;
     position: relative;
     z-index: 1;
+    color: var(--text-primary);
 }
 
 .feature-card p {
@@ -682,20 +695,26 @@ select:focus {
 }
 
 .cta-section {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.03));
+    background: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
     padding: 100px;
     border-radius: 48px;
     text-align: center;
     margin: 40px 80px 120px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 40px rgba(10, 132, 255, 0.2);
     position: relative;
     overflow: hidden;
+    color: white;
 }
 
 .cta-section h2 {
     font-size: 3.5rem;
     margin-bottom: 24px;
     letter-spacing: -1.5px;
+    color: white;
+}
+
+.cta-section p {
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 @media (max-width: 768px) {
