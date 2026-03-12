@@ -115,7 +115,16 @@
                             options: {
                                 responsive: true,
                                 maintainAspectRatio: false,
-                                scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8e8e93' } }, x: { ticks: { color: '#8e8e93' } } },
+                                scales: { 
+                                    y: { 
+                                        beginAtZero: true, 
+                                        grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+                                        ticks: { color: 'rgba(255, 255, 255, 0.7)' } 
+                                    }, 
+                                    x: { 
+                                        ticks: { color: 'rgba(255, 255, 255, 0.7)' } 
+                                    } 
+                                },
                                 plugins: { legend: { display: false } }
                             }
                         });

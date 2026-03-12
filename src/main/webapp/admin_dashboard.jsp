@@ -94,7 +94,7 @@
                                 legend: {
                                     position: 'right',
                                     labels: {
-                                        color: '#1c1c1e',
+                                        color: '#ffffff',
                                         font: {
                                             size: 14,
                                             weight: '500'

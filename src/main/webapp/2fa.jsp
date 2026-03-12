@@ -9,48 +9,13 @@
             <title>Two-Factor Authentication - HMSystem</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
             <style>
-                .auth-container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.1), transparent),
-                        radial-gradient(circle at bottom left, rgba(79, 172, 254, 0.1), transparent);
-                }
-
-                .auth-card {
-                    background: rgba(255, 255, 255, 0.05);
-                    backdrop-filter: blur(20px);
-                    -webkit-backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 24px;
-                    padding: 40px;
-                    width: 100%;
-                    max-width: 450px;
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-                    text-align: center;
-                }
-
-                .auth-card h2 {
-                    margin-bottom: 10px;
-                    font-size: 2rem;
-                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                }
-
-                .auth-card p {
-                    color: rgba(255, 255, 255, 0.7);
-                    margin-bottom: 30px;
-                    font-size: 0.95rem;
-                }
-
                 .qr-container {
                     background: #fff;
-                    padding: 15px;
-                    border-radius: 12px;
+                    padding: 20px;
+                    border-radius: 20px;
                     display: inline-block;
-                    margin-bottom: 25px;
+                    margin-bottom: 30px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
                 }
 
                 .qr-container img {
@@ -59,75 +24,56 @@
                     height: 200px;
                 }
 
-                .form-group {
-                    margin-bottom: 20px;
-                    text-align: left;
-                }
-
-                .form-group label {
-                    display: block;
-                    margin-bottom: 8px;
-                    color: rgba(255, 255, 255, 0.9);
-                    font-size: 0.9rem;
-                }
-
                 .form-control {
                     width: 100%;
-                    padding: 12px 15px;
+                    padding: 16px;
                     background: rgba(255, 255, 255, 0.05);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 12px;
+                    border: 1.5px solid var(--border);
+                    border-radius: 16px;
                     color: #fff;
-                    font-size: 1.1rem;
+                    font-size: 1.5rem;
                     text-align: center;
-                    letter-spacing: 4px;
+                    letter-spacing: 8px;
+                    font-weight: 700;
+                    font-family: 'Outfit', sans-serif;
                     transition: all 0.3s ease;
                 }
 
                 .form-control:focus {
                     outline: none;
-                    border-color: #4facfe;
+                    border-color: var(--primary);
                     background: rgba(255, 255, 255, 0.1);
-                    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1);
+                    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2);
                 }
 
                 .btn-submit {
                     width: 100%;
-                    padding: 14px;
-                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                    padding: 16px;
+                    background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
                     border: none;
-                    border-radius: 12px;
+                    border-radius: 16px;
                     color: #fff;
                     font-size: 1rem;
-                    font-weight: 600;
+                    font-weight: 700;
                     cursor: pointer;
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+                    transition: all 0.3s ease;
                 }
 
                 .btn-submit:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+                    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
                 }
 
                 .error-msg {
-                    background: rgba(255, 69, 58, 0.1);
-                    color: #ff453a;
-                    padding: 12px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                    font-size: 0.9rem;
-                    border: 1px solid rgba(255, 69, 58, 0.2);
-                }
-
-                .text-muted {
-                    opacity: 0.7;
-                    font-size: 0.85rem;
-                    margin-top: 15px;
-                }
-
-                .text-muted a {
-                    color: #4facfe;
-                    text-decoration: none;
+                    background: rgba(255, 59, 48, 0.1);
+                    color: #ff3b30;
+                    padding: 15px;
+                    border-radius: 12px;
+                    margin-bottom: 25px;
+                    font-size: 0.95rem;
+                    border: 1px solid rgba(255, 59, 48, 0.2);
+                    text-align: center;
                 }
             </style>
         </head>
@@ -136,22 +82,25 @@
 
             <div class="auth-container">
                 <div class="auth-card">
-                    <h2>Two-Factor Authentication</h2>
+                    <div class="auth-header">
+                        <h1>Two-Factor Check</h1>
+                        <p>Verify your identity to continue</p>
+                    </div>
 
                     <c:if test="${not empty error}">
                         <div class="error-msg">${error}</div>
                     </c:if>
 
                     <c:if test="${setup}">
-                        <p>Scan this QR code with your Authenticator app (e.g. Google Authenticator, Authy) to set up
-                            2FA for your account.</p>
+                        <p style="color: var(--card-text-dim); margin-bottom: 20px;">Scan this QR code with your Authenticator app (e.g. Google Authenticator) to set up
+                            2FA.</p>
                         <div class="qr-container">
                             <img src="${qrCode}" alt="2FA QR Code">
                         </div>
                     </c:if>
 
                     <c:if test="${not setup}">
-                        <p>Enter the 6-digit code from your Authenticator app to continue.</p>
+                        <p style="color: var(--card-text-dim); margin-bottom: 30px;">Enter the 6-digit code from your Authenticator app to continue.</p>
                     </c:if>
 
                     <form action="${pageContext.request.contextPath}/2fa" method="POST">
@@ -161,13 +110,12 @@
                             <input type="text" name="code" class="form-control" placeholder="000000" maxlength="6"
                                 pattern="[0-9]{6}" required autocomplete="off" autofocus>
                         </div>
-                        <button type="submit" class="btn-submit">Verify Code</button>
+                        <button type="submit" class="btn-submit">Verify Identity</button>
                     </form>
 
-                    <div class="text-muted">
-                        Need help? <a href="#">Contact Support</a>
-                        <br><br>
-                        <a href="${pageContext.request.contextPath}/login">Back to Login</a>
+                    <div style="text-align: center; margin-top: 30px; font-size: 0.95rem;">
+                        <p style="color: var(--card-text-dim);">Need help? <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 600;">Contact Support</a></p>
+                        <p style="margin-top: 20px;"><a href="${pageContext.request.contextPath}/login" style="color: var(--card-text-dim); text-decoration: none; opacity: 0.8;">🏠 Back to Login</a></p>
                     </div>
                 </div>
             </div>

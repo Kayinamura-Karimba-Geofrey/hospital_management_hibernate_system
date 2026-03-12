@@ -7,49 +7,19 @@
             <title>Advanced Analytics - HMSystem</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <style>
-                .analytics-grid {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 20px;
-                    margin-bottom: 30px;
+                .chart-card {
+                    background: var(--surface-solid);
+                    border: 1.5px solid var(--border);
+                    border-radius: 20px;
+                    padding: 25px;
+                    box-shadow: var(--card-shadow);
+                    transition: all 0.3s ease;
                 }
 
-                .chart-container {
-                    background: rgba(255, 255, 255, 0.05);
-                    backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 15px;
-                    padding: 20px;
-                    height: 350px;
-                }
-
-                .stats-row {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 20px;
-                    margin-bottom: 30px;
-                }
-
-                .stat-card {
-                    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
-                    backdrop-filter: blur(5px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 12px;
-                    padding: 20px;
-                    text-align: center;
-                }
-
-                .stat-card h2 {
-                    margin: 10px 0;
-                    font-size: 2em;
-                    color: #4facfe;
-                }
-
-                .stat-card p {
-                    margin: 0;
-                    opacity: 0.8;
-                    font-size: 0.9em;
+                .chart-card h3 {
+                    color: var(--card-text);
+                    margin-top: 0;
+                    margin-bottom: 20px;
                 }
 
                 .audit-section {
@@ -184,10 +154,10 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#1c1c1e', font: { weight: '500' } } } },
+                        plugins: { legend: { labels: { color: '#ffffff', font: { weight: '500' } } } },
                         scales: {
-                            y: { ticks: { color: '#8e8e93' }, grid: { color: 'rgba(0,0,0,0.05)' } },
-                            x: { ticks: { color: '#8e8e93' }, grid: { display: false } }
+                            y: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                            x: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { display: false } }
                         }
                     }
                 });
@@ -207,7 +177,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { color: '#1c1c1e', font: { weight: '500' } } } }
+                        plugins: { legend: { position: 'bottom', labels: { color: '#ffffff', font: { weight: '500' } } } }
                     }
                 });
 
@@ -230,8 +200,8 @@
                         indexAxis: 'y',
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { ticks: { color: '#8e8e93' }, grid: { display: false } },
-                            x: { ticks: { color: '#8e8e93' }, grid: { color: 'rgba(0,0,0,0.05)' } }
+                            y: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { display: false } },
+                            x: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
                         }
                     }
                 });
