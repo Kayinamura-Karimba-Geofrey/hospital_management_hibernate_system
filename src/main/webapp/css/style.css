@@ -3,25 +3,23 @@
 :root {
     --bg-dark: #ffffff;
     --surface: #ffffff;
-    --surface-solid: #1a3350;
-    /* Modern Navy Blue */
-    --surface-hover: #244163;
+    --surface-solid: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%); /* Vibrant Azure Gradient */
+    --surface-hover: linear-gradient(135deg, #1e90ff 0%, #6e6cf0 100%);
     --primary: #007aff;
-    --primary-glow: rgba(0, 122, 255, 0.25);
+    --primary-glow: rgba(0, 122, 255, 0.3);
     --secondary: #5e5ce6;
     --accent: #ff375f;
     --text-primary: #1c1c1e;
     --text-secondary: #48484a;
     --card-text: #ffffff;
-    --card-text-dim: rgba(255, 255, 255, 0.85);
-    /* High-opacity white */
-    --border: rgba(255, 255, 255, 0.15);
+    --card-text-dim: rgba(255, 255, 255, 0.9);
+    --border: rgba(255, 255, 255, 0.2);
     --success: #34c759;
     --danger: #ff3b30;
     --info: #32ade6;
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-    --card-shadow-hover: 0 20px 60px rgba(0, 122, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --card-shadow: 0 15px 45px rgba(10, 132, 255, 0.2);
+    --card-shadow-hover: 0 25px 70px rgba(0, 122, 255, 0.35);
 }
 
 * {
@@ -49,7 +47,7 @@ h3,
 /* Sidebar Styling */
 .sidebar {
     width: 280px;
-    background: var(--surface-solid);
+    background: #1a1a1c; /* Keep sidebar dark solid for contrast against vibrant cards */
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -252,7 +250,7 @@ th {
 
 td {
     padding: 15px 20px;
-    background: rgba(0, 0, 0, 0.01);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid transparent;
 }
 
