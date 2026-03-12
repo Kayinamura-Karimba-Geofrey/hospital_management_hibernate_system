@@ -66,25 +66,23 @@
                         <p>Your personalized health management portal is ready.</p>
                     </div>
 
-                    <div class="grid-3">
-                        <div class="stat-card"
-                            style="background: rgba(255, 159, 10, 0.05); border-radius: 15px; padding: 25px; border: 1px solid rgba(255, 159, 10, 0.2);">
-                            <h3>Department: <span style="color: #ff9f0a;">${nurse.department.name}</span></h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Department</h3>
+                            <div class="value" style="font-size: 1.8rem;">${nurse.department.name}</div>
                             <p class="text-muted" style="margin-top: 10px;">Current Shift: Morning</p>
                         </div>
 
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="stat-card">
                             <h3>Patients in Ward</h3>
-                            <h2 style="font-size: 2.5rem;">${myPatientsCount}</h2>
-                            <a href="${pageContext.request.contextPath}/patients" class="text-muted">Verify Vitals →</a>
+                            <div class="value">${myPatientsCount}</div>
+                            <a href="${pageContext.request.contextPath}/patients" class="text-muted" style="text-decoration: none; font-size: 0.9rem;">Verify Vitals →</a>
                         </div>
 
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="stat-card">
                             <h3>Urgent Tasks</h3>
                             <ul class="card-list">
-                                <li><span>Check Bed 4A</span> <span style="color: #ff453a;">URGENT</span></li>
+                                <li><span>Check Bed 4A</span> <span style="color: var(--danger); font-weight: 600;">URGENT</span></li>
                                 <li><span>Medication Round</span> <span class="text-muted">09:00 AM</span></li>
                                 <li><span>Shift Handover</span> <span class="text-muted">02:00 PM</span></li>
                             </ul>

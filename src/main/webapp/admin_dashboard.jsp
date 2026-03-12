@@ -42,29 +42,22 @@
                         <p>Your personalized health management portal is ready.</p>
                     </div>
 
-                    <div class="stats-grid"
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div class="stats-grid">
+                        <div class="stat-card">
                             <p class="text-muted" style="margin: 0;">Total Patients</p>
-                            <h2 style="margin: 10px 0; color: #4facfe;">${not empty totalPatients ? totalPatients : 0}
-                            </h2>
+                            <div class="value">${not empty totalPatients ? totalPatients : 0}</div>
                         </div>
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="stat-card">
                             <p class="text-muted" style="margin: 0;">Active Staff</p>
-                            <h2 style="margin: 10px 0; color: #00f2fe;">${not empty activeStaff ? activeStaff : 0}</h2>
+                            <div class="value">${not empty activeStaff ? activeStaff : 0}</div>
                         </div>
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="stat-card">
                             <p class="text-muted" style="margin: 0;">Appointments</p>
-                            <h2 style="margin: 10px 0; color: #7ed56f;">${not empty totalAppointments ?
-                                totalAppointments : 0}</h2>
+                            <div class="value">${not empty totalAppointments ? totalAppointments : 0}</div>
                         </div>
                     </div>
 
-                    <div class="chart-container"
-                        style="background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 25px; margin-top: 30px; height: 350px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <div class="card" style="height: 400px; margin-top: 30px;">
                         <h3 style="margin-top: 0;">Hospital Capacity Overview</h3>
                         <canvas id="adminChart"></canvas>
                     </div>
@@ -83,16 +76,33 @@
                             data: {
                                 labels: ['Patients', 'Doctors', 'Nurses', 'Appointments'],
                                 datasets: [{
-                                    data: [${ not empty totalPatients? totalPatients: 0 }, ${ not empty totalDoctors? totalDoctors: 0 }, ${ not empty totalNurses? totalNurses: 0 }, ${ not empty totalAppointments? totalAppointments: 0 }],
-                                    backgroundColor: ['#4facfe', '#00f2fe', '#ffa500', '#7ed56f'],
+                                    data: [
+                                        ${not empty totalPatients ? totalPatients : 0}, 
+                                        ${not empty totalDoctors ? totalDoctors : 0}, 
+                                        ${not empty totalNurses ? totalNurses : 0}, 
+                                        ${not empty totalAppointments ? totalAppointments : 0}
+                                    ],
+                                    backgroundColor: ['#0a84ff', '#5e5ce6', '#64d2ff', '#32d74b'],
                                     borderWidth: 0
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: { legend: { position: 'right', labels: { color: '#fff', font: { size: 14 } } } }
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                    labels: {
+                                        color: '#1c1c1e',
+                                        font: {
+                                            size: 14,
+                                            weight: '500'
+                                        }
+                                    }
+                                }
                             }
+                        }
                         });
                     }
                 </script>

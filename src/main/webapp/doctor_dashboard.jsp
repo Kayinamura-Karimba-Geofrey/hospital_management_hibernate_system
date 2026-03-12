@@ -67,18 +67,16 @@
                         <p>Your personalized health management portal is ready.</p>
                     </div>
 
-                    <div class="grid-3">
-                        <div class="stat-card"
-                            style="background: rgba(10, 132, 255, 0.05); border-radius: 15px; padding: 25px; border: 1px solid rgba(10, 132, 255, 0.2);">
+                    <div class="stats-grid">
+                        <div class="stat-card">
                             <h3>My Patients</h3>
-                            <h2 style="font-size: 3rem; color: #0a84ff;">${myPatientsCount}</h2>
+                            <div class="value">${myPatientsCount}</div>
                             <p class="text-muted">Assigned under your care</p>
                             <a href="${pageContext.request.contextPath}/patients"
-                                style="color: #0a84ff; text-decoration: none; font-size: 0.9rem;">View All →</a>
+                                style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 500;">View All →</a>
                         </div>
 
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="stat-card">
                             <h3>Today's Schedule</h3>
                             <ul class="card-list">
                                 <c:forEach var="app" items="${myAppointments}" end="4">
@@ -91,12 +89,11 @@
                                     <li><span class="text-muted">No appointments today</span></li>
                                 </c:if>
                             </ul>
-                            <a href="${pageContext.request.contextPath}/appointments" class="text-muted">Full Schedule
+                            <a href="${pageContext.request.contextPath}/appointments" class="text-muted" style="text-decoration: none; font-size: 0.9rem;">Full Schedule
                                 →</a>
                         </div>
 
-                        <div class="stat-card"
-                            style="background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="stat-card">
                             <h3>Patient Load</h3>
                             <canvas id="doctorChart" style="max-height: 150px;"></canvas>
                         </div>
@@ -118,7 +115,7 @@
                             options: {
                                 responsive: true,
                                 maintainAspectRatio: false,
-                                scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } },
+                                scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8e8e93' } }, x: { ticks: { color: '#8e8e93' } } },
                                 plugins: { legend: { display: false } }
                             }
                         });

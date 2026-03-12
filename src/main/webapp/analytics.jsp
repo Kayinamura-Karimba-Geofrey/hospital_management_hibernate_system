@@ -104,35 +104,35 @@
                     <p>Intelligence and Audit Dashboard</p>
                 </div>
 
-                <div class="stats-row">
+                <div class="stats-grid">
                     <div class="stat-card">
-                        <p>Total Patients</p>
-                        <h2>${totalPatients}</h2>
+                        <p class="text-muted">Total Patients</p>
+                        <div class="value">${totalPatients}</div>
                     </div>
                     <div class="stat-card">
-                        <p>Doctors</p>
-                        <h2>${totalDoctors}</h2>
+                        <p class="text-muted">Doctors</p>
+                        <div class="value">${totalDoctors}</div>
                     </div>
                     <div class="stat-card">
-                        <p>Nurses</p>
-                        <h2>${totalNurses}</h2>
+                        <p class="text-muted">Nurses</p>
+                        <div class="value">${totalNurses}</div>
                     </div>
                     <div class="stat-card">
-                        <p>Active Staff</p>
-                        <h2>${activeStaff}</h2>
+                        <p class="text-muted">Active Staff</p>
+                        <div class="value">${activeStaff}</div>
                     </div>
                 </div>
 
                 <div class="analytics-grid">
-                    <div class="chart-container">
+                    <div class="chart-card">
                         <h3>Patient Inflow (Monthly)</h3>
                         <canvas id="inflowChart"></canvas>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-card">
                         <h3>Revenue Distribution</h3>
                         <canvas id="revenueChart"></canvas>
                     </div>
-                    <div class="chart-container" style="grid-column: span 2;">
+                    <div class="chart-card" style="grid-column: span 2; height: 350px;">
                         <h3>Bed Occupancy Status</h3>
                         <canvas id="bedChart"></canvas>
                     </div>
@@ -184,10 +184,10 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#fff' } } },
+                        plugins: { legend: { labels: { color: '#1c1c1e', font: { weight: '500' } } } },
                         scales: {
-                            y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                            x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                            y: { ticks: { color: '#8e8e93' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            x: { ticks: { color: '#8e8e93' }, grid: { display: false } }
                         }
                     }
                 });
@@ -207,7 +207,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } }
+                        plugins: { legend: { position: 'bottom', labels: { color: '#1c1c1e', font: { weight: '500' } } } }
                     }
                 });
 
@@ -230,8 +230,8 @@
                         indexAxis: 'y',
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } },
-                            x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                            y: { ticks: { color: '#8e8e93' }, grid: { display: false } },
+                            x: { ticks: { color: '#8e8e93' }, grid: { color: 'rgba(0,0,0,0.05)' } }
                         }
                     }
                 });
