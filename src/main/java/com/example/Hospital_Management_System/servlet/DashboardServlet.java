@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Servlet for redirecting users to their role-specific dashboards.
@@ -88,6 +90,13 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("totalNurses", nurseCount);
         request.setAttribute("totalAppointments", appointmentCount);
         request.setAttribute("activeStaff", doctorCount + nurseCount);
+
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("Patients", patientCount);
+        stats.put("Doctors", doctorCount);
+        stats.put("Nurses", nurseCount);
+        stats.put("Appointments", appointmentCount);
+        request.setAttribute("stats", stats);
     }
 
     private void fetchDoctorStats(HttpServletRequest request, String email) {

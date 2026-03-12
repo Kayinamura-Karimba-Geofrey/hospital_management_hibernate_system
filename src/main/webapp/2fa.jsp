@@ -30,13 +30,13 @@
                     background: rgba(255, 255, 255, 0.05);
                     border: 1.5px solid var(--border);
                     border-radius: 16px;
-                    color: #fff;
+                    color: var(--text-primary, #1c1c1e);
                     font-size: 1.5rem;
                     text-align: center;
                     letter-spacing: 8px;
                     font-weight: 700;
                     font-family: 'Outfit', sans-serif;
-                    transition: all 0.3s ease;
+                    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
                 }
 
                 .form-control:focus {

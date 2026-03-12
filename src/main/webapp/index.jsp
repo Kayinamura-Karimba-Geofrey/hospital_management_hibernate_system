@@ -10,7 +10,7 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         </head>
 
-        <body class="landing-body">
+        <body class="landing-body theme-vibrant">
             <div class="blob-container">
                 <div class="blob blob-1"></div>
                 <div class="blob blob-2"></div>
@@ -34,9 +34,6 @@
 
             <header class="landing-hero">
                 <div class="hero-content">
-                    <div class="hero-badge">
-                        ✨ Next-Gen Hospital Management Solution
-                    </div>
                     <h1>Elevating Healthcare <br> Through Innovation</h1>
                     <p>A comprehensive, data-driven platform designed to streamline hospital operations, enhance patient
                         care, and

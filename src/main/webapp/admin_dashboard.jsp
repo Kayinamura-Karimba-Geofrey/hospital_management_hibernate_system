@@ -37,9 +37,8 @@
 
                 <div class="main-content">
                     <div class="hero">
-                        <span class="role-badge ADMIN-badge">ADMIN</span>
-                        <h1>Welcome back, ${sessionScope.user.fullName}</h1>
-                        <p>Your personalized health management portal is ready.</p>
+                        <h1>Dashboard Overview</h1>
+                        <p>Hospital management system monitoring and metrics.</p>
                     </div>
 
                     <div class="stats-grid">
@@ -74,35 +73,29 @@
                         new Chart(document.getElementById('adminChart').getContext('2d'), {
                             type: 'doughnut',
                             data: {
-                                labels: ['Patients', 'Doctors', 'Nurses', 'Appointments'],
+                                labels: [<c:forEach var="entry" items="${stats}">"${entry.key}",</c:forEach>],
                                 datasets: [{
-                                    data: [
-                                        ${not empty totalPatients ? totalPatients : 0}, 
-                                        ${not empty totalDoctors ? totalDoctors : 0}, 
-                                        ${not empty totalNurses ? totalNurses : 0}, 
-                                        ${not empty totalAppointments ? totalAppointments : 0}
-                                    ],
-                                    backgroundColor: ['#0a84ff', '#5e5ce6', '#64d2ff', '#32d74b'],
+                                    data: [<c:forEach var="entry" items="${stats}">${entry.value},</c:forEach>],
+                                    backgroundColor: ['#3b82f6', '#1e3a8a', '#60a5fa', '#93c5fd'],
                                     borderWidth: 0
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                    labels: {
-                                        color: '#ffffff',
-                                        font: {
-                                            size: 14,
-                                            weight: '500'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'right',
+                                        labels: {
+                                            color: '#1c1c1e',
+                                            font: {
+                                                size: 14,
+                                                weight: '500'
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
                         });
                     }
                 </script>

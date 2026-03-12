@@ -1,30 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-dark: #ffffff;
+    --bg-dark: #f8f9fa;
     --surface: #ffffff;
-    --surface-solid: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%); /* Vibrant Azure Gradient */
-    --surface-hover: linear-gradient(135deg, #1e90ff 0%, #6e6cf0 100%);
-    --primary: #007aff;
-    --primary-glow: rgba(0, 122, 255, 0.3);
+    --surface-solid: #ffffff; /* Neutral White */
+    --surface-hover: #f1f3f5;
+    --primary: #2563eb;
+    --primary-glow: rgba(37, 99, 235, 0.1);
     --secondary: #5e5ce6;
     --accent: #ff375f;
     --text-primary: #1c1c1e;
     --text-secondary: #48484a;
-    --card-text: #ffffff;
-    --card-text-dim: rgba(255, 255, 255, 0.9);
-    --border: rgba(255, 255, 255, 0.2);
+    --card-text: #1c1c1e;
+    --card-text-dim: #636366;
+    --border: rgba(0, 0, 0, 0.08);
     --success: #34c759;
     --danger: #ff3b30;
     --info: #32ade6;
-    --glass-border: rgba(255, 255, 255, 0.25);
-    --card-shadow: 0 15px 45px rgba(10, 132, 255, 0.2);
-    --card-shadow-hover: 0 25px 70px rgba(0, 122, 255, 0.35);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.theme-vibrant {
+    --bg-dark: #ffffff;
+    --surface-solid: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    --surface-hover: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+    --card-text: #ffffff;
+    --card-text-dim: rgba(255, 255, 255, 0.9);
+    --border: rgba(255, 255, 255, 0.2);
+    --card-shadow: 0 10px 30px rgba(30, 58, 138, 0.1);
+    --card-shadow-hover: 0 15px 45px rgba(37, 99, 235, 0.2);
 }
 
 * {
     box-sizing: border-box;
-    transition: all 0.2s ease;
 }
 
 body {
@@ -105,10 +115,10 @@ h3,
 
 /* Layout components */
 .hero {
-    background: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
     padding: 60px 40px;
     border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(10, 132, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.15);
     margin-bottom: 40px;
     position: relative;
     overflow: hidden;
@@ -147,7 +157,7 @@ h3,
     padding: 30px;
     box-shadow: var(--card-shadow);
     margin-bottom: 30px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
     color: var(--card-text);
 }
 
@@ -176,7 +186,7 @@ h3,
     padding: 32px 24px;
     text-align: center;
     box-shadow: var(--card-shadow);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease, background 0.4s ease;
     position: relative;
     overflow: hidden;
 }
@@ -194,7 +204,6 @@ h3,
 }
 
 .stat-card:hover {
-    transform: translateY(-8px);
     border-color: var(--primary);
     box-shadow: var(--card-shadow-hover);
 }
@@ -286,17 +295,18 @@ select,
 textarea {
     width: 100%;
     padding: 14px 18px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.02);
     border: 1.5px solid var(--border);
     border-radius: 14px;
-    color: #ffffff;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--card-text-dim);
+    opacity: 0.5;
 }
 
 select option {

@@ -30,7 +30,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
 
-        <body>
+        <body class="theme-vibrant">
             <div class="auth-container">
                 <div class="auth-card">
                     <div class="auth-header">

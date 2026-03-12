@@ -23,7 +23,7 @@
             </script>
         </head>
 
-        <body>
+        <body class="theme-vibrant">
             <div class="auth-container">
                 <div class="auth-card">
                     <div class="auth-header">

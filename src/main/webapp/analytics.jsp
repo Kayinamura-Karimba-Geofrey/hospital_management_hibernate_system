@@ -7,26 +7,47 @@
             <title>Advanced Analytics - HMSystem</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                .chart-card {
-                    background: var(--surface-solid);
-                    border: 1.5px solid var(--border);
+            <style>
+                .chart-card, .stat-card {
+                    background: #ffffff !important;
+                    transition: none !important;
+                }
+
+                .chart-card h3, .stat-card h3, .stat-card .value, .stat-card p {
+                    color: var(--text-primary) !important;
+                }
+
+                .audit-section {
+                    background: #ffffff;
+                    border: 1px solid var(--border);
                     border-radius: 20px;
-                    padding: 25px;
+                    padding: 24px;
+                    margin-top: 30px;
                     box-shadow: var(--card-shadow);
-                    transition: all 0.3s ease;
+                }
+
+                .analytics-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 25px;
+                    margin-bottom: 30px;
+                }
+
+                .chart-card {
+                    height: 400px;
+                    display: flex;
+                    flex-direction: column;
                 }
 
                 .chart-card h3 {
-                    color: var(--card-text);
                     margin-top: 0;
                     margin-bottom: 20px;
                 }
 
-                .audit-section {
-                    background: rgba(255, 255, 255, 0.02);
-                    border-radius: 15px;
-                    padding: 20px;
-                    margin-top: 30px;
+                .chart-card canvas {
+                    flex: 1;
+                    width: 100% !important;
+                    height: calc(100% - 40px) !important;
                 }
 
                 .audit-table {
@@ -102,7 +123,7 @@
                         <h3>Revenue Distribution</h3>
                         <canvas id="revenueChart"></canvas>
                     </div>
-                    <div class="chart-card" style="grid-column: span 2; height: 350px;">
+                    <div class="chart-card" style="grid-column: span 2;">
                         <h3>Bed Occupancy Status</h3>
                         <canvas id="bedChart"></canvas>
                     </div>
@@ -154,10 +175,10 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#ffffff', font: { weight: '500' } } } },
+                        plugins: { legend: { labels: { color: '#1c1c1e', font: { weight: '500' } } } },
                         scales: {
-                            y: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-                            x: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { display: false } }
+                            y: { ticks: { color: '#48484a' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            x: { ticks: { color: '#48484a' }, grid: { display: false } }
                         }
                     }
                 });
@@ -177,7 +198,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { color: '#ffffff', font: { weight: '500' } } } }
+                        plugins: { legend: { position: 'bottom', labels: { color: '#1c1c1e', font: { weight: '500' } } } }
                     }
                 });
 
@@ -200,8 +221,8 @@
                         indexAxis: 'y',
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { display: false } },
-                            x: { ticks: { color: 'rgba(255, 255, 255, 0.7)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                            y: { ticks: { color: '#48484a' }, grid: { display: false } },
+                            x: { ticks: { color: '#48484a' }, grid: { color: 'rgba(0,0,0,0.05)' } }
                         }
                     }
                 });
