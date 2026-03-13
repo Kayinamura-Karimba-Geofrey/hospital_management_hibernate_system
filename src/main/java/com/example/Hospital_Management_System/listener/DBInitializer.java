@@ -31,18 +31,37 @@ public class DBInitializer implements ServletContextListener {
             if (url == null || url.isBlank()) {
                 url = System.getenv("DATABASE_URL");
             }
-            if (url != null && url.startsWith("postgres://")) {
-                url = url.replace("postgres://", "jdbc:postgresql://");
+
+            if (url != null && !url.isBlank()) {
+                url = url.trim();
+                
+                // Remove 'psql ' prefix if present
+                if (url.toLowerCase().startsWith("psql ")) {
+                    url = url.substring(5).trim();
+                }
+                
+                // Remove surrounding quotes if present
+                if ((url.startsWith("'") && url.endsWith("'")) || (url.startsWith("\"") && url.endsWith("\""))) {
+                    url = url.substring(1, url.length() - 1).trim();
+                }
+
+                // Standardize as JDBC URL
+                if (url.startsWith("postgres://")) {
+                    url = url.replaceFirst("postgres://", "jdbc:postgresql://");
+                } else if (url.startsWith("postgresql://")) {
+                    url = url.replaceFirst("postgresql://", "jdbc:postgresql://");
+                }
             }
             
             String user = System.getenv("DB_USER");
             String pass = System.getenv("DB_PASSWORD");
 
             // Fallback for local development if env vars are missing
-            if (url == null) url = "jdbc:postgresql://localhost:5432/hospital_db";
+            if (url == null || url.isBlank()) url = "jdbc:postgresql://localhost:5432/hospital_db";
             if (user == null) user = "postgres";
             if (pass == null) pass = "123";
 
+            System.out.println("Running Flyway migrations with URL: " + url);
             org.flywaydb.core.Flyway flyway = org.flywaydb.core.Flyway.configure()
                 .dataSource(url, user, pass)
                 .baselineOnMigrate(true)
@@ -54,10 +73,17 @@ public class DBInitializer implements ServletContextListener {
             e.printStackTrace();
         }
 
-        initializeDefaultAdmin();
-        System.out.println("DBInitializer: Default admin check complete.");
-        initializeDefaultDepartments();
-        System.out.println("DBInitializer: Default departments check complete.");
+        // 2. Initialize Default Data (Wrapped in try-catch to prevent context failure)
+        try {
+            initializeDefaultAdmin();
+            System.out.println("DBInitializer: Default admin check complete.");
+            initializeDefaultDepartments();
+            System.out.println("DBInitializer: Default departments check complete.");
+        } catch (Exception e) {
+            System.err.println("DBInitializer: Default data seeding failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
         System.out.println("DBInitializer: initialization complete.");
     }
 

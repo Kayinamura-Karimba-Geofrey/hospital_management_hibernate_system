@@ -24,12 +24,27 @@ public class HibernateUtil {
             String pass = System.getenv("DB_PASSWORD");
 
             if (url != null && !url.isBlank()) {
-                // Convert postgres:// to jdbc:postgresql:// if needed
-                if (url.startsWith("postgres://")) {
-                    url = url.replace("postgres://", "jdbc:postgresql://");
+                url = url.trim();
+                
+                // Remove 'psql ' prefix if present
+                if (url.toLowerCase().startsWith("psql ")) {
+                    url = url.substring(5).trim();
                 }
+                
+                // Remove surrounding quotes if present
+                if ((url.startsWith("'") && url.endsWith("'")) || (url.startsWith("\"") && url.endsWith("\""))) {
+                    url = url.substring(1, url.length() - 1).trim();
+                }
+
+                // Standardize as JDBC URL
+                if (url.startsWith("postgres://")) {
+                    url = url.replaceFirst("postgres://", "jdbc:postgresql://");
+                } else if (url.startsWith("postgresql://")) {
+                    url = url.replaceFirst("postgresql://", "jdbc:postgresql://");
+                }
+                
                 cfg.setProperty("hibernate.connection.url", url);
-                System.out.println("Hibernate: Using DB_URL from environment.");
+                System.out.println("Hibernate: Using cleaned DB_URL: " + url);
             }
             if (user != null && !user.isBlank()) {
                 cfg.setProperty("hibernate.connection.username", user);
