@@ -16,13 +16,20 @@ public class HibernateUtil {
         try {
             Configuration cfg = new Configuration().configure();
 
-    
             String url = System.getenv("DB_URL");
+            if (url == null || url.isBlank()) {
+                url = System.getenv("DATABASE_URL");
+            }
             String user = System.getenv("DB_USER");
             String pass = System.getenv("DB_PASSWORD");
 
             if (url != null && !url.isBlank()) {
+                // Convert postgres:// to jdbc:postgresql:// if needed
+                if (url.startsWith("postgres://")) {
+                    url = url.replace("postgres://", "jdbc:postgresql://");
+                }
                 cfg.setProperty("hibernate.connection.url", url);
+                System.out.println("Hibernate: Using DB_URL from environment.");
             }
             if (user != null && !user.isBlank()) {
                 cfg.setProperty("hibernate.connection.username", user);
@@ -32,6 +39,7 @@ public class HibernateUtil {
             }
 
             sessionFactory = cfg.buildSessionFactory();
+            System.out.println("Hibernate: SessionFactory initialized successfully.");
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }

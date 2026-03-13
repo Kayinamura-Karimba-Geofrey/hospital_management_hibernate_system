@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: hospital-management-system
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: hospital-db
+          property: connectionString
+      - key: DB_USER
+        fromDatabase:
+          name: hospital-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: hospital-db
+          property: password
+      - key: RECAPTCHA_SECRET_KEY
+        generateValue: true
+    healthCheckPath: /health
+
+databases:
+  - name: hospital-db
+    plan: free
+    databaseName: hospital_db
+    user: hospital_admin
