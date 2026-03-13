@@ -7,7 +7,14 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>HMSystem - Advanced Healthcare Management</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <link rel="stylesheet" href="css/style.css">
+            <style>
+                /* Fallback to guarantee horizontal layout */
+                .landing-hero-new { display: grid !important; grid-template-columns: 1fr 1fr !important; align-items: center; }
+                .hero-image-container { grid-column: 1; }
+                .hero-text-new { grid-column: 2; }
+                .feature-list-new { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            </style>
         </head>
 
         <body class="landing-body">

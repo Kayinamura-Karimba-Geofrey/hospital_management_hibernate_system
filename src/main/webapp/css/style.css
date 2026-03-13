@@ -716,7 +716,7 @@ select:focus {
 
 @media (max-width: 1024px) {
     .landing-hero-new {
-        /* Force horizontal layout even on tablet/small desktop */
+        display: grid;
         grid-template-columns: 1fr 1fr;
         padding: 80px 5% 40px;
         gap: 30px;
@@ -727,11 +727,13 @@ select:focus {
     }
 
     .hero-image-container {
-        order: 1;
+        grid-column: 1;
+        grid-row: 1;
     }
 
     .hero-text-new {
-        order: 2;
+        grid-column: 2;
+        grid-row: 1;
     }
 
     .brand-mediflow, .hero-actions-new, .feature-list-new {
@@ -784,3 +786,88 @@ select:focus {
         font-size: 0.9rem;
     }
 }
+
+/* --- Emergency Layout Overrides to FORCE Horizontal SaaS Design --- */
+
+.landing-body {
+    background: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.landing-hero-new {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 60px !important;
+    align-items: stretch !important; /* Stretch to ensure same height for both columns */
+    padding: 20px 8% 40px !important; /* Start just below nav bar */
+    min-height: 80vh !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.hero-image-container {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100% !important;
+    background: #f8fafc; /* Subtle background for the image side */
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.hero-image-container img {
+    max-width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Professional cover fit */
+    display: block !important;
+}
+
+.hero-text-new {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; /* Center text vertically within the column */
+    text-align: left !important;
+    height: 100% !important;
+    padding-left: 20px !important;
+}
+
+.feature-list-new {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 30px 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+}
+
+.feature-item-new {
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.info-cards-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 40px !important;
+    flex-wrap: wrap !important;
+}
+
+/* Responsive Lock: Keep horizontal even on small screens */
+@media (max-width: 1024px) {
+    .landing-hero-new {
+        grid-template-columns: 1fr 1.2fr !important;
+        column-gap: 30px !important;
+        padding: 20px 4% !important;
+    }
+}
