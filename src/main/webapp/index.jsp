@@ -11,6 +11,22 @@
         </head>
 
         <body class="landing-body">
+            <nav class="landing-nav">
+                <div class="sidebar-header" style="border: none; padding: 0;">MediFlow</div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.user}">
+                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary">Dashboard</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/login">Login</a>
+                            <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Join Now</a>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </nav>
+
             <div class="landing-hero-new">
                 <div class="hero-image-container">
                     <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Professional Doctor">
