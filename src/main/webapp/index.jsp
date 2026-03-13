@@ -10,12 +10,7 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         </head>
 
-        <body class="landing-body theme-vibrant">
-            <div class="blob-container">
-                <div class="blob blob-1"></div>
-                <div class="blob blob-2"></div>
-            </div>
-
+        <body class="landing-body">
             <nav class="landing-nav">
                 <div class="sidebar-header" style="border: none; padding: 0;">HMSystem</div>
                 <div class="nav-links">
@@ -31,70 +26,77 @@
                     </c:choose>
                 </div>
             </nav>
-
-            <header class="landing-hero">
-                <div class="hero-content">
-                    <h1>Elevating Healthcare <br> Through Innovation</h1>
-                    <p>A comprehensive, data-driven platform designed to streamline hospital operations, enhance patient
-                        care, and
-                        empower medical professionals.</p>
-                    <div class="hero-btns">
-                        <a href="${pageContext.request.contextPath}/register" class="btn btn-primary"
-                            style="padding: 18px 36px; font-size: 1.1rem; border-radius: 12px;">Build Your System</a>
-                        <a href="#features" class="btn btn-secondary"
-                            style="padding: 18px 36px; font-size: 1.1rem; border-radius: 12px;">Explore Features</a>
+    
+            <div class="landing-hero-new">
+                <div class="hero-image-container">
+                    <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Professional Doctor">
+                </div>
+                <div class="hero-text-new">
+                    <div class="brand-mediflow">
+                        <div class="brand-icon">+</div>
+                        HMSystem
+                    </div>
+                    <h1>The All-in-One Hospital Management Software</h1>
+                    <p class="hero-subtitle">Streamline hospital operations, improve patient care, and boost efficiency with our powerful, easy-to-use platform.</p>
+                    
+                    <ul class="feature-list-new">
+                        <li class="feature-item-new">
+                            <div class="check-icon">✓</div>
+                            <div class="feature-content">
+                                <h3>Manage Patient Records</h3>
+                                <p>Keep accurate, up-to-date patient records securely.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item-new">
+                            <div class="check-icon">✓</div>
+                            <div class="feature-content">
+                                <h3>Simplify Appointment Scheduling</h3>
+                                <p>Easily schedule, manage, and track appointments.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item-new">
+                            <div class="check-icon">✓</div>
+                            <div class="feature-content">
+                                <h3>Automate Billing & Reporting</h3>
+                                <p>Generate invoices, track payments, and view financial reports.</p>
+                            </div>
+                        </li>
+                    </ul>
+    
+                    <div class="hero-actions-new">
+                        <a href="${pageContext.request.contextPath}/register" class="btn-mediflow-primary">Try it Free</a>
+                        <a href="#" class="btn-mediflow-secondary">Request Demo</a>
                     </div>
                 </div>
-            </header>
-
-            <section id="features" class="landing-section">
-                <div class="section-header">
-                    <h2>Everything You Need to Scale</h2>
-                    <p>From patient records to resource scheduling, manage every aspect of your healthcare facility with
-                        unprecedented precision.</p>
-                </div>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">🚑</div>
-                        <h3>Patient Care</h3>
-                        <p>Complete medical histories, real-time diagnosis tracking, and personalized treatment plans in
-                            one
-                            secure dashboard.</p>
+            </div>
+    
+            <section class="info-cards-section">
+                <div class="info-cards-grid">
+                    <div class="info-card-new">
+                        <div class="info-card-icon">❤️</div>
+                        <h3>24/7 Support</h3>
+                        <p>Access round-the-clock assistance from our specialized medical support team.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">👨‍⚕️</div>
-                        <h3>Staff Optimization</h3>
-                        <p>Intelligent scheduling for doctors and nurses, ensuring optimal coverage and reducing
-                            administrative
-                            overhead.</p>
+                    <div class="info-card-new">
+                        <div class="info-card-icon">🛡️</div>
+                        <h3>Secure & Compliant</h3>
+                        <p>HIPAA-compliant data encryption and enterprise-grade security protocols.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📅</div>
-                        <h3>Smart Scheduling</h3>
-                        <p>Automated appointment booking and conflict resolution to maximize facility utilization and
-                            patient
-                            satisfaction.</p>
+                    <div class="info-card-new">
+                        <div class="info-card-icon">🤝</div>
+                        <h3>User-Friendly</h3>
+                        <p>Intuitive, easy-to-navigate interface designed for medical professionals.</p>
                     </div>
                 </div>
             </section>
-
-            <section class="cta-section">
-                <div style="position: relative; z-index: 1;">
-                    <h2>Ready to transform your facility?</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.2rem;">Join hundreds of
-                        healthcare providers
-                        already
-                        optimizing their operations with HMSystem.</p>
-                    <a href="${pageContext.request.contextPath}/register" class="btn btn-primary"
-                        style="padding: 18px 48px; font-size: 1.1rem; border-radius: 12px;">Get Started for Free</a>
+    
+            <footer class="footer-mediflow">
+                <p>Transform Your Hospital Operations with <span>HMSystem</span> Today!</p>
+                <div style="margin-top: 20px; color: #636366; font-size: 0.9rem;">
+                    &copy; 2026 HMSystem. All rights reserved.
                 </div>
-            </section>
-
-            <footer
-                style="padding: 40px; text-align: center; border-top: 1px solid var(--border); color: var(--text-secondary);">
-                <p>&copy; 2026 HMSystem. All rights reserved.</p>
             </footer>
-
+    
             <script>
                 // Smooth scroll for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -107,5 +109,6 @@
                 });
             </script>
         </body>
-
+    
+        </html>
         </html>
