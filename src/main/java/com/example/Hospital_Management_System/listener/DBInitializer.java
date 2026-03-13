@@ -27,14 +27,31 @@ public class DBInitializer implements ServletContextListener {
         
         // 1. Run Flyway Migrations
         try {
+            String url = System.getenv("DB_URL");
+            if (url == null || url.isBlank()) {
+                url = System.getenv("DATABASE_URL");
+            }
+            if (url != null && url.startsWith("postgres://")) {
+                url = url.replace("postgres://", "jdbc:postgresql://");
+            }
+            
+            String user = System.getenv("DB_USER");
+            String pass = System.getenv("DB_PASSWORD");
+
+            // Fallback for local development if env vars are missing
+            if (url == null) url = "jdbc:postgresql://localhost:5432/hospital_db";
+            if (user == null) user = "postgres";
+            if (pass == null) pass = "123";
+
             org.flywaydb.core.Flyway flyway = org.flywaydb.core.Flyway.configure()
-                .dataSource("jdbc:postgresql://localhost:5432/hospital_db", "postgres", "123")
+                .dataSource(url, user, pass)
                 .baselineOnMigrate(true)
                 .load();
             flyway.migrate();
             System.out.println("Flyway migrations applied successfully.");
         } catch (Exception e) {
             System.err.println("Flyway migration failed: " + e.getMessage());
+            e.printStackTrace();
         }
 
         initializeDefaultAdmin();
