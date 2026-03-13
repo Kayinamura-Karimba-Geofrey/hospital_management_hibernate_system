@@ -32,7 +32,7 @@
                     <span class="stat-label">Department</span>
                 </div>
                 <div class="stat-value" style="font-size: 1.5rem;">${nurse.department.name}</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Active Unit: ${nurse.department.name}</p>
+                <p class="stat-trend" style="color: var(--text-muted);">Active Unit: ${nurse.department.name}</p>
             </div>
 
             <div class="stat-card">
@@ -40,8 +40,8 @@
                     <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">👥</span>
                     <span class="stat-label">Active Ward</span>
                 </div>
-                <div class="stat-value" style="font-size: 1.8rem;">${myPatientsCount}</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Patients requiring vitals: 4</p>
+                <div class="stat-value">${myPatientsCount}</div>
+                <p class="stat-trend" style="color: var(--text-muted);">Patients requiring vitals: 4</p>
             </div>
 
             <div class="stat-card">
@@ -49,8 +49,8 @@
                     <span class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">⚠️</span>
                     <span class="stat-label">Urgent Tasks</span>
                 </div>
-                <div class="stat-value" style="font-size: 1.8rem; color: var(--danger);">3</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Check Bed 4A immediately</p>
+                <div class="stat-value" style="color: var(--danger);">${3}</div>
+                <p class="stat-trend" style="color: var(--text-muted);">Check Bed 4A immediately</p>
             </div>
         </section>
 

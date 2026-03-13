@@ -32,22 +32,22 @@
                 </div>
                 <c:choose>
                     <c:when test="${not empty myAppointments}">
-                        <div class="stat-value" style="font-size: 1.25rem;">${myAppointments[0].appointmentDate}</div>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">With Dr. ${myAppointments[0].doctor.name}</p>
+                        <div class="stat-value">${myAppointments[0].appointmentDate}</div>
+                        <p class="stat-trend" style="color: var(--text-muted);">With Dr. ${myAppointments[0].doctor.name}</p>
                     </c:when>
                     <c:otherwise>
-                        <div class="stat-value" style="font-size: 1.1rem; color: var(--text-muted);">None Scheduled</div>
+                        <div class="stat-value" style="font-size: 1.5rem; color: var(--text-muted);">None Scheduled</div>
                     </c:otherwise>
                 </c:choose>
             </div>
-
+            
             <div class="stat-card">
                 <div class="stat-header">
                     <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">💰</span>
                     <span class="stat-label">Outstanding Balance</span>
                 </div>
                 <div class="stat-value">$240.00</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Due by end of month</p>
+                <p class="stat-trend" style="color: var(--text-muted);">Due by end of month</p>
             </div>
 
             <div class="stat-card">
@@ -56,7 +56,7 @@
                     <span class="stat-label">Medical Records</span>
                 </div>
                 <div class="stat-value">${not empty medicalRecord ? 'Available' : 'Pending'}</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Updated 2 days ago</p>
+                <p class="stat-trend" style="color: var(--text-muted);">Updated 2 days ago</p>
             </div>
         </section>
 

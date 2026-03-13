@@ -32,7 +32,7 @@
                     <span class="stat-label">Active Patients</span>
                 </div>
                 <div class="stat-value">${not empty myPatientsCount ? myPatientsCount : 0}</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Directly assigned to you</p>
+                <p class="stat-trend" style="color: var(--text-muted);">Directly assigned to you</p>
             </div>
 
             <div class="stat-card">
@@ -41,7 +41,7 @@
                     <span class="stat-label">Today's Load</span>
                 </div>
                 <div class="stat-value">${fn:length(myAppointments)}</div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Appointments remaining: 4</p>
+                <p class="stat-trend" style="color: var(--text-muted);">Appointments remaining: 4</p>
             </div>
 
             <div class="stat-card" style="grid-column: span 1.5;">

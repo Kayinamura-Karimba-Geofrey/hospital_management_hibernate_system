@@ -50,7 +50,7 @@
                     <span class="stat-label">Appointments</span>
                 </div>
                 <div class="stat-value">${not empty totalAppointments ? totalAppointments : 0}</div>
-                <div class="stat-trend">8 expected today</div>
+                <div class="stat-trend" style="color: var(--text-muted);">8 expected today</div>
             </div>
 
             <div class="stat-card">
@@ -78,26 +78,26 @@
                 <div class="card-header">
                     <h3>Recent Activity</h3>
                 </div>
-                <div class="activity-list" style="margin-top: 16px;">
-                    <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; gap: 12px; align-items: start;">
-                        <span style="font-size: 1.2rem;">📝</span>
+                <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <span style="font-size: 1.5rem;">📝</span>
                         <div>
-                            <p style="font-weight: 500; font-size: 0.9rem;">New patient registration</p>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">2 minutes ago</p>
+                            <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">New patient registration</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">2 minutes ago</p>
                         </div>
                     </div>
-                    <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; gap: 12px; align-items: start;">
-                        <span style="font-size: 1.2rem;">🏥</span>
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <span style="font-size: 1.5rem;">🏥</span>
                         <div>
-                            <p style="font-weight: 500; font-size: 0.9rem;">ICU capacity reached 85%</p>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">1 hour ago</p>
+                            <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">ICU capacity reached 85%</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">1 hour ago</p>
                         </div>
                     </div>
-                    <div style="padding: 12px 0; display: flex; gap: 12px; align-items: start;">
-                        <span style="font-size: 1.2rem;">👨‍⚕️</span>
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <span style="font-size: 1.5rem;">👨‍⚕️</span>
                         <div>
-                            <p style="font-weight: 500; font-size: 0.9rem;">Dr. Sarah assigned to Surgery</p>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">3 hours ago</p>
+                            <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">Dr. Sarah assigned to Surgery</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">3 hours ago</p>
                         </div>
                     </div>
                 </div>
