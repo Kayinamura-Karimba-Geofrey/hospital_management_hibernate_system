@@ -11,54 +11,38 @@
         </head>
 
         <body class="landing-body">
-            <nav class="landing-nav">
-                <div class="sidebar-header" style="border: none; padding: 0;">HMSystem</div>
-                <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.user}">
-                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary">Dashboard</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/login">Login</a>
-                            <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Join Now</a>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </nav>
-    
             <div class="landing-hero-new">
                 <div class="hero-image-container">
                     <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Professional Doctor">
                 </div>
                 <div class="hero-text-new">
                     <div class="brand-mediflow">
-                        <div class="brand-icon">+</div>
-                        HMSystem
+                        <div class="brand-logo-mockup"></div>
+                        MediFlow
                     </div>
                     <h1>The All-in-One Hospital Management Software</h1>
                     <p class="hero-subtitle">Streamline hospital operations, improve patient care, and boost efficiency with our powerful, easy-to-use platform.</p>
                     
                     <ul class="feature-list-new">
                         <li class="feature-item-new">
-                            <div class="check-icon">✓</div>
+                            <div class="feature-icon-mockup">💼</div>
                             <div class="feature-content">
                                 <h3>Manage Patient Records</h3>
-                                <p>Keep accurate, up-to-date patient records securely.</p>
+                                <p>Keep accurate, up-to-date patient records</p>
                             </div>
                         </li>
                         <li class="feature-item-new">
-                            <div class="check-icon">✓</div>
+                            <div class="feature-icon-mockup">📅</div>
                             <div class="feature-content">
                                 <h3>Simplify Appointment Scheduling</h3>
-                                <p>Easily schedule, manage, and track appointments.</p>
+                                <p>Easily schedule, manage, and track appointments</p>
                             </div>
                         </li>
                         <li class="feature-item-new">
-                            <div class="check-icon">✓</div>
+                            <div class="feature-icon-mockup">📈</div>
                             <div class="feature-content">
                                 <h3>Automate Billing & Reporting</h3>
-                                <p>Generate invoices, track payments, and view financial reports.</p>
+                                <p>Generate invoices, track payments, and view financial reports</p>
                             </div>
                         </li>
                     </ul>
@@ -73,38 +57,38 @@
             <section class="info-cards-section">
                 <div class="info-cards-grid">
                     <div class="info-card-new">
-                        <div class="info-card-icon">❤️</div>
+                        <span class="info-card-icon-mockup">💙</span>
                         <h3>24/7 Support</h3>
-                        <p>Access round-the-clock assistance from our specialized medical support team.</p>
+                        <p>Access round-the-clock assistance</p>
                     </div>
                     <div class="info-card-new">
-                        <div class="info-card-icon">🛡️</div>
+                        <span class="info-card-icon-mockup">🛡️</span>
                         <h3>Secure & Compliant</h3>
-                        <p>HIPAA-compliant data encryption and enterprise-grade security protocols.</p>
+                        <p>HIPAA-compliant & enterprise-grade security</p>
                     </div>
                     <div class="info-card-new">
-                        <div class="info-card-icon">🤝</div>
+                        <span class="info-card-icon-mockup">🌐</span>
                         <h3>User-Friendly</h3>
-                        <p>Intuitive, easy-to-navigate interface designed for medical professionals.</p>
+                        <p>Intuitive, easy-to-navigate interface</p>
                     </div>
                 </div>
             </section>
     
-            <footer class="footer-mediflow">
-                <p>Transform Your Hospital Operations with <span>HMSystem</span> Today!</p>
-                <div style="margin-top: 20px; color: #636366; font-size: 0.9rem;">
-                    &copy; 2026 HMSystem. All rights reserved.
-                </div>
-            </footer>
+            <div class="bottom-banner-cta">
+                Transform Your Hospital Operations with <span>MediFlow</span> Today!
+            </div>
     
             <script>
                 // Smooth scroll for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
                         e.preventDefault();
-                        document.querySelector(this.getAttribute('href')).scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
                     });
                 });
             </script>
