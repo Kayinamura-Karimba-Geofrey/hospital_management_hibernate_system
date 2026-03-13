@@ -55,7 +55,10 @@ public class DBInitializer implements ServletContextListener {
         }
 
         initializeDefaultAdmin();
+        System.out.println("DBInitializer: Default admin check complete.");
         initializeDefaultDepartments();
+        System.out.println("DBInitializer: Default departments check complete.");
+        System.out.println("DBInitializer: initialization complete.");
     }
 
     private void initializeDefaultAdmin() {
