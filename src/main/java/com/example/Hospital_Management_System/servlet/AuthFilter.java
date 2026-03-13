@@ -44,7 +44,7 @@ public class AuthFilter implements Filter {
             session.setAttribute("csrfToken", java.util.UUID.randomUUID().toString());
         }
 
-        boolean isPublicPage = path.equals("/") ||
+        boolean isPublicPage = path == null || path.isEmpty() || path.equals("/") ||
                                path.endsWith("index.jsp") ||
                                path.endsWith("login") || 
                                path.endsWith("logout") || 
