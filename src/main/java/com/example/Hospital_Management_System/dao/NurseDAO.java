@@ -115,9 +115,13 @@ public class NurseDAO {
      */
     public Nurses getNurseByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Nurses where email = :email", Nurses.class)
+            Nurses nurse = session.createQuery("from Nurses where email = :email", Nurses.class)
                     .setParameter("email", email)
                     .uniqueResult();
+            if (nurse != null) {
+                nurse.getPatients().size(); // Initialize lazy collection
+            }
+            return nurse;
         }
     }
 

@@ -1,127 +1,143 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <!DOCTYPE html>
-        <html lang="en">
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediFlow | Advanced Healthcare Management</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="landing-body">
+    <nav class="landing-nav">
+        <div class="brand-font">
+            <span class="logo-medi">Medi</span><span class="logo-flow">Flow</span>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#solutions">Solutions</a>
+            <a href="#contact">Contact</a>
+            <c:choose>
+                <c:when test="${not empty sessionScope.user}">
+                    <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary">Go to Dashboard</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/login">Sign In</a>
+                    <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Get Started</a>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </nav>
 
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>HMSystem - Advanced Healthcare Management</title>
-            <link rel="stylesheet" href="css/style.css">
-            <style>
-                /* Fallback to guarantee horizontal layout */
-                .landing-hero-new { display: grid !important; grid-template-columns: 1fr 1fr !important; align-items: center; }
-                .hero-image-container { grid-column: 1; }
-                .hero-text-new { grid-column: 2; }
-                .feature-list-new { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-            </style>
-        </head>
-
-        <body class="landing-body">
-            <nav class="landing-nav">
-                <div class="sidebar-header" style="border: none; padding: 0;">MediFlow</div>
-                <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.user}">
-                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary">Dashboard</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/login">Login</a>
-                            <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Join Now</a>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </nav>
-
-            <div class="landing-hero-new">
-                <div class="hero-image-container">
-                    <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Confident Professional Doctor">
-                </div>
+    <main>
+        <section class="landing-hero-new">
+            <div class="hero-content-column">
                 <div class="hero-text-new">
-                    <div class="brand-mediflow">
-                        <div class="brand-logo-mockup"></div>
-                        Mediflow
-                    </div>
-                    <h1>Manage Your Hospital Efficiently with Mediflow</h1>
-                    <p class="hero-subtitle">All-in-one platform to manage appointments, patient records, billing, and analytics in one place.</p>
+                    <h1>Tomorrow's Healthcare, <br>Managed Today.</h1>
+                    <p class="hero-subtitle">Experience the next generation of hospital management. Mediflow combines intelligence with intuition to streamline every aspect of patient care.</p>
                     
-                    <ul class="feature-list-new">
-                        <li class="feature-item-new">
-                            <div class="feature-icon-mockup">📅</div>
-                            <div class="feature-content">
-                                <h3>Appointments</h3>
-                                <p>Streamline scheduling and reduce no-shows</p>
-                            </div>
-                        </li>
-                        <li class="feature-item-new">
-                            <div class="feature-icon-mockup">📂</div>
-                            <div class="feature-content">
-                                <h3>Patient Records</h3>
-                                <p>Secure, centralized digital health records</p>
-                            </div>
-                        </li>
-                        <li class="feature-item-new">
-                            <div class="feature-icon-mockup">💳</div>
-                            <div class="feature-content">
-                                <h3>Billing & Payments</h3>
-                                <p>Automated invoicing and payment tracking</p>
-                            </div>
-                        </li>
-                        <li class="feature-item-new">
-                            <div class="feature-icon-mockup">📊</div>
-                            <div class="feature-content">
-                                <h3>Reports & Analytics</h3>
-                                <p>Data-driven insights for hospital operations</p>
-                            </div>
-                        </li>
-                    </ul>
-    
                     <div class="hero-actions-new">
-                        <a href="${pageContext.request.contextPath}/register" class="btn-mediflow-primary">Try it Free</a>
-                        <a href="#" class="btn-mediflow-secondary">Request Demo</a>
+                        <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Start Free Trial</a>
+                        <a href="#features" class="btn btn-secondary">Explore Features</a>
+                    </div>
+                    
+                    <div style="display: flex; gap: 40px; margin-top: 20px;">
+                        <div>
+                            <h3 style="font-size: 1.5rem; color: var(--primary);">99.9%</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Uptime SLA</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.5rem; color: var(--primary);">150+</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Hospitals Trusted</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.5rem; color: var(--primary);">24/7</h3>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Expert Support</p>
+                        </div>
                     </div>
                 </div>
             </div>
-    
-            <section class="info-cards-section">
-                <div class="info-cards-grid">
-                    <div class="info-card-new">
-                        <span class="info-card-icon-mockup">🕒</span>
-                        <h3>24/7 Support</h3>
-                        <p>Access round-the-clock assistance</p>
-                    </div>
-                    <div class="info-card-new">
-                        <span class="info-card-icon-mockup">🛡️</span>
-                        <h3>Secure & Compliant</h3>
-                        <p>HIPAA-compliant & enterprise-grade security</p>
-                    </div>
-                    <div class="info-card-new">
-                        <span class="info-card-icon-mockup">👤</span>
-                        <h3>User Friendly</h3>
-                        <p>Intuitive, easy-to-navigate interface</p>
-                    </div>
-                </div>
-            </section>
-    
-            <div class="bottom-banner-cta">
-                Transform Your Hospital Operations with <span>Mediflow</span> Today!
+            <div class="hero-image-container">
+                <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="MediFlow Professional Interface">
             </div>
-    
-            <script>
-                // Smooth scroll for anchor links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const target = document.querySelector(this.getAttribute('href'));
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth'
-                            });
-                        }
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2>Intelligent Features for <br>Modern Care</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Everything you need to manage your hospital with precision and ease.</p>
+            </div>
+
+            <div class="info-cards-grid">
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">📋</span>
+                    <h3>Precision Records</h3>
+                    <p>Unified patient data with real-time updates and historical tracking for better clinical decisions.</p>
+                </div>
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">📅</span>
+                    <h3>Smart Scheduling</h3>
+                    <p>AI-powered appointment management that reduces wait times and optimizes staff allocation.</p>
+                </div>
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">💰</span>
+                    <h3>Seamless Billing</h3>
+                    <p>Automated invoicing and insurance integration that ensures 100% financial transparency.</p>
+                </div>
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">🛡️</span>
+                    <h3>Safe & Secure</h3>
+                    <p>Enterprise-grade encryption and HIPAA compliance to keep patient data protected at all times.</p>
+                </div>
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">📊</span>
+                    <h3>Advanced Analytics</h3>
+                    <p>Gain deep insights into hospital performance with beautiful, interactive reporting dashboards.</p>
+                </div>
+                <div class="info-card-new">
+                    <span class="info-card-icon-mockup">📲</span>
+                    <h3>Mobile Ready</h3>
+                    <p>Access your hospital management system from anywhere, on any device, with full functionality.</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="background: var(--slate-900); padding: 100px 10%; text-align: center; color: white;">
+            <h2 style="color: white; font-size: 3rem; margin-bottom: 24px;">Ready to Transform Your Workflow?</h2>
+            <p style="color: #94a3b8; font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">Join hundreds of medical institutions already using MediFlow to redefine healthcare excellence.</p>
+            <a href="${pageContext.request.contextPath}/register" class="btn btn-primary" style="padding: 16px 48px; border-radius: 12px; font-size: 1.1rem;">Get Started for Free</a>
+        </section>
+    </main>
+
+    <footer style="padding: 60px 10%; border-top: 1px solid var(--border-light); background: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px;">
+            <div class="brand-font">
+                <span class="logo-medi">Medi</span><span class="logo-flow">Flow</span>
+            </div>
+            <div style="display: flex; gap: 32px; color: var(--text-muted); font-size: 0.9rem;">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 MediFlow Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interaction micro-animations
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
                     });
-                });
-            </script>
-        </body>
-    
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+   
         </html>

@@ -37,8 +37,8 @@ public class PatientService {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             
-            Doctors doctor = session.get(Doctors.class, doctorId);
-            Nurses nurse = session.get(Nurses.class, nurseId);
+            Doctors doctor = (doctorId > 0) ? session.get(Doctors.class, doctorId) : null;
+            Nurses nurse = (nurseId > 0) ? session.get(Nurses.class, nurseId) : null;
             
             patient.setDoctor(doctor);
             patient.setNurse(nurse);

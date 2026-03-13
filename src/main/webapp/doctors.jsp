@@ -69,15 +69,17 @@
                 </div>
 
                 <div class="card">
-                    <h3>Active Doctors</h3>
+                    <div class="card-header">
+                        <h3>Active Medical Staff</h3>
+                    </div>
                     <div class="table-container">
-                        <table>
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Physician</th>
                                     <th>Specialisation</th>
-                                    <th>Email</th>
+                                    <th>Contact Information</th>
                                     <th>Department</th>
                                     <th>Actions</th>
                                 </tr>
@@ -85,28 +87,29 @@
                             <tbody>
                                 <c:forEach var="doc" items="${doctors}">
                                     <tr>
-                                        <td>${doc.id}</td>
-                                        <td>${doc.name}</td>
-                                        <td>${doc.specialisation}</td>
+                                        <td style="color: var(--text-muted); font-size: 0.8rem;">#${doc.id}</td>
+                                        <td style="font-weight: 600; color: var(--slate-900);">${doc.name}</td>
                                         <td>
-                                            ${doc.email}<br>
-                                            <small style="opacity: 0.7">${doc.phone}</small>
+                                            <span class="status-pill status-active">${doc.specialisation}</span>
                                         </td>
-                                        <td>${doc.department.name}</td>
-                                        <td style="display: flex; gap: 10px;">
-                                            <a href="doctors?action=edit&id=${doc.id}"
-                                                class="btn btn-info btn-sm">Edit</a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete('${doc.id}')"
-                                                class="btn btn-danger btn-sm">Delete</a>
+                                        <td>
+                                            <div style="font-size: 0.9rem;">${doc.email}</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">${doc.phone}</div>
+                                        </td>
+                                        <td>
+                                            <div class="badge DOCTOR-badge">${doc.department.name}</div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 8px;">
+                                                <a href="doctors?action=edit&id=${doc.id}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Edit</a>
+                                                <a href="javascript:void(0)" onclick="confirmDelete('${doc.id}')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">Delete</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty doctors}">
                                     <tr>
-                                        <td colspan="5"
-                                            style="text-align: center; color: var(--text-secondary); padding: 40px;">No
-                                            doctors
-                                            found.</td>
+                                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">No medical staff records found.</td>
                                     </tr>
                                 </c:if>
                             </tbody>

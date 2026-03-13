@@ -1,151 +1,133 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <%@ taglib prefix="fmt" uri="jakarta.tags.core" %>
-            <!DOCTYPE html>
-            <html>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Records | MediFlow</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+</head>
+<body class="dashboard-body">
+    <jsp:include page="includes/sidebar.jsp" />
 
-            <head>
-                <title>Patient Portal - HMSystem</title>
-                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-                <style>
-                    .portal-grid {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                        gap: 20px;
-                        margin-top: 20px;
-                    }
+    <main class="main-content">
+        <header class="dashboard-header">
+            <div>
+                <h1>Health Records</h1>
+                <p>Complete medical history and clinical documentation for ${sessionScope.user.fullName}</p>
+            </div>
+        </header>
 
-                    .portal-card {
-                        background: rgba(255, 255, 255, 0.05);
-                        backdrop-filter: blur(10px);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 15px;
-                        padding: 20px;
-                    }
-
-                    .portal-card h3 {
-                        margin-top: 0;
-                        color: #4facfe;
-                        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                        padding-bottom: 10px;
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-
-                    .data-list {
-                        list-style: none;
-                        padding: 0;
-                    }
-
-                    .data-item {
-                        padding: 10px 0;
-                        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                    }
-
-                    .data-item:last-child {
-                        border-bottom: none;
-                    }
-
-                    .status-badge {
-                        padding: 2px 8px;
-                        border-radius: 10px;
-                        font-size: 0.8em;
-                    }
-
-                    .status-paid {
-                        background: rgba(0, 255, 0, 0.2);
-                        color: #00ff00;
-                    }
-
-                    .status-pending {
-                        background: rgba(255, 165, 0, 0.2);
-                        color: #ffa500;
-                    }
-                </style>
-            </head>
-
-            <body>
-                <jsp:include page="includes/sidebar.jsp" />
-                <script>document.getElementById('nav-portal').classList.add('active');</script>
-                <div class="main-content">
-                    <div class="hero">
-                        <h1>Patient Portal</h1>
-                        <p>Welcome, ${sessionScope.user.fullName}. Here is your healthcare overview.</p>
-                    </div>
-
-                    <c:if test="${empty patient}">
-                        <div class="portal-card" style="margin-top: 20px;">
-                            <h3>⚠️ Profile Incomplete</h3>
-                            <p>We couldn't find a clinical record matching your account. Please contact the hospital
-                                administration to link your patient profile.</p>
-                        </div>
-                    </c:if>
-
-                    <c:if test="${not empty patient}">
-                        <div class="portal-grid">
-                            <!-- Clinical Summary -->
-                            <div class="portal-card">
-                                <h3><span>📂</span> Clinical Overview</h3>
-                                <div class="data-list">
-                                    <div class="data-item"><strong>Name:</strong> ${patient.name}</div>
-                                    <div class="data-item"><strong>Diagnosis:</strong> ${patient.disease}</div>
-                                    <div class="data-item"><strong>Primary Doctor:</strong> ${patient.doctor.name}</div>
-                                    <c:if test="${not empty record}">
-                                        <div class="data-item"><strong>Blood Type:</strong> ${record.bloodType}</div>
-                                        <div class="data-item"><strong>Allergies:</strong> ${record.allergies}</div>
-                                    </c:if>
-                                </div>
-                            </div>
-
-                            <!-- Upcoming Appointments -->
-                            <div class="portal-card">
-                                <h3><span>📅</span> Appointments</h3>
-                                <div class="data-list">
-                                    <c:choose>
-                                        <c:when test="${empty appointments}">
-                                            <p>No upcoming appointments found.</p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:forEach var="app" items="${appointments}">
-                                                <div class="data-item">
-                                                    <div><strong>Date:</strong> ${app.appointmentDate}</div>
-                                                    <div><strong>Doctor:</strong> ${app.doctor.name}</div>
-                                                </div>
-                                            </c:forEach>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-
-                            <!-- Billing History -->
-                            <div class="portal-card">
-                                <h3><span>💰</span> Billing History</h3>
-                                <div class="data-list">
-                                    <c:choose>
-                                        <c:when test="${empty invoices}">
-                                            <p>No billing records found.</p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:forEach var="inv" items="${invoices}">
-                                                <div class="data-item"
-                                                    style="display: flex; justify-content: space-between; align-items: center;">
-                                                    <div>
-                                                        <strong>#${inv.id}</strong> - ${inv.invoiceDate}
-                                                        <div style="font-size: 1.2em; color: #4facfe;">
-                                                            $${inv.totalAmount}</div>
-                                                    </div>
-                                                    <span
-                                                        class="status-badge ${inv.status == 'PAID' ? 'status-paid' : 'status-pending'}">${inv.status}</span>
-                                                </div>
-                                            </c:forEach>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-                        </div>
-                    </c:if>
+        <c:if test="${empty patient}">
+            <div class="card" style="border-left: 4px solid var(--warning);">
+                <div class="card-header">
+                    <h3>⚠️ Profile Linkage Required</h3>
                 </div>
-            </body>
+                <p style="margin-top: 12px; color: var(--text-muted);">We couldn't find a clinical record matching your account. Please contact the hospital administration to link your patient profile with your login credentials.</p>
+            </div>
+        </c:if>
 
-            </html>
+        <c:if test="${not empty patient}">
+            <section class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Clinical Summary</h3>
+                    </div>
+                    <div class="activity-list" style="margin-top: 16px;">
+                        <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Diagnosis</span>
+                            <span style="font-weight: 500;">${patient.disease}</span>
+                        </div>
+                        <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Primary Physician</span>
+                            <span style="font-weight: 500;">Dr. ${patient.doctor.name}</span>
+                        </div>
+                        <c:if test="${not empty record}">
+                            <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-muted);">Blood Type</span>
+                                <span style="font-weight: 500;">${record.bloodType}</span>
+                            </div>
+                            <div style="padding: 12px 0; display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-muted);">Allergies</span>
+                                <span style="font-weight: 500; color: var(--danger);">${record.allergies}</span>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
+
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <h3>Upcoming Consultations</h3>
+                    </div>
+                    <div class="table-responsive" style="margin-top: 16px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="app" items="${appointments}">
+                                    <tr>
+                                        <td style="font-weight: 500;">Dr. ${app.doctor.name}</td>
+                                        <td>${app.appointmentDate}</td>
+                                        <td>Follow-up</td>
+                                        <td><span class="status-pill status-active">Confirmed</span></td>
+                                    </tr>
+                                </c:forEach>
+                                <c:if test="${empty appointments}">
+                                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 40px;">No upcoming appointments.</td></tr>
+                                </c:if>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card" style="margin-top: 32px;">
+                <div class="card-header">
+                    <h3>Billing & Invoice History</h3>
+                </div>
+                <div class="table-responsive" style="margin-top: 16px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="inv" items="${invoices}">
+                                <tr>
+                                    <td style="font-weight: 600;">#${inv.id}</td>
+                                    <td>${inv.invoiceDate}</td>
+                                    <td>Clinical Consultation</td>
+                                    <td style="font-weight: 600; color: var(--primary);">$${inv.totalAmount}</td>
+                                    <td>
+                                        <span class="status-pill ${inv.status == 'PAID' ? 'status-active' : 'status-pending'}" 
+                                              style="${inv.status != 'PAID' ? 'background: rgba(245, 158, 11, 0.1); color: var(--warning);' : ''}">
+                                            ${inv.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${empty invoices}">
+                                <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">No billing records found.</td></tr>
+                             </c:if>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </c:if>
+    </main>
+</body>
+</html>
+      </html>

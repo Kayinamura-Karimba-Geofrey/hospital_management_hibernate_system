@@ -66,9 +66,12 @@ public class TwoFactorServlet extends HttpServlet {
 
         if (!tempUser.isTwoFactorEnabled() || tempUser.getTwoFactorSecret() == null) {
             // Setup 2FA
-            String secret = secretGenerator.generate();
-            tempUser.setTwoFactorSecret(secret);
-            userDAO.updateUser(tempUser); // Save secret immediately
+            String secret = tempUser.getTwoFactorSecret();
+            if (secret == null) {
+                secret = secretGenerator.generate();
+                tempUser.setTwoFactorSecret(secret);
+                userDAO.updateUser(tempUser); // Save secret immediately
+            }
 
             QrData data = new QrData.Builder()
                     .label(tempUser.getEmail())

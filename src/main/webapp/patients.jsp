@@ -70,44 +70,52 @@
                 </div>
 
                 <div class="card">
-                    <h3>All Patients</h3>
+                    <div class="card-header">
+                        <h3>All Patients</h3>
+                    </div>
                     <div class="table-container">
-                        <table>
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Patient Details</th>
                                     <th>Diagnosis</th>
-                                    <th>Doctor</th>
-                                    <th>Nurse</th>
+                                    <th>Assigned Medical Team</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="p" items="${patients}">
                                     <tr>
-                                        <td>${p.id}</td>
+                                        <td style="color: var(--text-muted); font-size: 0.8rem;">#${p.id}</td>
                                         <td>
-                                            ${p.name}<br>
-                                            <small style="opacity: 0.7">${p.email} | ${p.phone}</small>
+                                            <div style="font-weight: 600; color: var(--slate-900);">${p.name}</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">${p.email}</div>
                                         </td>
-                                        <td>${p.disease}</td>
-                                        <td>${p.doctor.name}</td>
-                                        <td>${p.nurse.name}</td>
-                                        <td style="display: flex; gap: 10px;">
-                                            <a href="patients?action=edit&id=${p.id}"
-                                                class="btn btn-info btn-sm">Edit</a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete('${p.id}')"
-                                                class="btn btn-danger btn-sm">Delete</a>
+                                        <td>
+                                            <span class="status-pill status-active">${p.disease}</span>
+                                        </td>
+                                        <td>
+                                            <div style="font-size: 0.9rem;">
+                                                <span style="color: var(--text-muted);">Doctor:</span> Dr. ${p.doctor.name}
+                                            </div>
+                                            <div style="font-size: 0.85rem; margin-top: 4px;">
+                                                <span style="color: var(--text-muted);">Nurse:</span> ${p.nurse.name}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 8px;">
+                                                <a href="patients?action=edit&id=${p.id}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Edit</a>
+                                                <a href="javascript:void(0)" onclick="confirmDelete('${p.id}')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">Delete</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty patients}">
                                     <tr>
-                                        <td colspan="6"
-                                            style="text-align: center; color: var(--text-secondary); padding: 40px;">No
-                                            patients
-                                            found.</td>
+                                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">
+                                            No patients found in the system.
+                                        </td>
                                     </tr>
                                 </c:if>
                             </tbody>

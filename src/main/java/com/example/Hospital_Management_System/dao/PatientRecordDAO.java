@@ -22,7 +22,9 @@ public class PatientRecordDAO {
             session.merge(record);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null && transaction.getStatus().canRollback()) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }

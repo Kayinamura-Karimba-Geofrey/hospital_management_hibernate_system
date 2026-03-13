@@ -50,40 +50,45 @@
                 </div>
 
                 <div class="card">
-                    <h3>Upcoming Appointments</h3>
+                    <div class="card-header">
+                        <h3>Upcoming Appointments</h3>
+                    </div>
                     <div class="table-container">
-                        <table>
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Patient</th>
-                                    <th>Doctor</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
+                                    <th>Physician</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="app" items="${appointments}">
                                     <tr>
-                                        <td>${app.id}</td>
-                                        <td>${app.patient.name}</td>
-                                        <td>${app.patient.doctor.name}</td>
-                                        <td>${app.appointmentDate}</td>
-                                        <td>${app.appointmentTime}</td>
-                                        <td style="display: flex; gap: 10px;">
-                                            <a href="appointments?action=edit&id=${app.id}"
-                                                class="btn btn-info btn-sm">Edit</a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete('${app.id}')"
-                                                class="btn btn-danger btn-sm">Delete</a>
+                                        <td style="color: var(--text-muted); font-size: 0.8rem;">#${app.id}</td>
+                                        <td style="font-weight: 600; color: var(--slate-900);">${app.patient.name}</td>
+                                        <td>Dr. ${app.patient.doctor.name}</td>
+                                        <td>
+                                            <div style="font-weight: 500;">${app.appointmentDate}</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">${app.appointmentTime}</div>
+                                        </td>
+                                        <td>
+                                            <span class="status-pill status-active">Confirmed</span>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 8px;">
+                                                <a href="appointments?action=edit&id=${app.id}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Reschedule</a>
+                                                <a href="javascript:void(0)" onclick="confirmDelete('${app.id}')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">Cancel</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty appointments}">
                                     <tr>
-                                        <td colspan="6"
-                                            style="text-align: center; color: var(--text-secondary); padding: 40px;">No
-                                            appointments scheduled.</td>
+                                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">No appointments scheduled for this period.</td>
                                     </tr>
                                 </c:if>
                             </tbody>

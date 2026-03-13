@@ -147,8 +147,12 @@
                                 <div class="bed-card ${bed.status}"
                                     onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}', '${activeAdm.id}', '${activeAdm.patient.name}')">
                                     <span class="bed-icon">🛏️</span>
-                                    <div style="font-weight: 600;">Bed ${bed.bedNumber}</div>
-                                    <span class="status-badge status-${bed.status.toLowerCase()}">${bed.status}</span>
+                                    <span class="badge" style="background: rgba(10, 132, 255, 0.1); color: var(--primary);">Bed ${bed.bedNumber}</span>
+                                    <div style="margin-top: 10px;">
+                                        <span class="status-pill ${bed.status == 'AVAILABLE' ? 'status-active' : (bed.status == 'OCCUPIED' ? 'status-critical' : 'status-warning')}">
+                                            ${bed.status}
+                                        </span>
+                                    </div>
                                     <c:if test="${not empty activeAdm}">
                                         <div
                                             style="font-size: 0.7rem; margin-top: 5px; color: var(--text-secondary); font-weight: 600;">

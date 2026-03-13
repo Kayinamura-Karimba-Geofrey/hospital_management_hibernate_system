@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.javaproject</groupId>
-    <artifactId>School-Management</artifactId>
+    <artifactId>hospital_management_system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 

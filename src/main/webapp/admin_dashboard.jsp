@@ -1,104 +1,154 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
-            <!DOCTYPE html>
-            <html>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MediFlow</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+    <jsp:include page="includes/sidebar.jsp" />
 
-            <head>
-                <title>ADMIN Dashboard - HMSystem</title>
-                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <style>
-                    .role-badge {
-                        display: inline-block;
-                        padding: 4px 12px;
-                        border-radius: 20px;
-                        font-size: 0.8rem;
-                        font-weight: 600;
-                        text-transform: uppercase;
-                        margin-bottom: 10px;
-                    }
+    <main class="main-content">
+        <header class="dashboard-header">
+            <div>
+                <h1>Enterprise Overview</h1>
+                <p>Real-time insights across all departments</p>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Add New User</a>
+                <button class="btn btn-secondary">Download Report</button>
+            </div>
+        </header>
 
-                    .ADMIN-badge {
-                        background: rgba(255, 69, 58, 0.2);
-                        color: #ff453a;
-                    }
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">👥</span>
+                    <span class="stat-label">Total Patients</span>
+                </div>
+                <div class="stat-value">${not empty totalPatients ? totalPatients : 0}</div>
+                <div class="stat-trend trend-up">↑ 4.2% from last month</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">👨‍⚕️</span>
+                    <span class="stat-label">Active Staff</span>
+                </div>
+                <div class="stat-value">${not empty activeStaff ? activeStaff : 0}</div>
+                <div class="stat-trend trend-up">↑ 2 new doctors joined</div>
+            </div>
 
-                    .text-muted {
-                        opacity: 0.6;
-                        font-size: 0.9rem;
-                    }
-                </style>
-            </head>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">📅</span>
+                    <span class="stat-label">Appointments</span>
+                </div>
+                <div class="stat-value">${not empty totalAppointments ? totalAppointments : 0}</div>
+                <div class="stat-trend">8 expected today</div>
+            </div>
 
-            <body>
-                <jsp:include page="includes/sidebar.jsp" />
-                <script>document.getElementById('nav-dashboard').classList.add('active');</script>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">💰</span>
+                    <span class="stat-label">Revenue Overview</span>
+                </div>
+                <div class="stat-value">$12.4k</div>
+                <div class="stat-trend trend-down">↓ 1.5% decrease</div>
+            </div>
+        </section>
 
-                <div class="main-content">
-                    <div class="hero">
-                        <h1>Dashboard Overview</h1>
-                        <p>Hospital management system monitoring and metrics.</p>
-                    </div>
+        <section class="dashboard-grid" style="margin-top: 32px;">
+            <div class="card" style="grid-column: span 2;">
+                <div class="card-header">
+                    <h3>Hospital Capacity & Load</h3>
+                    <p>Current distribution across departments</p>
+                </div>
+                <div style="height: 350px; margin-top: 24px;">
+                    <canvas id="adminChart"></canvas>
+                </div>
+            </div>
 
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <p class="text-muted" style="margin: 0;">Total Patients</p>
-                            <div class="value">${not empty totalPatients ? totalPatients : 0}</div>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                <div class="activity-list" style="margin-top: 16px;">
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; gap: 12px; align-items: start;">
+                        <span style="font-size: 1.2rem;">📝</span>
+                        <div>
+                            <p style="font-weight: 500; font-size: 0.9rem;">New patient registration</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">2 minutes ago</p>
                         </div>
-                        <div class="stat-card">
-                            <p class="text-muted" style="margin: 0;">Active Staff</p>
-                            <div class="value">${not empty activeStaff ? activeStaff : 0}</div>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-muted" style="margin: 0;">Appointments</p>
-                            <div class="value">${not empty totalAppointments ? totalAppointments : 0}</div>
+                    </div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--slate-100); display: flex; gap: 12px; align-items: start;">
+                        <span style="font-size: 1.2rem;">🏥</span>
+                        <div>
+                            <p style="font-weight: 500; font-size: 0.9rem;">ICU capacity reached 85%</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">1 hour ago</p>
                         </div>
                     </div>
-
-                    <div class="card" style="height: 400px; margin-top: 30px;">
-                        <h3 style="margin-top: 0;">Hospital Capacity Overview</h3>
-                        <canvas id="adminChart"></canvas>
-                    </div>
-
-                    <div class="action-btns" style="display: flex; gap: 15px; margin-top: 30px;">
-                        <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Add New User</a>
-                        <a href="${pageContext.request.contextPath}/analytics" class="btn btn-secondary">Full
-                            Analytics</a>
+                    <div style="padding: 12px 0; display: flex; gap: 12px; align-items: start;">
+                        <span style="font-size: 1.2rem;">👨‍⚕️</span>
+                        <div>
+                            <p style="font-weight: 500; font-size: 0.9rem;">Dr. Sarah assigned to Surgery</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">3 hours ago</p>
+                        </div>
                     </div>
                 </div>
+                <a href="#" class="btn btn-secondary" style="width: 100%; margin-top: 24px; text-align: center;">View All Logs</a>
+            </div>
+        </section>
+    </main>
 
-                <script>
-                    if (document.getElementById('adminChart')) {
-                        new Chart(document.getElementById('adminChart').getContext('2d'), {
-                            type: 'doughnut',
-                            data: {
-                                labels: [<c:forEach var="entry" items="${stats}">"${entry.key}",</c:forEach>],
-                                datasets: [{
-                                    data: [<c:forEach var="entry" items="${stats}">${entry.value},</c:forEach>],
-                                    backgroundColor: ['#3b82f6', '#1e3a8a', '#60a5fa', '#93c5fd'],
-                                    borderWidth: 0
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: 'right',
-                                        labels: {
-                                            color: '#1c1c1e',
-                                            font: {
-                                                size: 14,
-                                                weight: '500'
-                                            }
-                                        }
-                                    }
+    <script>
+        document.getElementById('nav-dashboard').classList.add('active');
+
+        if (document.getElementById('adminChart')) {
+            new Chart(document.getElementById('adminChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: [<c:forEach var="entry" items="${stats}">"${entry.key}",</c:forEach>],
+                    datasets: [{
+                        data: [<c:forEach var="entry" items="${stats}">${entry.value},</c:forEach>],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.85)', 
+                            'rgba(16, 185, 129, 0.85)', 
+                            'rgba(245, 158, 11, 0.85)', 
+                            'rgba(139, 92, 246, 0.85)',
+                            'rgba(236, 72, 153, 0.85)'
+                        ],
+                        hoverOffset: 20,
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                font: {
+                                    size: 13,
+                                    family: "'Inter', sans-serif"
                                 }
                             }
-                        });
+                        }
                     }
-                </script>
-            </body>
-
-            </html>
+                }
+            });
+        }
+    </script>
+</body>
+</html>

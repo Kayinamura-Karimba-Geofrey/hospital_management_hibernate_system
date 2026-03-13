@@ -113,6 +113,7 @@ public class DashboardServlet extends HttpServlet {
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
             request.setAttribute("myPatientsCount", nurseService.getPatientsCount(nurse.getId()));
+            request.setAttribute("wardPatients", nurse.getPatients()); // Fetch list for the table
             request.setAttribute("deptAppointments", appointmentService.getAppointmentsByNurseId(nurse.getId()));
         }
     }

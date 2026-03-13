@@ -42,36 +42,38 @@
                 </div>
 
                 <div class="card">
-                    <h3>Department List</h3>
+                    <div class="card-header">
+                        <h3>Department Overview</h3>
+                    </div>
                     <div class="table-container">
-                        <table>
+                        <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Location</th>
-                                    <th>Actions</th>
+                                    <th>Dept ID</th>
+                                    <th>Department Name</th>
+                                    <th>Facility Location</th>
+                                    <th>Operations</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="dept" items="${departments}">
                                     <tr>
-                                        <td>${dept.id}</td>
-                                        <td>${dept.name}</td>
-                                        <td>${dept.location}</td>
-                                        <td style="display: flex; gap: 10px;">
-                                            <a href="departments?action=edit&id=${dept.id}"
-                                                class="btn btn-info btn-sm">Edit</a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete('${dept.id}')"
-                                                class="btn btn-danger btn-sm">Delete</a>
+                                        <td style="color: var(--text-muted); font-size: 0.8rem;">#${dept.id}</td>
+                                        <td style="font-weight: 600; color: var(--slate-900); text-transform: uppercase; letter-spacing: 0.02em;">${dept.name}</td>
+                                        <td>
+                                            <div style="font-size: 0.9rem; color: var(--text-muted);">${dept.location}</div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 8px;">
+                                                <a href="departments?action=edit&id=${dept.id}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;">Edit</a>
+                                                <a href="javascript:void(0)" onclick="confirmDelete('${dept.id}')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">Delete</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty departments}">
                                     <tr>
-                                        <td colspan="4"
-                                            style="text-align: center; color: var(--text-secondary); padding: 40px;">No
-                                            departments found.</td>
+                                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 40px;">No operational departments found.</td>
                                     </tr>
                                 </c:if>
                             </tbody>

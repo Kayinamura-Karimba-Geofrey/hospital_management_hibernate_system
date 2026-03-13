@@ -115,9 +115,13 @@ public class DoctorDAO {
      */
     public Doctors getDoctorByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Doctors where email = :email", Doctors.class)
+            Doctors doctor = session.createQuery("from Doctors where email = :email", Doctors.class)
                     .setParameter("email", email)
                     .uniqueResult();
+            if (doctor != null) {
+                doctor.getPatients().size(); // Initialize lazy collection
+            }
+            return doctor;
         }
     }
 

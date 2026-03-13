@@ -105,11 +105,11 @@
                 </div>
 
                 <div class="card">
-                    <div class="section-header">
-                        <h2>Invoice History</h2>
+                    <div class="card-header">
+                        <h3>Invoice History</h3>
                     </div>
                     <div class="table-container">
-                        <table>
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -124,41 +124,31 @@
                                 <c:forEach var="inv" items="${allInvoices}">
                                     <tr>
                                         <td>${inv.invoiceDate.toLocalDate()}</td>
-                                        <td><strong>${inv.patient.name}</strong></td>
+                                        <td style="font-weight: 600;">${inv.patient.name}</td>
                                         <td>${inv.description}</td>
-                                        <td>$${inv.amount}</td>
+                                        <td style="font-weight: 700; color: var(--slate-900);">$${inv.amount}</td>
                                         <td>
-                                            <span
-                                                class="badge ${inv.status == 'PAID' ? 'badge-success' : 'badge-warning'}">
+                                            <span class="badge ${inv.status == 'PAID' ? 'badge-success' : 'badge-warning'}">
                                                 ${inv.status}
                                             </span>
                                         </td>
                                         <td>
-                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                            <div style="display: flex; gap: 8px; align-items: center;">
                                                 <c:if test="${inv.status == 'UNPAID'}">
-                                                    <form
-                                                        action="${pageContext.request.contextPath}/financial?action=updatePaymentStatus"
-                                                        method="post" style="margin: 0;">
+                                                    <form action="${pageContext.request.contextPath}/financial?action=updatePaymentStatus" method="post" style="margin: 0;">
                                                         <input type="hidden" name="csrfToken" value="${csrfToken}">
                                                         <input type="hidden" name="invoiceId" value="${inv.id}">
                                                         <input type="hidden" name="status" value="PAID">
-                                                        <button type="submit" class="btn btn-primary"
-                                                            style="padding: 4px 8px; font-size: 0.7rem;">Paid</button>
+                                                        <button type="submit" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.75rem;">Mark Paid</button>
                                                     </form>
-                                                    <button class="btn btn-secondary"
-                                                        style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255,255,255,0.1);"
-                                                        onclick="editInvoice('${inv.id}', '${inv.patient.id}', '${inv.description}', '${inv.amount}')">
+                                                    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="editInvoice('${inv.id}', '${inv.patient.id}', '${inv.description}', '${inv.amount}')">
                                                         Edit
                                                     </button>
                                                 </c:if>
-                                                <form
-                                                    action="${pageContext.request.contextPath}/financial?action=deleteInvoice"
-                                                    method="post" style="margin: 0;"
-                                                    onsubmit="return confirm('Are you sure?')">
+                                                <form action="${pageContext.request.contextPath}/financial?action=deleteInvoice" method="post" style="margin: 0;" onsubmit="return confirm('Are you sure?')">
                                                     <input type="hidden" name="csrfToken" value="${csrfToken}">
                                                     <input type="hidden" name="invoiceId" value="${inv.id}">
-                                                    <button type="submit" class="btn btn-danger"
-                                                        style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.3);">
+                                                    <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
                                                         Delete
                                                     </button>
                                                 </form>

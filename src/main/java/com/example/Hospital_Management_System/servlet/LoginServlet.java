@@ -55,8 +55,14 @@ public class LoginServlet extends HttpServlet {
 
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("tempUser", user);
-            response.sendRedirect(request.getContextPath() + "/2fa");
+            if (user.isTwoFactorEnabled()) {
+                session.setAttribute("tempUser", user);
+                response.sendRedirect(request.getContextPath() + "/2fa");
+            } else {
+                session.setAttribute("user", user);
+                session.setAttribute("role", user.getRole());
+                response.sendRedirect(request.getContextPath() + "/dashboard");
+            }
         } else {
             request.setAttribute("error", "Invalid email/username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);

@@ -67,57 +67,73 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
-                    <div>
-                        <h3>Upcoming Operations</h3>
-                        <table class="surgery-table">
-                            <c:forEach var="s" items="${surgeries}">
-                                <tr>
-                                    <td>
-                                        <span class="room-tag">${s.otRoomName}</span>
-                                        <div style="font-weight: 600; font-size: 1.1rem;">${s.patient.name}</div>
-                                        <div style="font-size: 0.8rem; opacity: 0.7;">Equipment: ${s.equipment}</div>
-                                    </td>
-                                    <td>
-                                        <div style="font-size: 0.8rem; opacity: 0.6;">SURGEON</div>
-                                        <strong>Dr. ${s.surgeon.name}</strong>
-                                        <div style="font-size: 0.75rem; color: var(--primary);">Anes: ${s.anesthetist !=
-                                            null ? s.anesthetist.name : 'N/A'}</div>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <div class="time-badge">${s.surgeryDateTime}</div>
-                                        <div style="font-size: 0.8rem; margin-top: 5px; opacity: 0.6;">Duration:
-                                            ${s.durationMinutes} min</div>
-                                        <div
-                                            style="margin-top: 10px; display: flex; gap: 5px; justify-content: flex-end;">
-                                            <button class="btn btn-secondary"
-                                                style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255,255,255,0.1);"
-                                                onclick="editSurgery('${s.id}', '${s.patient.id}', '${s.surgeon.id}', '${s.anesthetist.id}', '${s.otRoomName}', '${s.surgeryDateTime}', '${s.durationMinutes}', '${s.equipment}')">
-                                                Edit
-                                            </button>
-                                            <form
-                                                action="${pageContext.request.contextPath}/surgery?action=deleteSurgery"
-                                                method="post" style="margin: 0;"
-                                                onsubmit="return confirm('Are you sure?')">
-                                                <input type="hidden" name="csrfToken" value="${csrfToken}">
-                                                <input type="hidden" name="surgeryId" value="${s.id}">
-                                                <button type="submit" class="btn btn-danger"
-                                                    style="padding: 4px 8px; font-size: 0.7rem; background: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.3);">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                            <c:if test="${empty surgeries}">
-                                <tr>
-                                    <td colspan="3"
-                                        style="text-align: center; padding: 40px; color: var(--text-secondary);">No
-                                        surgeries scheduled.</td>
-                                </tr>
-                            </c:if>
-                        </table>
+                <div style="grid-column: span 2;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Upcoming Surgical Procedures</h3>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Procedure Details</th>
+                                        <th>Surgical Team</th>
+                                        <th>Date & Room</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="s" items="${surgeries}">
+                                        <tr>
+                                            <td>
+                                                <div style="font-weight: 600; color: var(--slate-900);">${s.patient.name}</div>
+                                                <div style="font-size: 0.8rem; color: var(--text-muted);">Equip: ${s.equipment}</div>
+                                            </td>
+                                            <td>
+                                                <div style="font-size: 0.9rem;">
+                                                    <span style="color: var(--text-muted);">Lead:</span> Dr. ${s.surgeon.name}
+                                                </div>
+                                                <div style="font-size: 0.8rem; color: var(--primary); margin-top: 2px;">
+                                                    Anesthetist: ${s.anesthetist != null ? s.anesthetist.name : 'N/A'}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 500;">${s.surgeryDateTime}</div>
+                                                <div class="badge" style="background: rgba(59, 130, 246, 0.1); color: var(--primary); margin-top: 4px;">
+                                                    ${s.otRoomName}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="status-pill status-active">Scheduled</span>
+                                            </td>
+                                            <td>
+                                                <div style="display: flex; gap: 8px;">
+                                                    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;"
+                                                        onclick="editSurgery('${s.id}', '${s.patient.id}', '${s.surgeon.id}', '${s.anesthetist.id}', '${s.otRoomName}', '${s.surgeryDateTime}', '${s.durationMinutes}', '${s.equipment}')">
+                                                        Edit
+                                                    </button>
+                                                    <form action="${pageContext.request.contextPath}/surgery?action=deleteSurgery" method="post" style="margin: 0;" onsubmit="return confirm('Are you sure?')">
+                                                        <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                                        <input type="hidden" name="surgeryId" value="${s.id}">
+                                                        <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    <c:if test="${empty surgeries}">
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">No upcoming surgeries detected.</td>
+                                        </tr>
+                                    </c:if>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                </div>
 
                     <div class="card">
                         <h3 id="form-title">Schedule Surgery</h3>
