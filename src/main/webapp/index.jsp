@@ -29,36 +29,43 @@
 
             <div class="landing-hero-new">
                 <div class="hero-image-container">
-                    <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Professional Doctor">
+                    <img src="${pageContext.request.contextPath}/images/doctor-hero.png" alt="Confident Professional Doctor">
                 </div>
                 <div class="hero-text-new">
                     <div class="brand-mediflow">
                         <div class="brand-logo-mockup"></div>
-                        MediFlow
+                        Mediflow
                     </div>
-                    <h1>The All-in-One Hospital Management Software</h1>
-                    <p class="hero-subtitle">Streamline hospital operations, improve patient care, and boost efficiency with our powerful, easy-to-use platform.</p>
+                    <h1>Manage Your Hospital Efficiently with Mediflow</h1>
+                    <p class="hero-subtitle">All-in-one platform to manage appointments, patient records, billing, and analytics in one place.</p>
                     
                     <ul class="feature-list-new">
                         <li class="feature-item-new">
-                            <div class="feature-icon-mockup">💼</div>
-                            <div class="feature-content">
-                                <h3>Manage Patient Records</h3>
-                                <p>Keep accurate, up-to-date patient records</p>
-                            </div>
-                        </li>
-                        <li class="feature-item-new">
                             <div class="feature-icon-mockup">📅</div>
                             <div class="feature-content">
-                                <h3>Simplify Appointment Scheduling</h3>
-                                <p>Easily schedule, manage, and track appointments</p>
+                                <h3>Appointments</h3>
+                                <p>Streamline scheduling and reduce no-shows</p>
                             </div>
                         </li>
                         <li class="feature-item-new">
-                            <div class="feature-icon-mockup">📈</div>
+                            <div class="feature-icon-mockup">📂</div>
                             <div class="feature-content">
-                                <h3>Automate Billing & Reporting</h3>
-                                <p>Generate invoices, track payments, and view financial reports</p>
+                                <h3>Patient Records</h3>
+                                <p>Secure, centralized digital health records</p>
+                            </div>
+                        </li>
+                        <li class="feature-item-new">
+                            <div class="feature-icon-mockup">💳</div>
+                            <div class="feature-content">
+                                <h3>Billing & Payments</h3>
+                                <p>Automated invoicing and payment tracking</p>
+                            </div>
+                        </li>
+                        <li class="feature-item-new">
+                            <div class="feature-icon-mockup">📊</div>
+                            <div class="feature-content">
+                                <h3>Reports & Analytics</h3>
+                                <p>Data-driven insights for hospital operations</p>
                             </div>
                         </li>
                     </ul>
@@ -73,7 +80,7 @@
             <section class="info-cards-section">
                 <div class="info-cards-grid">
                     <div class="info-card-new">
-                        <span class="info-card-icon-mockup">💙</span>
+                        <span class="info-card-icon-mockup">🕒</span>
                         <h3>24/7 Support</h3>
                         <p>Access round-the-clock assistance</p>
                     </div>
@@ -83,15 +90,15 @@
                         <p>HIPAA-compliant & enterprise-grade security</p>
                     </div>
                     <div class="info-card-new">
-                        <span class="info-card-icon-mockup">🌐</span>
-                        <h3>User-Friendly</h3>
+                        <span class="info-card-icon-mockup">👤</span>
+                        <h3>User Friendly</h3>
                         <p>Intuitive, easy-to-navigate interface</p>
                     </div>
                 </div>
             </section>
     
             <div class="bottom-banner-cta">
-                Transform Your Hospital Operations with <span>MediFlow</span> Today!
+                Transform Your Hospital Operations with <span>Mediflow</span> Today!
             </div>
     
             <script>

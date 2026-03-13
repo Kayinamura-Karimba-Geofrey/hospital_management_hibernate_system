@@ -491,6 +491,7 @@ select:focus {
 }
 
 /* Landing Page Redesign - Exact Mockup Mode */
+/* Landing Page Redesign - SaaS Medical Tech Mode */
 .landing-body {
     background: #ffffff;
     font-family: 'Inter', sans-serif;
@@ -498,60 +499,63 @@ select:focus {
     flex-direction: column;
     width: 100%;
     margin: 0;
+    color: #1a1a1c;
 }
 
 .landing-hero-new {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 85vh;
-    padding: 100px 5% 40px;
-    gap: 40px;
+    min-height: 90vh;
+    padding: 80px 8% 40px;
+    gap: 60px;
     width: 100%;
-    background: radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.05) 0%, transparent 40%);
+    background: radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 50%);
 }
 
 .hero-image-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .hero-image-container img {
     max-width: 100%;
-    max-height: 750px;
+    max-height: 800px;
     height: auto;
     object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
 }
 
 .hero-text-new {
     max-width: 600px;
-    padding-left: 20px;
 }
 
 .brand-mediflow {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    font-size: 2.8rem;
+    gap: 12px;
+    margin-bottom: 32px;
+    font-size: 2.2rem;
     font-weight: 800;
-    color: #1e3a8a;
+    color: #0f172a;
     font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.5px;
 }
 
 .brand-logo-mockup {
-    width: 50px;
-    height: 50px;
-    background: var(--primary);
+    width: 44px;
+    height: 44px;
+    background: #2563eb;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 2rem;
+    font-size: 1.8rem;
     position: relative;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
 }
 
 .brand-logo-mockup::before {
@@ -560,172 +564,165 @@ select:focus {
 }
 
 .hero-text-new h1 {
-    font-size: 3.2rem;
-    line-height: 1.15;
-    color: #1e3a8a;
+    font-size: 3.8rem;
+    line-height: 1.1;
+    color: #0f172a;
     margin-bottom: 24px;
     font-weight: 800;
-    letter-spacing: -1px;
+    letter-spacing: -1.5px;
 }
 
 .hero-text-new p.hero-subtitle {
-    font-size: 1.15rem;
-    color: #48484a;
-    margin-bottom: 45px;
+    font-size: 1.25rem;
+    color: #475569;
+    margin-bottom: 48px;
     line-height: 1.6;
-    opacity: 0.8;
+    max-width: 90%;
 }
 
 .feature-list-new {
     list-style: none;
     padding: 0;
-    margin-bottom: 50px;
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
 }
 
 .feature-item-new {
     display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 30px;
+    align-items: center;
+    gap: 16px;
 }
 
 .feature-icon-mockup {
-    width: 44px;
-    height: 44px;
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
-    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    background: #f1f5f9;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2563eb;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     flex-shrink: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .feature-content h3 {
-    font-size: 1.2rem;
-    margin: 0 0 6px;
+    font-size: 1.1rem;
+    margin: 0;
     font-weight: 700;
-    color: #1a1a1c;
+    color: #0f172a;
 }
 
 .feature-content p {
-    font-size: 1rem;
-    color: #636366;
-    margin: 0;
+    display: none; /* Keep it clean as per modern SaaS trends, only headings for the 4 features */
 }
 
 .hero-actions-new {
     display: flex;
-    gap: 24px;
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .btn-mediflow-primary {
-    background: #0066cc;
+    background: #2563eb;
     color: white;
-    padding: 16px 48px;
+    padding: 16px 36px;
     border-radius: 12px;
     font-weight: 700;
     font-size: 1.1rem;
     text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 102, 204, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
 }
 
 .btn-mediflow-secondary {
     background: #ffffff;
-    color: #1a1a1c;
-    padding: 16px 48px;
+    color: #0f172a;
+    padding: 16px 36px;
     border-radius: 12px;
     font-weight: 600;
     font-size: 1.1rem;
     text-decoration: none;
-    border: 1px solid #d1d5db;
+    border: 1px solid #e2e8f0;
     transition: all 0.3s ease;
 }
 
 .btn-mediflow-primary:hover {
-    background: #0052a3;
+    background: #1d4ed8;
     transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
 }
 
 .btn-mediflow-secondary:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
+    background: #f8fafc;
+    border-color: #cbd5e1;
     transform: translateY(-2px);
 }
 
 .info-cards-section {
-    padding: 80px 5% 100px;
+    padding: 60px 8% 80px;
+    background: #f8fafc;
 }
 
 .info-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    max-width: 1300px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .info-card-new {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    transition: transform 0.3s ease;
-}
-
-.info-card-new:hover {
-    transform: translateY(-5px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .info-card-icon-mockup {
-    font-size: 2.2rem;
-    margin-bottom: 24px;
-    display: block;
+    font-size: 1.4rem;
     color: #2563eb;
 }
 
 .info-card-new h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    font-weight: 700;
-    color: #1a1a1c;
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .info-card-new p {
-    font-size: 1.05rem;
-    color: #636366;
-    line-height: 1.6;
+    display: none; /* Minimal trust badges style */
 }
 
 .bottom-banner-cta {
     text-align: center;
-    padding: 60px 20px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #4b5563;
-    border-top: 1px solid #f1f5f9;
+    padding: 100px 20px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: white;
 }
 
 .bottom-banner-cta span {
-    color: #1e3a8a;
-    font-weight: 800;
+    color: #2563eb;
+    background: linear-gradient(to right, #2563eb, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 1024px) {
     .landing-hero-new {
-        flex-direction: column;
-        padding: 120px 40px 60px;
+        grid-template-columns: 1fr;
+        padding: 120px 5% 60px;
         text-align: center;
     }
 
     .hero-image-container {
         order: 2;
-        justify-content: center;
     }
 
     .hero-text-new {
@@ -733,12 +730,21 @@ select:focus {
         margin: 0 auto;
     }
 
-    .brand-mediflow, .feature-item-new, .hero-actions-new {
+    .brand-mediflow, .hero-actions-new, .feature-list-new {
         justify-content: center;
+    }
+    
+    .feature-list-new {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
         text-align: left;
     }
 
     .info-cards-grid {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
     }
 }
