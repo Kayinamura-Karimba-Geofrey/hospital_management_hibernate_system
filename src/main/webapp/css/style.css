@@ -494,6 +494,10 @@ select:focus {
 .landing-body {
     background: #ffffff;
     font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
 }
 
 .landing-hero-new {
@@ -503,6 +507,7 @@ select:focus {
     min-height: 85vh;
     padding: 100px 5% 40px;
     gap: 40px;
+    width: 100%;
     background: radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.05) 0%, transparent 40%);
 }
 
