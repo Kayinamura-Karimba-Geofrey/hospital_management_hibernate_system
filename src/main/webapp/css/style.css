@@ -253,6 +253,7 @@ a {
     margin-bottom: 24px;
     background: linear-gradient(135deg, var(--slate-900) 40%, var(--primary) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -360,6 +361,26 @@ a {
     top: 0;
     padding: 32px 16px;
     color: white;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-header {
@@ -576,6 +597,9 @@ a {
 .status-active, .badge-success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
 .status-pending, .badge-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
 .status-critical, .badge-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.status-requested { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+.status-rejected { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.status-inactive { background: var(--slate-100); color: var(--text-muted); }
 
 .PATIENT-badge { background: var(--primary-soft); color: var(--primary); }
 .DOCTOR-badge { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }

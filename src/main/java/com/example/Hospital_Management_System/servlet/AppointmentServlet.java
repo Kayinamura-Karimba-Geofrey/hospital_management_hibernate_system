@@ -92,6 +92,14 @@ public class AppointmentServlet extends HttpServlet {
                 LocalTime time = LocalTime.parse(timeStr);
                 Appointments appointment = new Appointments(date, time);
                 appointment.setPatient(patient);
+                
+                String doctorIdStr = request.getParameter("doctorId");
+                if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
+                    com.example.Hospital_Management_System.service.DoctorService ds = new com.example.Hospital_Management_System.service.DoctorService();
+                    com.example.Hospital_Management_System.entity.Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
+                    appointment.setDoctor(doctor);
+                }
+                
                 appointment.setStatus("REQUESTED");
                 appointmentService.saveAppointment(appointment);
                 AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Patient requested new appointment");

@@ -129,6 +129,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("myAppointments", appointmentService.getAppointmentsByPatientId(patient.getId()));
             request.setAttribute("myInvoices", financialService.getInvoicesByPatientId(patient.getId()));
             request.setAttribute("medicalRecord", clinicalService.getRecordByPatientId(patient.getId()));
+            request.setAttribute("allDoctors", doctorService.getAllDoctors());
         }
     }
 }

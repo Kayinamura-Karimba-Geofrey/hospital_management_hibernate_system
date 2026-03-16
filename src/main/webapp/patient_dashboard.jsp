@@ -39,6 +39,15 @@
                         <input type="text" value="${sessionScope.user.fullName}" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--slate-50); color: var(--slate-600);">
                     </div>
                     <div class="form-group" style="margin-top: 15px;">
+                        <label>Preferred Doctor</label>
+                        <select name="doctorId" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                            <option value="" disabled selected>Select a Doctor</option>
+                            <c:forEach var="doc" items="${allDoctors}">
+                                <option value="${doc.id}">Dr. ${doc.name} - ${doc.specialisation}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
                         <label>Preferred Date</label>
                         <input type="date" name="appointmentDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
                     </div>
@@ -108,12 +117,20 @@
                         <tbody>
                             <c:forEach var="app" items="${myAppointments}">
                                 <tr>
-                                    <td style="font-weight: 500;">Dr. ${app.doctor.name}</td>
+                                    <td style="font-weight: 500;">
+                                        <c:choose>
+                                            <c:when test="${not empty app.doctor}">
+                                                Dr. ${app.doctor.name}
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span style="color: var(--text-muted); font-style: italic;">Pending Assignment</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                     <td>${app.appointmentDate}</td>
                                     <td>${app.appointmentTime}</td>
                                     <td>
-                                        <span class="status-pill ${app.status == 'REQUESTED' ? 'status-pending' : (app.status == 'REJECTED' ? 'status-inactive' : 'status-active')}"
-                                              style="${app.status == 'REQUESTED' ? 'background: rgba(245, 158, 11, 0.1); color: var(--warning);' : (app.status == 'REJECTED' ? 'background: rgba(239, 68, 68, 0.1); color: var(--danger);' : '')}">
+                                        <span class="status-pill ${app.status == 'REQUESTED' ? 'status-requested' : (app.status == 'REJECTED' ? 'status-rejected' : 'status-active')}">
                                             ${app.status != null ? app.status : 'CONFIRMED'}
                                         </span>
                                         <c:if test="${app.status == 'REJECTED' && not empty app.rejectionReason}">
