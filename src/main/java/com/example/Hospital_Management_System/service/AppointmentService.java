@@ -58,4 +58,8 @@ public class AppointmentService {
     public List<Appointments> getAppointmentsByNurseId(int nurseId) {
         return appointmentDAO.getAppointmentsByNurseId(nurseId);
     }
+
+    public List<Appointments> getRequestedAppointments() {
+        return appointmentDAO.getRequestedAppointments();
+    }
 }

@@ -76,6 +76,58 @@
 
             <div class="card">
                 <div class="card-header">
+                    <h3>Appointment Requests</h3>
+                </div>
+                <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
+                    <c:forEach var="req" items="${requestedAppointments}">
+                        <div style="display: flex; gap: 16px; align-items: start; padding-bottom: 15px; border-bottom: 1px solid var(--slate-100);">
+                            <span style="font-size: 1.5rem;">📅</span>
+                            <div style="flex-grow: 1;">
+                                <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">${req.patient.name}</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Requested: ${req.appointmentDate} at ${req.appointmentTime}</p>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <form action="${pageContext.request.contextPath}/appointments" method="post" style="display: inline;">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                    <input type="hidden" name="action" value="approve">
+                                    <input type="hidden" name="id" value="${req.id}">
+                                    <button type="submit" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Approve</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('rejectModal_${req.id}').style.display='block'" style="padding: 4px 10px; font-size: 0.75rem; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">Decline</button>
+                                
+                                <!-- Reject Modal -->
+                                <div id="rejectModal_${req.id}" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                                    <div class="card" style="width: 100%; max-width: 400px; margin: 10vh auto; background: white;">
+                                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <h3>Decline Appointment</h3>
+                                            <button onclick="document.getElementById('rejectModal_${req.id}').style.display='none'" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
+                                        </div>
+                                        <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
+                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                            <input type="hidden" name="action" value="reject">
+                                            <input type="hidden" name="id" value="${req.id}">
+                                            <div class="form-group">
+                                                <label>Reason for Rejection</label>
+                                                <textarea name="rejectionReason" required rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 8px;" placeholder="Please explain why this appointment is being declined..."></textarea>
+                                            </div>
+                                            <div style="margin-top: 25px; display: flex; gap: 10px;">
+                                                <button type="submit" class="btn btn-primary" style="flex-grow: 1; background: var(--danger); border-color: var(--danger);">Confirm Decline</button>
+                                                <button type="button" onclick="document.getElementById('rejectModal_${req.id}').style.display='none'" class="btn btn-secondary">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                    <c:if test="${empty requestedAppointments}">
+                        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">No pending appointment requests.</p>
+                    </c:if>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
                     <h3>Recent Activity</h3>
                 </div>
                 <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
@@ -91,13 +143,6 @@
                         <div>
                             <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">ICU capacity reached 85%</p>
                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">1 hour ago</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 16px; align-items: start;">
-                        <span style="font-size: 1.5rem;">👨‍⚕️</span>
-                        <div>
-                            <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">Dr. Sarah assigned to Surgery</p>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">3 hours ago</p>
                         </div>
                     </div>
                 </div>

@@ -17,6 +17,11 @@ public class Appointments {
 
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
+    private String status = "CONFIRMED"; // CONFIRMED or REQUESTED
+    
+    @Column(length = 500)
+    private String rejectionReason;
+
 
 
     @ManyToOne
@@ -64,6 +69,12 @@ public class Appointments {
 
     public LocalTime getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(LocalTime appointmentTime) { this.appointmentTime = appointmentTime; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getRejectionReason() { return rejectionReason; }
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
 
     public Patients getPatient() { return patient; }
     public void setPatient(Patients patient) { this.patient = patient; }

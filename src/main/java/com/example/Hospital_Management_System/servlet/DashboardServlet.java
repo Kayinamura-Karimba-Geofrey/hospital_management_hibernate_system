@@ -97,6 +97,10 @@ public class DashboardServlet extends HttpServlet {
         stats.put("Nurses", nurseCount);
         stats.put("Appointments", appointmentCount);
         request.setAttribute("stats", stats);
+
+        // Fetch requested appointments
+        List<Appointments> requestedApps = appointmentService.getRequestedAppointments();
+        request.setAttribute("requestedAppointments", requestedApps);
     }
 
     private void fetchDoctorStats(HttpServletRequest request, String email) {

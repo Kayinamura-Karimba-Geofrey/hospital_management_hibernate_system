@@ -62,6 +62,55 @@ public class AppointmentServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("request".equals(action)) {
+            // Patient requesting an appointment
+            String dateStr = request.getParameter("appointmentDate");
+            String timeStr = request.getParameter("appointmentTime");
+            com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
+            
+            if (user != null) {
+                com.example.Hospital_Management_System.service.PatientService ps = new com.example.Hospital_Management_System.service.PatientService();
+                Patients patient = ps.getPatientByEmail(user.getEmail());
+                if (patient != null) {
+                    LocalDate date = LocalDate.parse(dateStr);
+                    LocalTime time = LocalTime.parse(timeStr);
+                    Appointments appointment = new Appointments(date, time);
+                    appointment.setPatient(patient);
+                    appointment.setStatus("REQUESTED");
+                    appointmentService.saveAppointment(appointment);
+                    AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Patient requested new appointment");
+                }
+            }
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
+            return;
+        } else if ("approve".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Appointments appointment = appointmentService.getAppointmentById(id);
+            if (appointment != null) {
+                appointment.setStatus("CONFIRMED");
+                appointmentService.updateAppointment(appointment);
+                AuditService.log(request.getSession(), "UPDATE", "Appointment", String.valueOf(id), "Approved appointment request");
+            }
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        } else if ("reject".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String rejectionReason = request.getParameter("rejectionReason");
+            Appointments appointment = appointmentService.getAppointmentById(id);
+            if (appointment != null) {
+                appointment.setStatus("REJECTED");
+                if (rejectionReason != null && !rejectionReason.trim().isEmpty()) {
+                    appointment.setRejectionReason(rejectionReason.trim());
+                }
+                appointmentService.updateAppointment(appointment);
+                AuditService.log(request.getSession(), "UPDATE", "Appointment", String.valueOf(id), "Rejected appointment request");
+            }
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        }
+
         String idStr = request.getParameter("id");
         int patientId = Integer.parseInt(request.getParameter("patientId"));
         String dateStr = request.getParameter("appointmentDate");
@@ -73,6 +122,7 @@ public class AppointmentServlet extends HttpServlet {
 
         Appointments appointment = new Appointments(date, time);
         appointment.setPatient(patient);
+        appointment.setStatus("CONFIRMED");
 
         if (idStr != null && !idStr.isEmpty()) {
             appointment.setId(Integer.parseInt(idStr));

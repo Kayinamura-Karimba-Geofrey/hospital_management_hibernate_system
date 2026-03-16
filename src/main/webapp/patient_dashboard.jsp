@@ -20,9 +20,34 @@
                 <p>Your health journey, managed with precision.</p>
             </div>
             <div style="display: flex; gap: 12px;">
-                <a href="${pageContext.request.contextPath}/patient-portal" class="btn btn-primary">Book New Appointment</a>
+                <button onclick="document.getElementById('requestModal').style.display='block'" class="btn btn-primary">Request Appointment</button>
             </div>
         </header>
+
+        <!-- Request Appointment Modal -->
+        <div id="requestModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+            <div class="card" style="width: 100%; max-width: 400px; margin: 10vh auto;">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Request Appointment</h3>
+                    <button onclick="document.getElementById('requestModal').style.display='none'" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
+                </div>
+                <form action="${pageContext.request.contextPath}/appointments?action=request" method="post" style="margin-top: 20px;">
+                    <input type="hidden" name="csrfToken" value="${csrfToken}">
+                    <div class="form-group">
+                        <label>Preferred Date</label>
+                        <input type="date" name="appointmentDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Preferred Time</label>
+                        <input type="time" name="appointmentTime" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                    </div>
+                    <div style="margin-top: 25px; display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Submit Request</button>
+                        <button type="button" onclick="document.getElementById('requestModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <section class="stats-grid">
             <div class="stat-card">
@@ -82,7 +107,15 @@
                                     <td>${app.appointmentDate}</td>
                                     <td>${app.appointmentTime}</td>
                                     <td>
-                                        <span class="status-pill status-active">Confirmed</span>
+                                        <span class="status-pill ${app.status == 'REQUESTED' ? 'status-pending' : (app.status == 'REJECTED' ? 'status-inactive' : 'status-active')}"
+                                              style="${app.status == 'REQUESTED' ? 'background: rgba(245, 158, 11, 0.1); color: var(--warning);' : (app.status == 'REJECTED' ? 'background: rgba(239, 68, 68, 0.1); color: var(--danger);' : '')}">
+                                            ${app.status != null ? app.status : 'CONFIRMED'}
+                                        </span>
+                                        <c:if test="${app.status == 'REJECTED' && not empty app.rejectionReason}">
+                                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; max-width: 250px;">
+                                                <strong style="color: var(--danger);">Reason:</strong> ${app.rejectionReason}
+                                            </div>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

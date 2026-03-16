@@ -146,4 +146,14 @@ public class AppointmentDAO {
                     .list();
         }
     }
+
+    /**
+     * Retrieves all requested appointments from the database.
+     * @return A list of all Appointments entities with status 'REQUESTED'.
+     */
+    public List<Appointments> getRequestedAppointments() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Appointments where status = 'REQUESTED'", Appointments.class).list();
+        }
+    }
 }
