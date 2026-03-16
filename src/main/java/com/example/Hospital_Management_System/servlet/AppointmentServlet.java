@@ -70,18 +70,33 @@ public class AppointmentServlet extends HttpServlet {
             String timeStr = request.getParameter("appointmentTime");
             com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
             
-            if (user != null) {
-                com.example.Hospital_Management_System.service.PatientService ps = new com.example.Hospital_Management_System.service.PatientService();
-                Patients patient = ps.getPatientByEmail(user.getEmail());
-                if (patient != null) {
-                    LocalDate date = LocalDate.parse(dateStr);
-                    LocalTime time = LocalTime.parse(timeStr);
-                    Appointments appointment = new Appointments(date, time);
-                    appointment.setPatient(patient);
-                    appointment.setStatus("REQUESTED");
-                    appointmentService.saveAppointment(appointment);
-                    AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Patient requested new appointment");
-                }
+            String patientIdStr = request.getParameter("patientId");
+            
+            Patients patient = null;
+            com.example.Hospital_Management_System.service.PatientService ps = new com.example.Hospital_Management_System.service.PatientService();
+            
+            if (patientIdStr != null && !patientIdStr.isEmpty()) {
+                patient = ps.getPatientById(Integer.parseInt(patientIdStr));
+                System.out.println("DEBUG: Patient retrieved via ID: " + (patient != null ? patient.getName() : "null"));
+            } else if (user != null) {
+                System.out.println("DEBUG: User found in session. Email: " + user.getEmail());
+                patient = ps.getPatientByEmail(user.getEmail());
+                System.out.println("DEBUG: Patient retrieved via Email: " + (patient != null ? patient.getName() : "null"));
+            } else {
+                System.out.println("DEBUG: User NOT found in session and no patientId provided!");
+            }
+
+            if (patient != null) {
+                System.out.println("DEBUG: Patient found. Saving requested appointment...");
+                LocalDate date = LocalDate.parse(dateStr);
+                LocalTime time = LocalTime.parse(timeStr);
+                Appointments appointment = new Appointments(date, time);
+                appointment.setPatient(patient);
+                appointment.setStatus("REQUESTED");
+                appointmentService.saveAppointment(appointment);
+                AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Patient requested new appointment");
+            } else {
+                System.out.println("DEBUG: Patient NOT FOUND for request processing.");
             }
             response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
             return;

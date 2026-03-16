@@ -15,8 +15,6 @@
         </div>
         <div class="nav-links">
             <a href="#features">Features</a>
-            <a href="#solutions">Solutions</a>
-            <a href="#contact">Contact</a>
             <c:choose>
                 <c:when test="${not empty sessionScope.user}">
                     <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary">Go to Dashboard</a>

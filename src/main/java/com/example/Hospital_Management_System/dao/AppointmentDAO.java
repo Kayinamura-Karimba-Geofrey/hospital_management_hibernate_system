@@ -28,7 +28,7 @@ public class AppointmentDAO {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            throw new RuntimeException("Failed to save appointment: " + e.getMessage(), e);
         } finally {
             if (session != null) {
                 session.close();

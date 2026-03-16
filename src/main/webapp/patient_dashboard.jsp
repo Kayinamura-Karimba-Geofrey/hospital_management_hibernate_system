@@ -33,7 +33,12 @@
                 </div>
                 <form action="${pageContext.request.contextPath}/appointments?action=request" method="post" style="margin-top: 20px;">
                     <input type="hidden" name="csrfToken" value="${csrfToken}">
+                    <input type="hidden" name="patientId" value="${patient.id}">
                     <div class="form-group">
+                        <label>Patient Name</label>
+                        <input type="text" value="${sessionScope.user.fullName}" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--slate-50); color: var(--slate-600);">
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
                         <label>Preferred Date</label>
                         <input type="date" name="appointmentDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
                     </div>
