@@ -19,9 +19,12 @@ public class AppointmentDAO {
             transaction = session.beginTransaction();
             session.persist(appointment);
             transaction.commit();
+            System.out.println("DEBUG: [AppointmentDAO] Successfully persisted appointment. ID: " + appointment.getId());
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) transaction.rollback();
+            System.err.println("DEBUG: [AppointmentDAO] CRITICAL: Failed to save appointment: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("Database error: Failed to save appointment", e);
         }
     }
 
@@ -31,9 +34,12 @@ public class AppointmentDAO {
             transaction = session.beginTransaction();
             session.merge(appointment);
             transaction.commit();
+            System.out.println("DEBUG: [AppointmentDAO] Successfully updated appointment. ID: " + appointment.getId());
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) transaction.rollback();
+            System.err.println("DEBUG: [AppointmentDAO] CRITICAL: Failed to update appointment: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException("Database error: Failed to update appointment", e);
         }
     }
 
@@ -104,12 +110,14 @@ public class AppointmentDAO {
     public List<Appointments> getRequestedAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Appointments> query = session.createQuery(
-                "from Appointments a left join fetch a.patient " +
-                "where (upper(a.status) like :status or a.status is null or trim(a.status) = '') " +
+                "from Appointments a " +
+                "left join fetch a.patient " +
+                "left join fetch a.doctor " +
+                "where upper(a.status) = :status " +
                 "order by a.appointmentDate desc", Appointments.class);
-            query.setParameter("status", "%REQUESTED%");
+            query.setParameter("status", "REQUESTED");
             List<Appointments> results = query.list();
-            System.out.println("DEBUG: [AppointmentDAO] Found " + (results != null ? results.size() : 0) + " matches for %REQUESTED%");
+            System.out.println("DEBUG: [AppointmentDAO] Found " + (results != null ? results.size() : 0) + " matches for REQUESTED");
             return results != null ? results : new ArrayList<>();
         } catch (Exception e) {
             System.err.println("DEBUG: [AppointmentDAO] Error: " + e.getMessage());

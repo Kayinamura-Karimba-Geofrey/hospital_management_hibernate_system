@@ -97,7 +97,7 @@ public class AppointmentServlet extends HttpServlet {
         String patientIdStr = request.getParameter("patientId");
         String doctorIdStr = request.getParameter("doctorId");
         
-        System.out.println("DEBUG: [AppointmentServlet] Request Details - Date: " + dateStr + ", Time: " + timeStr + ", PatientID: " + patientIdStr + ", DoctorID: " + doctorIdStr);
+        System.out.println("DEBUG: [AppointmentServlet] handleRequest - Incoming params: Date=" + dateStr + ", Time=" + timeStr + ", PatientID=" + patientIdStr + ", DoctorID=" + doctorIdStr);
 
         User user = (User) request.getSession().getAttribute("user");
         Patients patient = null;
@@ -105,36 +105,51 @@ public class AppointmentServlet extends HttpServlet {
         try {
             if (patientIdStr != null && !patientIdStr.isEmpty()) {
                 patient = patientService.getPatientById(Integer.parseInt(patientIdStr));
+                System.out.println("DEBUG: [AppointmentServlet] Fetched patient by ID: " + (patient != null ? patient.getName() : "NULL"));
             } else if (user != null) {
                 patient = patientService.getPatientByEmail(user.getEmail());
+                System.out.println("DEBUG: [AppointmentServlet] Fetched patient by session email: " + (patient != null ? patient.getName() : "NULL"));
             }
 
-            if (patient != null && dateStr != null && timeStr != null) {
-                LocalDate date = LocalDate.parse(dateStr);
-                LocalTime time = LocalTime.parse(timeStr);
-                
-                Appointments appointment = new Appointments(date, time);
-                appointment.setPatient(patient);
-                appointment.setStatus("REQUESTED");
-                
-                if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
-                    Doctors doctor = doctorService.getDoctorById(Integer.parseInt(doctorIdStr));
-                    if (doctor != null) {
-                        appointment.setDoctor(doctor);
-                    }
-                }
-                
-                appointmentService.saveAppointment(appointment);
-                System.out.println("DEBUG: [AppointmentServlet] Saved request. ID: " + appointment.getId() + " for Patient: " + patient.getName());
-                response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
-            } else {
-                String error = (patient == null) ? "patient_not_found" : "missing_data";
-                System.err.println("DEBUG: [AppointmentServlet] Request failed: " + error);
-                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_" + error);
+            if (patient == null) {
+                System.err.println("DEBUG: [AppointmentServlet] Request failed: Patient not found for ID=" + patientIdStr + " or User=" + (user != null ? user.getEmail() : "ANONYMOUS"));
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_patient_not_found");
+                return;
             }
+
+            if (dateStr == null || timeStr == null || dateStr.isEmpty() || timeStr.isEmpty()) {
+                System.err.println("DEBUG: [AppointmentServlet] Request failed: Missing date/time");
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_missing_data");
+                return;
+            }
+
+            LocalDate date = LocalDate.parse(dateStr);
+            LocalTime time = LocalTime.parse(timeStr);
+            
+            Appointments appointment = new Appointments(date, time);
+            appointment.setPatient(patient);
+            appointment.setStatus("REQUESTED");
+            
+            if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
+                Doctors doctor = doctorService.getDoctorById(Integer.parseInt(doctorIdStr));
+                if (doctor != null) {
+                    appointment.setDoctor(doctor);
+                    System.out.println("DEBUG: [AppointmentServlet] Assigned doctor: " + doctor.getName());
+                } else {
+                    System.err.println("DEBUG: [AppointmentServlet] WARNING: Requested doctor ID " + doctorIdStr + " not found.");
+                }
+            }
+            
+            appointmentService.saveAppointment(appointment);
+            System.out.println("DEBUG: [AppointmentServlet] Successfully saved REQUESTED appointment. ID: " + appointment.getId());
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
+
         } catch (DateTimeParseException | NumberFormatException e) {
-            System.err.println("DEBUG: [AppointmentServlet] Parsing error: " + e.getMessage());
+            System.err.println("DEBUG: [AppointmentServlet] Parsing error during request: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_invalid_input");
+        } catch (RuntimeException e) {
+            System.err.println("DEBUG: [AppointmentServlet] Persistence error during request: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_db_failure");
         }
     }
 

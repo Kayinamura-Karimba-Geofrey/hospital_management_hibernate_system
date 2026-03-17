@@ -34,6 +34,11 @@
                 Error: Missing required information for the appointment request.
             </div>
         </c:if>
+        <c:if test="${param.msg == 'error_patient_not_found'}">
+            <div style="background: var(--primary-soft); color: var(--danger); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 500;">
+                Error: Your patient profile is not yet linked. Please contact administration.
+            </div>
+        </c:if>
 
         <!-- Request Appointment Modal -->
         <div id="requestModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
@@ -42,36 +47,50 @@
                     <h3>Request Appointment</h3>
                     <button onclick="document.getElementById('requestModal').style.display='none'" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
                 </div>
-                <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
-                    <input type="hidden" name="action" value="request">
-                    <input type="hidden" name="csrfToken" value="${csrfToken}">
-                    <input type="hidden" name="patientId" value="${patient.id}">
-                    <div class="form-group">
-                        <label>Patient Name</label>
-                        <input type="text" value="${sessionScope.user.fullName}" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--slate-50); color: var(--slate-600);">
-                    </div>
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label>Preferred Doctor</label>
-                        <select name="doctorId" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
-                            <option value="" disabled selected>Select a Doctor</option>
-                            <c:forEach var="doc" items="${allDoctors}">
-                                <option value="${doc.id}">Dr. ${doc.name} - ${doc.specialisation}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label>Preferred Date</label>
-                        <input type="date" name="appointmentDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
-                    </div>
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label>Preferred Time</label>
-                        <input type="time" name="appointmentTime" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
-                    </div>
-                    <div style="margin-top: 25px; display: flex; gap: 10px;">
-                        <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Submit Request</button>
-                        <button type="button" onclick="document.getElementById('requestModal').style.display='none'" class="btn btn-secondary">Cancel</button>
-                    </div>
-                </form>
+                <c:choose>
+                    <c:when test="${not empty patient}">
+                        <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
+                            <input type="hidden" name="action" value="request">
+                            <input type="hidden" name="csrfToken" value="${csrfToken}">
+                            <input type="hidden" name="patientId" value="${patient.id}">
+                            <div class="form-group">
+                                <label>Patient Name</label>
+                                <input type="text" value="${sessionScope.user.fullName}" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--slate-50); color: var(--slate-600);">
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label>Preferred Doctor</label>
+                                <select name="doctorId" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                                    <option value="" disabled selected>Select a Doctor</option>
+                                    <c:forEach var="doc" items="${allDoctors}">
+                                        <option value="${doc.id}">Dr. ${doc.name} - ${doc.specialisation}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label>Preferred Date</label>
+                                <input type="date" name="appointmentDate" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label>Preferred Time</label>
+                                <input type="time" name="appointmentTime" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                            </div>
+                            <div style="margin-top: 25px; display: flex; gap: 10px;">
+                                <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Submit Request</button>
+                                <button type="button" onclick="document.getElementById('requestModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="padding: 30px 20px; text-align: center;">
+                            <div style="background: var(--primary-soft); color: var(--primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                                <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            </div>
+                            <h4 style="margin-bottom: 8px;">Profile Not Linked</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">Your digital account is not yet linked to your clinical records. Please visit the administration desk to complete your registration.</p>
+                            <button type="button" onclick="document.getElementById('requestModal').style.display='none'" class="btn btn-secondary" style="width: 100%;">Close</button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
 

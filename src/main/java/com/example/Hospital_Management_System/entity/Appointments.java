@@ -15,11 +15,16 @@ public class Appointments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "appointmentdate")
     private LocalDate appointmentDate;
+
+    @Column(name = "appointmenttime")
     private LocalTime appointmentTime;
-    private String status = "CONFIRMED"; // CONFIRMED or REQUESTED
+
+    @Column(name = "status", length = 50)
+    private String status = "REQUESTED"; // Default to REQUESTED for new requests
     
-    @Column(length = 500)
+    @Column(name = "rejection_reason", length = 500)
     private String rejectionReason;
 
 
