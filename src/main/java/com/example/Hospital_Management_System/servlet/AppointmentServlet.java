@@ -1,6 +1,5 @@
 package com.example.Hospital_Management_System.servlet;
 
-import com.example.Hospital_Management_System.dao.PatientsDAO;
 import com.example.Hospital_Management_System.entity.Appointments;
 import com.example.Hospital_Management_System.entity.Patients;
 import com.example.Hospital_Management_System.entity.User;
@@ -17,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 /**
@@ -26,12 +26,14 @@ import java.util.List;
 @WebServlet("/appointments")
 public class AppointmentServlet extends HttpServlet {
     private AppointmentService appointmentService;
-    private PatientsDAO patientsDAO;
+    private PatientService patientService;
+    private DoctorService doctorService;
 
     @Override
     public void init() {
         appointmentService = new AppointmentService();
-        patientsDAO = new PatientsDAO();
+        patientService = new PatientService();
+        doctorService = new DoctorService();
     }
 
     @Override
@@ -42,23 +44,31 @@ public class AppointmentServlet extends HttpServlet {
         if ("delete".equals(action)) {
             String idStr = request.getParameter("id");
             if (idStr != null && !idStr.isEmpty()) {
-                int id = Integer.parseInt(idStr);
-                appointmentService.deleteAppointment(id);
-                AuditService.log(request.getSession(), "DELETE", "Appointment", idStr, "Deleted appointment record");
+                try {
+                    int id = Integer.parseInt(idStr);
+                    appointmentService.deleteAppointment(id);
+                    AuditService.log(request.getSession(), "DELETE", "Appointment", idStr, "Deleted appointment record");
+                } catch (NumberFormatException e) {
+                    System.err.println("ERROR: Invalid ID for deletion: " + idStr);
+                }
             }
             response.sendRedirect(request.getContextPath() + "/appointments");
             return;
         } else if ("edit".equals(action)) {
             String idStr = request.getParameter("id");
             if (idStr != null && !idStr.isEmpty()) {
-                int id = Integer.parseInt(idStr);
-                Appointments appointment = appointmentService.getAppointmentById(id);
-                request.setAttribute("editableApp", appointment);
+                try {
+                    int id = Integer.parseInt(idStr);
+                    Appointments appointment = appointmentService.getAppointmentById(id);
+                    request.setAttribute("editableApp", appointment);
+                } catch (NumberFormatException e) {
+                    System.err.println("ERROR: Invalid ID for edit: " + idStr);
+                }
             }
         }
 
         List<Appointments> appointments = appointmentService.getAllAppointments();
-        List<Patients> patients = patientsDAO.getAllPatients();
+        List<Patients> patients = patientService.getAllPatients();
         request.setAttribute("appointments", appointments);
         request.setAttribute("patients", patients);
         request.getRequestDispatcher("appointments.jsp").forward(request, response);
@@ -68,7 +78,7 @@ public class AppointmentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        System.out.println("DEBUG: AppointmentServlet POST action: " + action);
+        System.out.println("DEBUG: [AppointmentServlet] POST action: " + action);
 
         if ("request".equals(action)) {
             handleRequest(request, response);
@@ -87,49 +97,60 @@ public class AppointmentServlet extends HttpServlet {
         String patientIdStr = request.getParameter("patientId");
         String doctorIdStr = request.getParameter("doctorId");
         
+        System.out.println("DEBUG: [AppointmentServlet] Request Details - Date: " + dateStr + ", Time: " + timeStr + ", PatientID: " + patientIdStr + ", DoctorID: " + doctorIdStr);
+
         User user = (User) request.getSession().getAttribute("user");
-        PatientService ps = new PatientService();
         Patients patient = null;
 
-        if (patientIdStr != null && !patientIdStr.isEmpty()) {
-            patient = ps.getPatientById(Integer.parseInt(patientIdStr));
-        } else if (user != null) {
-            patient = ps.getPatientByEmail(user.getEmail());
-        }
-
-        if (patient != null) {
-            LocalDate date = LocalDate.parse(dateStr);
-            LocalTime time = LocalTime.parse(timeStr);
-            Appointments appointment = new Appointments(date, time);
-            appointment.setPatient(patient);
-            
-            if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
-                DoctorService ds = new DoctorService();
-                Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
-                if (doctor != null) {
-                    appointment.setDoctor(doctor);
-                }
+        try {
+            if (patientIdStr != null && !patientIdStr.isEmpty()) {
+                patient = patientService.getPatientById(Integer.parseInt(patientIdStr));
+            } else if (user != null) {
+                patient = patientService.getPatientByEmail(user.getEmail());
             }
-            
-            appointment.setStatus("REQUESTED");
-            appointmentService.saveAppointment(appointment);
-            System.out.println("DEBUG: Patient request saved. ID: " + appointment.getId() + " for Patient: " + patient.getName());
-            response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
-        } else {
-            System.err.println("DEBUG: Patient lookup failed for request.");
-            response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_patient_not_found");
+
+            if (patient != null && dateStr != null && timeStr != null) {
+                LocalDate date = LocalDate.parse(dateStr);
+                LocalTime time = LocalTime.parse(timeStr);
+                
+                Appointments appointment = new Appointments(date, time);
+                appointment.setPatient(patient);
+                appointment.setStatus("REQUESTED");
+                
+                if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
+                    Doctors doctor = doctorService.getDoctorById(Integer.parseInt(doctorIdStr));
+                    if (doctor != null) {
+                        appointment.setDoctor(doctor);
+                    }
+                }
+                
+                appointmentService.saveAppointment(appointment);
+                System.out.println("DEBUG: [AppointmentServlet] Saved request. ID: " + appointment.getId() + " for Patient: " + patient.getName());
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
+            } else {
+                String error = (patient == null) ? "patient_not_found" : "missing_data";
+                System.err.println("DEBUG: [AppointmentServlet] Request failed: " + error);
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_" + error);
+            }
+        } catch (DateTimeParseException | NumberFormatException e) {
+            System.err.println("DEBUG: [AppointmentServlet] Parsing error: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_invalid_input");
         }
     }
 
     private void handleApprove(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String idStr = request.getParameter("id");
         if (idStr != null && !idStr.isEmpty()) {
-            int id = Integer.parseInt(idStr);
-            Appointments appointment = appointmentService.getAppointmentById(id);
-            if (appointment != null) {
-                appointment.setStatus("CONFIRMED");
-                appointmentService.updateAppointment(appointment);
-                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Approved appointment request");
+            try {
+                int id = Integer.parseInt(idStr);
+                Appointments appointment = appointmentService.getAppointmentById(id);
+                if (appointment != null) {
+                    appointment.setStatus("CONFIRMED");
+                    appointmentService.updateAppointment(appointment);
+                    AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Approved appointment request");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("ERROR: Invalid ID for approval: " + idStr);
             }
         }
         response.sendRedirect(request.getContextPath() + "/dashboard");
@@ -139,13 +160,17 @@ public class AppointmentServlet extends HttpServlet {
         String idStr = request.getParameter("id");
         String reason = request.getParameter("rejectionReason");
         if (idStr != null && !idStr.isEmpty()) {
-            int id = Integer.parseInt(idStr);
-            Appointments appointment = appointmentService.getAppointmentById(id);
-            if (appointment != null) {
-                appointment.setStatus("REJECTED");
-                if (reason != null) appointment.setRejectionReason(reason.trim());
-                appointmentService.updateAppointment(appointment);
-                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Rejected appointment request");
+            try {
+                int id = Integer.parseInt(idStr);
+                Appointments appointment = appointmentService.getAppointmentById(id);
+                if (appointment != null) {
+                    appointment.setStatus("REJECTED");
+                    if (reason != null) appointment.setRejectionReason(reason.trim());
+                    appointmentService.updateAppointment(appointment);
+                    AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Rejected appointment request");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("ERROR: Invalid ID for rejection: " + idStr);
             }
         }
         response.sendRedirect(request.getContextPath() + "/dashboard");
@@ -162,26 +187,32 @@ public class AppointmentServlet extends HttpServlet {
             return;
         }
 
-        Patients patient = patientsDAO.getPatientById(Integer.parseInt(patientIdStr));
-        LocalDate date = LocalDate.parse(dateStr);
-        LocalTime time = LocalTime.parse(timeStr);
+        try {
+            int patientId = Integer.parseInt(patientIdStr);
+            Patients patient = patientService.getPatientById(patientId);
+            LocalDate date = LocalDate.parse(dateStr);
+            LocalTime time = LocalTime.parse(timeStr);
 
-        if (idStr != null && !idStr.isEmpty()) {
-            Appointments appointment = appointmentService.getAppointmentById(Integer.parseInt(idStr));
-            if (appointment != null) {
+            if (idStr != null && !idStr.isEmpty()) {
+                int id = Integer.parseInt(idStr);
+                Appointments appointment = appointmentService.getAppointmentById(id);
+                if (appointment != null && patient != null) {
+                    appointment.setPatient(patient);
+                    appointment.setAppointmentDate(date);
+                    appointment.setAppointmentTime(time);
+                    appointmentService.updateAppointment(appointment);
+                    AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated existing appointment");
+                }
+            } else if (patient != null) {
+                Appointments appointment = new Appointments(date, time);
                 appointment.setPatient(patient);
-                appointment.setAppointmentDate(date);
-                appointment.setAppointmentTime(time);
-                appointmentService.updateAppointment(appointment);
-                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated existing appointment");
+                appointment.setStatus("CONFIRMED");
+                appointmentService.saveAppointment(appointment);
+                AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created new appointment");
             }
-        } else {
-            Appointments appointment = new Appointments(date, time);
-            appointment.setPatient(patient);
-            appointment.setStatus("CONFIRMED");
-            appointmentService.saveAppointment(appointment);
-            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created new appointment");
+            response.sendRedirect(request.getContextPath() + "/appointments");
+        } catch (DateTimeParseException | NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/appointments?error=invalid_input");
         }
-        response.sendRedirect(request.getContextPath() + "/appointments");
     }
 }

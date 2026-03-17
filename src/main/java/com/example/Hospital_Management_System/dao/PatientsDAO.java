@@ -114,8 +114,9 @@ public class PatientsDAO {
      * @return The Patients entity, or null if not found.
      */
     public Patients getPatientByEmail(String email) {
+        if (email == null) return null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Patients where email = :email", Patients.class)
+            return session.createQuery("from Patients where lower(trim(email)) = lower(trim(:email))", Patients.class)
                     .setParameter("email", email)
                     .uniqueResult();
         }

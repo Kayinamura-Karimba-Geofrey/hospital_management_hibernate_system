@@ -28,32 +28,33 @@ public class DashboardServlet extends HttpServlet {
     private AppointmentService appointmentService;
     private FinancialService financialService;
     private ClinicalService clinicalService;
+    private UserService userService;
 
-    @Override
-    public void init() {
-        patientService = new PatientService();
-        doctorService = new DoctorService();
-        nurseService = new NurseService();
-        appointmentService = new AppointmentService();
-        financialService = new FinancialService();
-        clinicalService = new ClinicalService();
+    public DashboardServlet() {
+        this.patientService = new PatientService();
+        this.doctorService = new DoctorService();
+        this.nurseService = new NurseService();
+        this.appointmentService = new AppointmentService();
+        this.financialService = new FinancialService();
+        this.clinicalService = new ClinicalService();
+        this.userService = new UserService();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        String role = (String) session.getAttribute("role");
-
-        if (user == null || role == null) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
+        String role = (String) session.getAttribute("role");
+        User user = (User) session.getAttribute("user");
         String email = user.getEmail();
-        String jspPage = null;
+
+        String jspPage = "index.jsp";
+        String action = request.getParameter("action");
 
         if ("ADMIN".equalsIgnoreCase(role)) {
             fetchAdminStats(request);
@@ -67,13 +68,18 @@ public class DashboardServlet extends HttpServlet {
         } else if ("PATIENT".equalsIgnoreCase(role)) {
             fetchPatientStats(request, email);
             jspPage = "patient_dashboard.jsp";
-        }
-
-        if (jspPage != null) {
-            request.getRequestDispatcher(jspPage).forward(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
+
+        request.getRequestDispatcher(jspPage).forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
     private void fetchAdminStats(HttpServletRequest request) {
@@ -95,19 +101,22 @@ public class DashboardServlet extends HttpServlet {
         stats.put("Appointments", (long)appointments.size());
         request.setAttribute("stats", stats);
 
+        System.out.println("DEBUG: [DashboardServlet] Admin - TOTAL Appointments in DB: " + appointments.size());
+        
         List<Appointments> requestedApps = appointmentService.getRequestedAppointments();
         if (requestedApps == null) requestedApps = new ArrayList<>();
         System.out.println("DEBUG: [DashboardServlet] Admin - Requested App Count: " + requestedApps.size());
+        
         request.setAttribute("requestedAppointments", requestedApps);
+        // Expose appointment service for JSP debug loop if needed
+        request.setAttribute("appointmentService", appointmentService);
     }
 
     private void fetchDoctorStats(HttpServletRequest request, String email) {
         Doctors doctor = doctorService.getDoctorByEmail(email);
         if (doctor != null) {
             request.setAttribute("doctor", doctor);
-            request.setAttribute("myPatientsCount", doctorService.getPatientsCount(doctor.getId()));
-            List<Appointments> myApps = appointmentService.getAppointmentsByDoctorId(doctor.getId());
-            request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
+            request.setAttribute("appointments", appointmentService.getAppointmentsByDoctorId(doctor.getId()));
         }
     }
 
@@ -115,10 +124,7 @@ public class DashboardServlet extends HttpServlet {
         Nurses nurse = nurseService.getNurseByEmail(email);
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
-            request.setAttribute("myPatientsCount", nurseService.getPatientsCount(nurse.getId()));
-            request.setAttribute("wardPatients", nurse.getPatients() != null ? nurse.getPatients() : new ArrayList<>());
-            List<Appointments> deptApps = appointmentService.getAppointmentsByNurseId(nurse.getId());
-            request.setAttribute("deptAppointments", deptApps != null ? deptApps : new ArrayList<>());
+            request.setAttribute("patients", nurse.getPatients());
         }
     }
 
@@ -128,11 +134,6 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("patient", patient);
             List<Appointments> myApps = appointmentService.getAppointmentsByPatientId(patient.getId());
             request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
-            request.setAttribute("myInvoices", financialService.getInvoicesByPatientId(patient.getId()));
-            request.setAttribute("medicalRecord", clinicalService.getRecordByPatientId(patient.getId()));
-            request.setAttribute("allDoctors", doctorService.getAllDoctors());
-        } else {
-            System.err.println("DEBUG: [DashboardServlet] Patient account not linked for email: " + email);
         }
     }
 }

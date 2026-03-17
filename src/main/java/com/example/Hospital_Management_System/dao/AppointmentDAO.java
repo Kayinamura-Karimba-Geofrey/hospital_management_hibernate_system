@@ -4,6 +4,7 @@ import com.example.Hospital_Management_System.entity.Appointments;
 import com.example.Hospital_Management_System.entity.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class AppointmentDAO {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) transaction.rollback();
-            throw new RuntimeException("Failed to save appointment", e);
+            e.printStackTrace();
         }
     }
 
@@ -51,7 +52,7 @@ public class AppointmentDAO {
 
     public List<Appointments> getAllAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments a left join fetch a.patient left join fetch a.doctor", Appointments.class).list();
+            return session.createQuery("from Appointments", Appointments.class).list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -60,16 +61,17 @@ public class AppointmentDAO {
 
     public Appointments getAppointmentById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments a left join fetch a.patient left join fetch a.doctor where a.id = :id", Appointments.class)
-                    .setParameter("id", id)
-                    .uniqueResult();
+            return session.get(Appointments.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    public List<Appointments> getAppointmentsByPatientId(int patientId) {
+    public List<Appointments> getAppointmentsByDoctorId(int doctorId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments a left join fetch a.doctor left join fetch a.patient where a.patient.id = :patientId", Appointments.class)
-                    .setParameter("patientId", patientId)
+            return session.createQuery("from Appointments a where a.doctor.id = :doctorId", Appointments.class)
+                    .setParameter("doctorId", doctorId)
                     .list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,10 +79,10 @@ public class AppointmentDAO {
         }
     }
 
-    public List<Appointments> getAppointmentsByDoctorId(int doctorId) {
+    public List<Appointments> getAppointmentsByPatientId(int patientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments a left join fetch a.patient where a.doctor.id = :doctorId", Appointments.class)
-                    .setParameter("doctorId", doctorId)
+            return session.createQuery("from Appointments a left join fetch a.doctor where a.patient.id = :patientId", Appointments.class)
+                    .setParameter("patientId", patientId)
                     .list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,15 +103,16 @@ public class AppointmentDAO {
 
     public List<Appointments> getRequestedAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Appointments> results = session.createQuery(
+            Query<Appointments> query = session.createQuery(
                 "from Appointments a left join fetch a.patient " +
-                "where upper(trim(a.status)) = 'REQUESTED' " +
-                "order by a.appointmentDate desc", Appointments.class).list();
-            
-            System.out.println("DEBUG: [AppointmentDAO] Found " + (results != null ? results.size() : 0) + " pending requests.");
+                "where upper(a.status) like :status " +
+                "order by a.appointmentDate desc", Appointments.class);
+            query.setParameter("status", "%REQUESTED%");
+            List<Appointments> results = query.list();
+            System.out.println("DEBUG: [AppointmentDAO] Found " + (results != null ? results.size() : 0) + " matches for %REQUESTED%");
             return results != null ? results : new ArrayList<>();
         } catch (Exception e) {
-            System.err.println("DEBUG: [AppointmentDAO] Error fetching requested appointments: " + e.getMessage());
+            System.err.println("DEBUG: [AppointmentDAO] Error: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<>();
         }

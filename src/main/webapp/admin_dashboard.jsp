@@ -77,6 +77,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Appointment Requests (${fn:length(requestedAppointments)})</h3>
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">Internal Debug: Total Appointments in DB: ${fn:length(stats['Appointments'])} (or ${totalAppointments})</p>
                 </div>
                 <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
                     <c:forEach var="req" items="${requestedAppointments}">
@@ -89,6 +90,7 @@
                             <div style="display: flex; gap: 8px;">
                                 <form action="${pageContext.request.contextPath}/appointments" method="post" style="display: inline;">
                                     <input type="hidden" name="action" value="approve">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="id" value="${req.id}">
                                     <button type="submit" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Approve</button>
                                 </form>
@@ -103,6 +105,7 @@
                                         </div>
                                         <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
                                             <input type="hidden" name="action" value="reject">
+                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                             <input type="hidden" name="id" value="${req.id}">
                                             <div class="form-group">
                                                 <label>Reason for Rejection</label>
@@ -119,7 +122,25 @@
                         </div>
                     </c:forEach>
                     <c:if test="${empty requestedAppointments}">
-                        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">No pending appointment requests.</p>
+                        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 40px; background: var(--slate-50); border-radius: var(--radius-md);">No pending appointment requests found.</p>
+                        
+                        <!-- System Integrity Check -->
+                        <div style="margin-top: 32px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-md); padding: 20px;">
+                            <h4 style="color: #92400e; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1rem;">🔍</span> Database Integrity Monitor
+                            </h4>
+                            <div style="font-family: monospace; font-size: 0.7rem; color: #b45309; line-height: 1.8;">
+                                <c:forEach var="app" items="${appointmentService.getAllAppointments()}">
+                                    <div style="padding: 4px 8px; border-bottom: 1px solid rgba(180, 83, 9, 0.1);">
+                                        <strong>[ID: ${app.id}]</strong> Status: <span style="background: rgba(180, 83, 9, 0.1); padding: 1px 4px; border-radius: 4px;">${app.status}</span> 
+                                        ➔ Patient: <span style="color: var(--text-heading);">${not empty app.patient ? app.patient.name : '<em>DISCONNECTED</em>'}</span>
+                                    </div>
+                                </c:forEach>
+                                <c:if test="${empty appointmentService.getAllAppointments()}">
+                                    <div style="padding: 10px; text-align: center; font-style: italic;">Appointments table is currently empty.</div>
+                                </c:if>
+                            </div>
+                        </div>
                     </c:if>
                 </div>
             </div>
