@@ -33,7 +33,6 @@
                 </div>
                 <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
                     <input type="hidden" name="action" value="request">
-                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                     <input type="hidden" name="patientId" value="${patient.id}">
                     <div class="form-group">
                         <label>Patient Name</label>

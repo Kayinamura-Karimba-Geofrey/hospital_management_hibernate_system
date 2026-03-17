@@ -89,7 +89,6 @@
                             <div style="display: flex; gap: 8px;">
                                 <form action="${pageContext.request.contextPath}/appointments" method="post" style="display: inline;">
                                     <input type="hidden" name="action" value="approve">
-                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="id" value="${req.id}">
                                     <button type="submit" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Approve</button>
                                 </form>
@@ -104,7 +103,6 @@
                                         </div>
                                         <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
                                             <input type="hidden" name="action" value="reject">
-                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                             <input type="hidden" name="id" value="${req.id}">
                                             <div class="form-group">
                                                 <label>Reason for Rejection</label>

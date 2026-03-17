@@ -28,25 +28,33 @@ public class AppointmentServlet extends HttpServlet {
     private AppointmentService appointmentService;
     private PatientsDAO patientsDAO;
 
+    @Override
     public void init() {
         appointmentService = new AppointmentService();
         patientsDAO = new PatientsDAO();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if ("delete".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            appointmentService.deleteAppointment(id);
-            AuditService.log(request.getSession(), "DELETE", "Appointment", String.valueOf(id), "Deleted appointment record");
+            String idStr = request.getParameter("id");
+            if (idStr != null && !idStr.isEmpty()) {
+                int id = Integer.parseInt(idStr);
+                appointmentService.deleteAppointment(id);
+                AuditService.log(request.getSession(), "DELETE", "Appointment", idStr, "Deleted appointment record");
+            }
             response.sendRedirect(request.getContextPath() + "/appointments");
             return;
         } else if ("edit".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Appointments appointment = appointmentService.getAppointmentById(id);
-            request.setAttribute("editableApp", appointment);
+            String idStr = request.getParameter("id");
+            if (idStr != null && !idStr.isEmpty()) {
+                int id = Integer.parseInt(idStr);
+                Appointments appointment = appointmentService.getAppointmentById(id);
+                request.setAttribute("editableApp", appointment);
+            }
         }
 
         List<Appointments> appointments = appointmentService.getAllAppointments();
@@ -56,100 +64,124 @@ public class AppointmentServlet extends HttpServlet {
         request.getRequestDispatcher("appointments.jsp").forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        System.out.println("DEBUG: AppointmentServlet POST action: " + action);
 
         if ("request".equals(action)) {
-            String dateStr = request.getParameter("appointmentDate");
-            String timeStr = request.getParameter("appointmentTime");
-            String patientIdStr = request.getParameter("patientId");
-            User user = (User) request.getSession().getAttribute("user");
-            
-            PatientService ps = new PatientService();
-            Patients patient = null;
-
-            if (patientIdStr != null && !patientIdStr.isEmpty()) {
-                patient = ps.getPatientById(Integer.parseInt(patientIdStr));
-            } else if (user != null) {
-                patient = ps.getPatientByEmail(user.getEmail());
-            }
-
-            if (patient != null) {
-                System.out.println("DEBUG: Saving appointment for patient: " + patient.getName());
-                LocalDate date = LocalDate.parse(dateStr);
-                LocalTime time = LocalTime.parse(timeStr);
-                Appointments appointment = new Appointments(date, time);
-                appointment.setPatient(patient);
-                
-                String doctorIdStr = request.getParameter("doctorId");
-                if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
-                    DoctorService ds = new DoctorService();
-                    Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
-                    if (doctor != null) {
-                        appointment.setDoctor(doctor);
-                    }
-                }
-                
-                appointment.setStatus("REQUESTED");
-                System.out.println("DEBUG: Saving appointment - Status: " + appointment.getStatus() + ", Patient: " + (appointment.getPatient() != null ? appointment.getPatient().getName() : "NULL"));
-                appointmentService.saveAppointment(appointment);
-                System.out.println("DEBUG: Appointment saved. ID assigned: " + appointment.getId());
-                response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
-            } else {
-                System.out.println("DEBUG: Patient not found for email: " + (user != null ? user.getEmail() : "null"));
-                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_patient_not_found");
-            }
-            return;
+            handleRequest(request, response);
         } else if ("approve".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
+            handleApprove(request, response);
+        } else if ("reject".equals(action)) {
+            handleReject(request, response);
+        } else {
+            handleDefaultPost(request, response);
+        }
+    }
+
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String dateStr = request.getParameter("appointmentDate");
+        String timeStr = request.getParameter("appointmentTime");
+        String patientIdStr = request.getParameter("patientId");
+        String doctorIdStr = request.getParameter("doctorId");
+        
+        User user = (User) request.getSession().getAttribute("user");
+        PatientService ps = new PatientService();
+        Patients patient = null;
+
+        if (patientIdStr != null && !patientIdStr.isEmpty()) {
+            patient = ps.getPatientById(Integer.parseInt(patientIdStr));
+        } else if (user != null) {
+            patient = ps.getPatientByEmail(user.getEmail());
+        }
+
+        if (patient != null) {
+            LocalDate date = LocalDate.parse(dateStr);
+            LocalTime time = LocalTime.parse(timeStr);
+            Appointments appointment = new Appointments(date, time);
+            appointment.setPatient(patient);
+            
+            if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
+                DoctorService ds = new DoctorService();
+                Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
+                if (doctor != null) {
+                    appointment.setDoctor(doctor);
+                }
+            }
+            
+            appointment.setStatus("REQUESTED");
+            appointmentService.saveAppointment(appointment);
+            System.out.println("DEBUG: Patient request saved. ID: " + appointment.getId() + " for Patient: " + patient.getName());
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
+        } else {
+            System.err.println("DEBUG: Patient lookup failed for request.");
+            response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_patient_not_found");
+        }
+    }
+
+    private void handleApprove(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String idStr = request.getParameter("id");
+        if (idStr != null && !idStr.isEmpty()) {
+            int id = Integer.parseInt(idStr);
             Appointments appointment = appointmentService.getAppointmentById(id);
             if (appointment != null) {
                 appointment.setStatus("CONFIRMED");
                 appointmentService.updateAppointment(appointment);
-                AuditService.log(request.getSession(), "UPDATE", "Appointment", String.valueOf(id), "Approved appointment request");
+                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Approved appointment request");
             }
-            response.sendRedirect(request.getContextPath() + "/dashboard");
-            return;
-        } else if ("reject".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            String rejectionReason = request.getParameter("rejectionReason");
+        }
+        response.sendRedirect(request.getContextPath() + "/dashboard");
+    }
+
+    private void handleReject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String idStr = request.getParameter("id");
+        String reason = request.getParameter("rejectionReason");
+        if (idStr != null && !idStr.isEmpty()) {
+            int id = Integer.parseInt(idStr);
             Appointments appointment = appointmentService.getAppointmentById(id);
             if (appointment != null) {
                 appointment.setStatus("REJECTED");
-                if (rejectionReason != null && !rejectionReason.trim().isEmpty()) {
-                    appointment.setRejectionReason(rejectionReason.trim());
-                }
+                if (reason != null) appointment.setRejectionReason(reason.trim());
                 appointmentService.updateAppointment(appointment);
-                AuditService.log(request.getSession(), "UPDATE", "Appointment", String.valueOf(id), "Rejected appointment request");
+                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Rejected appointment request");
             }
-            response.sendRedirect(request.getContextPath() + "/dashboard");
-            return;
         }
+        response.sendRedirect(request.getContextPath() + "/dashboard");
+    }
 
-        // Default appointment creation (Admin/Staff)
+    private void handleDefaultPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String idStr = request.getParameter("id");
-        int patientId = Integer.parseInt(request.getParameter("patientId"));
+        String patientIdStr = request.getParameter("patientId");
         String dateStr = request.getParameter("appointmentDate");
         String timeStr = request.getParameter("appointmentTime");
 
-        Patients patient = patientsDAO.getPatientById(patientId);
+        if (patientIdStr == null || dateStr == null || timeStr == null) {
+            response.sendRedirect(request.getContextPath() + "/appointments?error=missing_data");
+            return;
+        }
+
+        Patients patient = patientsDAO.getPatientById(Integer.parseInt(patientIdStr));
         LocalDate date = LocalDate.parse(dateStr);
         LocalTime time = LocalTime.parse(timeStr);
 
-        Appointments appointment = new Appointments(date, time);
-        appointment.setPatient(patient);
-        appointment.setStatus("CONFIRMED");
-
         if (idStr != null && !idStr.isEmpty()) {
-            appointment.setId(Integer.parseInt(idStr));
-            appointmentService.updateAppointment(appointment);
-            AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated appointment");
+            Appointments appointment = appointmentService.getAppointmentById(Integer.parseInt(idStr));
+            if (appointment != null) {
+                appointment.setPatient(patient);
+                appointment.setAppointmentDate(date);
+                appointment.setAppointmentTime(time);
+                appointmentService.updateAppointment(appointment);
+                AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated existing appointment");
+            }
         } else {
+            Appointments appointment = new Appointments(date, time);
+            appointment.setPatient(patient);
+            appointment.setStatus("CONFIRMED");
             appointmentService.saveAppointment(appointment);
-            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created appointment");
+            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created new appointment");
         }
-
         response.sendRedirect(request.getContextPath() + "/appointments");
     }
 }

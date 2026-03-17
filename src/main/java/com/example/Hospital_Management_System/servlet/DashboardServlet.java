@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class DashboardServlet extends HttpServlet {
         clinicalService = new ClinicalService();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -53,16 +55,16 @@ public class DashboardServlet extends HttpServlet {
         String email = user.getEmail();
         String jspPage = null;
 
-        if ("ADMIN".equals(role)) {
+        if ("ADMIN".equalsIgnoreCase(role)) {
             fetchAdminStats(request);
             jspPage = "admin_dashboard.jsp";
-        } else if ("DOCTOR".equals(role)) {
+        } else if ("DOCTOR".equalsIgnoreCase(role)) {
             fetchDoctorStats(request, email);
             jspPage = "doctor_dashboard.jsp";
-        } else if ("NURSE".equals(role)) {
+        } else if ("NURSE".equalsIgnoreCase(role)) {
             fetchNurseStats(request, email);
             jspPage = "nurse_dashboard.jsp";
-        } else if ("PATIENT".equals(role)) {
+        } else if ("PATIENT".equalsIgnoreCase(role)) {
             fetchPatientStats(request, email);
             jspPage = "patient_dashboard.jsp";
         }
@@ -75,26 +77,27 @@ public class DashboardServlet extends HttpServlet {
     }
 
     private void fetchAdminStats(HttpServletRequest request) {
-        long patientCount = patientService.getAllPatients().size();
-        long doctorCount = doctorService.getAllDoctors().size();
-        long nurseCount = nurseService.getAllNurses().size();
-        long appointmentCount = appointmentService.getAllAppointments().size();
+        List<Patients> patients = patientService.getAllPatients();
+        List<Doctors> doctors = doctorService.getAllDoctors();
+        List<Nurses> nurses = nurseService.getAllNurses();
+        List<Appointments> appointments = appointmentService.getAllAppointments();
 
-        request.setAttribute("totalPatients", patientCount);
-        request.setAttribute("totalDoctors", doctorCount);
-        request.setAttribute("totalNurses", nurseCount);
-        request.setAttribute("totalAppointments", appointmentCount);
-        request.setAttribute("activeStaff", doctorCount + nurseCount);
+        request.setAttribute("totalPatients", patients.size());
+        request.setAttribute("totalDoctors", doctors.size());
+        request.setAttribute("totalNurses", nurses.size());
+        request.setAttribute("totalAppointments", appointments.size());
+        request.setAttribute("activeStaff", doctors.size() + nurses.size());
 
         Map<String, Long> stats = new HashMap<>();
-        stats.put("Patients", patientCount);
-        stats.put("Doctors", doctorCount);
-        stats.put("Nurses", nurseCount);
-        stats.put("Appointments", appointmentCount);
+        stats.put("Patients", (long)patients.size());
+        stats.put("Doctors", (long)doctors.size());
+        stats.put("Nurses", (long)nurses.size());
+        stats.put("Appointments", (long)appointments.size());
         request.setAttribute("stats", stats);
 
         List<Appointments> requestedApps = appointmentService.getRequestedAppointments();
-        System.out.println("DEBUG: Admin Dashboard - Requested Appointments Count: " + (requestedApps != null ? requestedApps.size() : 0));
+        if (requestedApps == null) requestedApps = new ArrayList<>();
+        System.out.println("DEBUG: [DashboardServlet] Admin - Requested App Count: " + requestedApps.size());
         request.setAttribute("requestedAppointments", requestedApps);
     }
 
@@ -103,7 +106,8 @@ public class DashboardServlet extends HttpServlet {
         if (doctor != null) {
             request.setAttribute("doctor", doctor);
             request.setAttribute("myPatientsCount", doctorService.getPatientsCount(doctor.getId()));
-            request.setAttribute("myAppointments", appointmentService.getAppointmentsByDoctorId(doctor.getId()));
+            List<Appointments> myApps = appointmentService.getAppointmentsByDoctorId(doctor.getId());
+            request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
         }
     }
 
@@ -112,8 +116,9 @@ public class DashboardServlet extends HttpServlet {
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
             request.setAttribute("myPatientsCount", nurseService.getPatientsCount(nurse.getId()));
-            request.setAttribute("wardPatients", nurse.getPatients());
-            request.setAttribute("deptAppointments", appointmentService.getAppointmentsByNurseId(nurse.getId()));
+            request.setAttribute("wardPatients", nurse.getPatients() != null ? nurse.getPatients() : new ArrayList<>());
+            List<Appointments> deptApps = appointmentService.getAppointmentsByNurseId(nurse.getId());
+            request.setAttribute("deptAppointments", deptApps != null ? deptApps : new ArrayList<>());
         }
     }
 
@@ -121,12 +126,13 @@ public class DashboardServlet extends HttpServlet {
         Patients patient = patientService.getPatientByEmail(email);
         if (patient != null) {
             request.setAttribute("patient", patient);
-            request.setAttribute("myAppointments", appointmentService.getAppointmentsByPatientId(patient.getId()));
+            List<Appointments> myApps = appointmentService.getAppointmentsByPatientId(patient.getId());
+            request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
             request.setAttribute("myInvoices", financialService.getInvoicesByPatientId(patient.getId()));
             request.setAttribute("medicalRecord", clinicalService.getRecordByPatientId(patient.getId()));
             request.setAttribute("allDoctors", doctorService.getAllDoctors());
         } else {
-            System.out.println("DEBUG: Dashboard - Patient not found for email: " + email);
+            System.err.println("DEBUG: [DashboardServlet] Patient account not linked for email: " + email);
         }
     }
 }
