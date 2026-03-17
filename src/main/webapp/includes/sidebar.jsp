@@ -6,63 +6,63 @@
     </div>
     <div class="sidebar-nav">
         <a href="${pageContext.request.contextPath}/dashboard" id="nav-dashboard">
-            <span class="icon">🏠</span> Dashboard
+            Dashboard
         </a>
 
         <c:if test="${sessionScope.role == 'ADMIN'}">
             <a href="${pageContext.request.contextPath}/departments" id="nav-departments">
-                <span class="icon">🏢</span> Departments
+                Departments
             </a>
             <a href="${pageContext.request.contextPath}/register" id="nav-register">
-                <span class="icon">👤</span> Registration
+                Registration
             </a>
         </c:if>
 
         <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR'}">
             <a href="${pageContext.request.contextPath}/doctors" id="nav-doctors">
-                <span class="icon">👨‍⚕️</span> Doctors
+                Doctors
             </a>
             <a href="${pageContext.request.contextPath}/surgery" id="nav-surgery">
-                <span class="icon">✂️</span> Surgeries
+                Surgeries
             </a>
             <a href="${pageContext.request.contextPath}/analytics" id="nav-analytics">
-                <span class="icon">📊</span> Analytics
+                Analytics
             </a>
         </c:if>
 
         <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'NURSE'}">
             <a href="${pageContext.request.contextPath}/nurses" id="nav-nurses">
-                <span class="icon">👩‍⚕️</span> Nurses
+                Nurses
             </a>
         </c:if>
 
         <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'DOCTOR' || sessionScope.role == 'NURSE'}">
             <a href="${pageContext.request.contextPath}/clinical" id="nav-clinical">
-                <span class="icon">📑</span> Clinical Records
+                Clinical Records
             </a>
             <a href="${pageContext.request.contextPath}/patients" id="nav-patients">
-                <span class="icon">👥</span> Patients
+                Patients
             </a>
             <a href="${pageContext.request.contextPath}/facility" id="nav-facility">
-                <span class="icon">🏥</span> Facility
+                Facility
             </a>
             <a href="${pageContext.request.contextPath}/appointments" id="nav-appointments">
-                <span class="icon">📅</span> Appointments
+                Appointments
             </a>
         </c:if>
 
         <c:if test="${sessionScope.role == 'ADMIN' || sessionScope.role == 'ACCOUNTANT'}">
             <a href="${pageContext.request.contextPath}/financial" id="nav-billing">
-                <span class="icon">💰</span> Billing
+                Billing
             </a>
             <a href="${pageContext.request.contextPath}/inventory" id="nav-inventory">
-                <span class="icon">📦</span> Inventory
+                Inventory
             </a>
         </c:if>
 
         <c:if test="${sessionScope.role == 'PATIENT'}">
             <a href="${pageContext.request.contextPath}/patient-portal" id="nav-portal">
-                <span class="icon">🛡️</span> My Portal
+                My Portal
             </a>
         </c:if>
 
@@ -70,12 +70,12 @@
             <c:choose>
                 <c:when test="${not empty sessionScope.user}">
                     <a href="${pageContext.request.contextPath}/logout" class="logout-btn" style="color: var(--danger); opacity: 0.8;">
-                        <span class="icon">🚪</span> Logout
+                        Logout
                     </a>
                 </c:when>
                 <c:otherwise>
                     <a href="${pageContext.request.contextPath}/login" class="logout-btn">
-                        <span class="icon">🔑</span> Login
+                        Login
                     </a>
                 </c:otherwise>
             </c:choose>

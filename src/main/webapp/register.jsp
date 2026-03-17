@@ -110,9 +110,7 @@
             <div style="text-align: center; margin-top: 32px; font-size: 0.9rem; color: var(--text-muted);">
                 Already have an account? <a href="${pageContext.request.contextPath}/login" style="color: var(--primary); font-weight: 600;">Sign In</a>
                 <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--slate-100);">
-                    <a href="${pageContext.request.contextPath}/index.jsp" style="display: inline-flex; align-items: center; gap: 8px;">
-                        <span>←</span> Back to Home
-                    </a>
+                        Back to Home
                 </div>
             </div>
         </div>

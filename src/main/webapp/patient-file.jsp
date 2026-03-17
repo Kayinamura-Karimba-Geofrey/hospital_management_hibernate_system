@@ -119,7 +119,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <div>
                         <a href="${pageContext.request.contextPath}/clinical"
-                            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">← Back to
+                            style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Back to
                             Directory</a>
                         <h1 style="margin-top: 10px;">Medical File: ${patient.name}</h1>
                     </div>
@@ -185,7 +185,7 @@
                                 <c:if test="${not empty record.filePath}">
                                     <div style="margin-top: 10px;">
                                         <a href="${pageContext.request.contextPath}/clinical?action=download&path=${record.filePath}"
-                                            class="btn btn-info btn-sm">📎 Download Current Attachment</a>
+                                            class="btn btn-info btn-sm">Download Current Attachment</a>
                                     </div>
                                 </c:if>
                             </div>

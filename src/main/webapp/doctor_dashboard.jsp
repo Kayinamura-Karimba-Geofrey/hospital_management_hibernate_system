@@ -28,7 +28,6 @@
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">👥</span>
                     <span class="stat-label">Active Patients</span>
                 </div>
                 <div class="stat-value">${not empty myPatientsCount ? myPatientsCount : 0}</div>
@@ -37,7 +36,6 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">📅</span>
                     <span class="stat-label">Today's Load</span>
                 </div>
                 <div class="stat-value">${fn:length(myAppointments)}</div>
@@ -46,7 +44,6 @@
 
             <div class="stat-card" style="grid-column: span 1.5;">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">📈</span>
                     <span class="stat-label">Weekly Activity</span>
                 </div>
                 <div style="height: 120px; margin-top: 12px;">
@@ -99,13 +96,13 @@
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
                     <a href="${pageContext.request.contextPath}/patients" class="btn btn-secondary" style="text-align: left; justify-content: start;">
-                        <span style="margin-right: 8px;">📋</span> Search Patient Records
+                        Search Patient Records
                     </a>
                     <a href="${pageContext.request.contextPath}/surgery" class="btn btn-secondary" style="text-align: left; justify-content: start;">
-                        <span style="margin-right: 8px;">✂️</span> Surgery Schedule
+                        Surgery Schedule
                     </a>
                     <a href="${pageContext.request.contextPath}/clinical" class="btn btn-secondary" style="text-align: left; justify-content: start;">
-                        <span style="margin-right: 8px;">📑</span> Write Clinical Note
+                        Write Clinical Note
                     </a>
                 </div>
             </div>

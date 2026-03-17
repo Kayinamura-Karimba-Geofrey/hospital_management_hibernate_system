@@ -23,6 +23,17 @@
                 <button onclick="document.getElementById('requestModal').style.display='block'" class="btn btn-primary">Request Appointment</button>
             </div>
         </header>
+        
+        <c:if test="${param.msg == 'request_sent'}">
+            <div style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 500;">
+                Appointment request successfully sent to administration for approval.
+            </div>
+        </c:if>
+        <c:if test="${param.msg == 'error_missing_data'}">
+            <div style="background: var(--primary-soft); color: var(--danger); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 500;">
+                Error: Missing required information for the appointment request.
+            </div>
+        </c:if>
 
         <!-- Request Appointment Modal -->
         <div id="requestModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
@@ -67,7 +78,6 @@
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">📅</span>
                     <span class="stat-label">Next Appointment</span>
                 </div>
                 <c:choose>
@@ -83,7 +93,6 @@
             
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">💰</span>
                     <span class="stat-label">Outstanding Balance</span>
                 </div>
                 <div class="stat-value">$240.00</div>
@@ -92,7 +101,6 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">📑</span>
                     <span class="stat-label">Medical Records</span>
                 </div>
                 <div class="stat-value">${not empty medicalRecord ? 'Available' : 'Pending'}</div>
@@ -109,27 +117,27 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Doctor</th>
                                 <th>Date</th>
                                 <th>Time</th>
+                                <th>Doctor</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="app" items="${myAppointments}">
                                 <tr>
+                                    <td>${app.appointmentDate}</td>
+                                    <td>${app.appointmentTime}</td>
                                     <td style="font-weight: 500;">
                                         <c:choose>
                                             <c:when test="${not empty app.doctor}">
                                                 Dr. ${app.doctor.name}
                                             </c:when>
                                             <c:otherwise>
-                                                <span style="color: var(--text-muted); font-style: italic;">Pending Assignment</span>
+                                                <span style="color: var(--text-muted); font-style: italic;">Pending assignment</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <td>${app.appointmentDate}</td>
-                                    <td>${app.appointmentTime}</td>
                                     <td>
                                         <span class="status-pill ${app.status == 'REQUESTED' ? 'status-requested' : (app.status == 'REJECTED' ? 'status-rejected' : 'status-active')}">
                                             ${app.status != null ? app.status : 'CONFIRMED'}

@@ -153,7 +153,7 @@ public class AppointmentServlet extends HttpServlet {
                 System.err.println("ERROR: Invalid ID for approval: " + idStr);
             }
         }
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        response.sendRedirect(request.getContextPath() + "/dashboard?msg=approved");
     }
 
     private void handleReject(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -173,7 +173,7 @@ public class AppointmentServlet extends HttpServlet {
                 System.err.println("ERROR: Invalid ID for rejection: " + idStr);
             }
         }
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        response.sendRedirect(request.getContextPath() + "/dashboard?msg=declined");
     }
 
     private void handleDefaultPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

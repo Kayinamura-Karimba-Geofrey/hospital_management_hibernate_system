@@ -146,7 +146,6 @@
 
                                 <div class="bed-card ${bed.status}"
                                     onclick="handleBedClick('${bed.id}', '${bed.bedNumber}', '${bed.status}', '${activeAdm.id}', '${activeAdm.patient.name}')">
-                                    <span class="bed-icon">🛏️</span>
                                     <span class="badge" style="background: rgba(10, 132, 255, 0.1); color: var(--primary);">Bed ${bed.bedNumber}</span>
                                     <div style="margin-top: 10px;">
                                         <span class="status-pill ${bed.status == 'AVAILABLE' ? 'status-active' : (bed.status == 'OCCUPIED' ? 'status-critical' : 'status-warning')}">

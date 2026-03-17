@@ -114,7 +114,17 @@ public class TwoFactorServlet extends HttpServlet {
         }
 
         String code = request.getParameter("code");
+        String action = request.getParameter("action");
         String secret = tempUser.getTwoFactorSecret();
+
+        if ("skip".equalsIgnoreCase(action) && !tempUser.isTwoFactorEnabled()) {
+            // User chose to skip 2FA setup
+            session.removeAttribute("tempUser");
+            session.setAttribute("user", tempUser);
+            session.setAttribute("role", tempUser.getRole());
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        }
 
         if (codeVerifier.isValidCode(secret, code)) {
             // Valid code, enable 2FA if not already

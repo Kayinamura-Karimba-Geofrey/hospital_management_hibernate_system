@@ -68,32 +68,26 @@
 
             <div class="info-cards-grid">
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">📋</span>
                     <h3>Precision Records</h3>
                     <p>Unified patient data with real-time updates and historical tracking for better clinical decisions.</p>
                 </div>
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">📅</span>
                     <h3>Smart Scheduling</h3>
                     <p>AI-powered appointment management that reduces wait times and optimizes staff allocation.</p>
                 </div>
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">💰</span>
                     <h3>Seamless Billing</h3>
                     <p>Automated invoicing and insurance integration that ensures 100% financial transparency.</p>
                 </div>
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">🛡️</span>
                     <h3>Safe & Secure</h3>
                     <p>Enterprise-grade encryption and HIPAA compliance to keep patient data protected at all times.</p>
                 </div>
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">📊</span>
                     <h3>Advanced Analytics</h3>
                     <p>Gain deep insights into hospital performance with beautiful, interactive reporting dashboards.</p>
                 </div>
                 <div class="info-card-new">
-                    <span class="info-card-icon-mockup">📲</span>
                     <h3>Mobile Ready</h3>
                     <p>Access your hospital management system from anywhere, on any device, with full functionality.</p>
                 </div>

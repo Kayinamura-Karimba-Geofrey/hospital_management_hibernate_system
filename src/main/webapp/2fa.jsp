@@ -51,13 +51,20 @@
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
                     Verify Identity
                 </button>
+
+                <c:if test="${setup}">
+                    <button type="submit" name="action" value="skip" class="btn" 
+                            style="width: 100%; margin-top: 12px; background: transparent; border: 1px solid var(--slate-200); color: var(--text-muted); font-weight: 500;">
+                        Skip and Continue to Dashboard
+                    </button>
+                </c:if>
             </form>
 
             <div style="text-align: center; margin-top: 32px; font-size: 0.9rem; color: var(--text-muted);">
                 Having trouble? <a href="#" style="color: var(--primary); font-weight: 600;">Contact Administrator</a>
                 <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--slate-100);">
                     <a href="${pageContext.request.contextPath}/login" style="display: inline-flex; align-items: center; gap: 8px;">
-                        <span>←</span> Back to Sign In
+                        Back to Sign In
                     </a>
                 </div>
             </div>

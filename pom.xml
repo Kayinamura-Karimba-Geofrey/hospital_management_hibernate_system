@@ -177,6 +177,14 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>10.10.0</version>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <mainClass>com.example.Hospital_Management_System.DBInspector</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

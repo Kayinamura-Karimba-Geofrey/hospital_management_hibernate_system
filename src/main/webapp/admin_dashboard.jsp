@@ -24,29 +24,39 @@
                 <button class="btn btn-secondary">Download Report</button>
             </div>
         </header>
+        
+        <c:choose>
+            <c:when test="${param.msg == 'approved'}">
+                <div style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 500;">
+                    Appointment request has been successfully approved and confirmed.
+                </div>
+            </c:when>
+            <c:when test="${param.msg == 'declined'}">
+                <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 500;">
+                    Appointment request has been declined.
+                </div>
+            </c:when>
+        </c:choose>
 
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">👥</span>
                     <span class="stat-label">Total Patients</span>
                 </div>
                 <div class="stat-value">${not empty totalPatients ? totalPatients : 0}</div>
-                <div class="stat-trend trend-up">↑ 4.2% from last month</div>
+                <div class="stat-trend trend-up">4.2% from last month</div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">👨‍⚕️</span>
                     <span class="stat-label">Active Staff</span>
                 </div>
                 <div class="stat-value">${not empty activeStaff ? activeStaff : 0}</div>
-                <div class="stat-trend trend-up">↑ 2 new doctors joined</div>
+                <div class="stat-trend trend-up">2 new doctors joined</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">📅</span>
                     <span class="stat-label">Appointments</span>
                 </div>
                 <div class="stat-value">${not empty totalAppointments ? totalAppointments : 0}</div>
@@ -55,11 +65,10 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">💰</span>
                     <span class="stat-label">Revenue Overview</span>
                 </div>
                 <div class="stat-value">$12.4k</div>
-                <div class="stat-trend trend-down">↓ 1.5% decrease</div>
+                <div class="stat-trend trend-down">1.5% decrease</div>
             </div>
         </section>
 
@@ -77,15 +86,16 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Appointment Requests (${fn:length(requestedAppointments)})</h3>
-                    <p style="font-size: 0.7rem; color: var(--text-muted);">Internal Debug: Total Appointments in DB: ${fn:length(stats['Appointments'])} (or ${totalAppointments})</p>
                 </div>
                 <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
                     <c:forEach var="req" items="${requestedAppointments}">
                         <div style="display: flex; gap: 16px; align-items: start; padding-bottom: 15px; border-bottom: 1px solid var(--slate-100);">
-                            <span style="font-size: 1.5rem;">📅</span>
                             <div style="flex-grow: 1;">
                                 <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">${req.patient.name}</p>
                                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Requested: ${req.appointmentDate} at ${req.appointmentTime}</p>
+                                <c:if test="${not empty req.doctor}">
+                                    <p style="font-size: 0.75rem; color: var(--primary); margin-top: 4px; font-weight: 500;">Preferred: Dr. ${req.doctor.name}</p>
+                                </c:if>
                             </div>
                             <div style="display: flex; gap: 8px;">
                                 <form action="${pageContext.request.contextPath}/appointments" method="post" style="display: inline;">
@@ -124,23 +134,6 @@
                     <c:if test="${empty requestedAppointments}">
                         <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 40px; background: var(--slate-50); border-radius: var(--radius-md);">No pending appointment requests found.</p>
                         
-                        <!-- System Integrity Check -->
-                        <div style="margin-top: 32px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-md); padding: 20px;">
-                            <h4 style="color: #92400e; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 1rem;">🔍</span> Database Integrity Monitor
-                            </h4>
-                            <div style="font-family: monospace; font-size: 0.7rem; color: #b45309; line-height: 1.8;">
-                                <c:forEach var="app" items="${appointmentService.getAllAppointments()}">
-                                    <div style="padding: 4px 8px; border-bottom: 1px solid rgba(180, 83, 9, 0.1);">
-                                        <strong>[ID: ${app.id}]</strong> Status: <span style="background: rgba(180, 83, 9, 0.1); padding: 1px 4px; border-radius: 4px;">${app.status}</span> 
-                                        ➔ Patient: <span style="color: var(--text-heading);">${not empty app.patient ? app.patient.name : '<em>DISCONNECTED</em>'}</span>
-                                    </div>
-                                </c:forEach>
-                                <c:if test="${empty appointmentService.getAllAppointments()}">
-                                    <div style="padding: 10px; text-align: center; font-style: italic;">Appointments table is currently empty.</div>
-                                </c:if>
-                            </div>
-                        </div>
                     </c:if>
                 </div>
             </div>
@@ -151,14 +144,12 @@
                 </div>
                 <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
                     <div style="display: flex; gap: 16px; align-items: start;">
-                        <span style="font-size: 1.5rem;">📝</span>
                         <div>
                             <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">New patient registration</p>
                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">2 minutes ago</p>
                         </div>
                     </div>
                     <div style="display: flex; gap: 16px; align-items: start;">
-                        <span style="font-size: 1.5rem;">🏥</span>
                         <div>
                             <p style="font-weight: 600; font-size: 0.95rem; color: var(--slate-900);">ICU capacity reached 85%</p>
                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">1 hour ago</p>

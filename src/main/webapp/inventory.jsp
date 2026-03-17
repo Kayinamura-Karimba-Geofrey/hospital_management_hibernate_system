@@ -140,7 +140,6 @@
                             <c:forEach var="low" items="${lowStockItems}">
                                 <div
                                     style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px; background: rgba(255, 82, 82, 0.05); border-radius: 8px; border: 1px solid rgba(255, 82, 82, 0.2);">
-                                    <span style="color: var(--danger);">⚠️</span>
                                     <div style="flex-grow: 1;">
                                         <div style="font-weight: 600; font-size: 0.9rem;">${low.name}</div>
                                         <div style="font-size: 0.75rem; color: var(--text-secondary);">Only
@@ -150,7 +149,7 @@
                             </c:forEach>
                             <c:if test="${empty lowStockItems}">
                                 <div style="text-align: center; color: var(--success); padding: 20px;">
-                                    ✅ All stock levels healthy
+                                    All stock levels healthy
                                 </div>
                             </c:if>
                         </div>

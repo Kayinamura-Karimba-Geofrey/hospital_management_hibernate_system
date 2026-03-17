@@ -116,7 +116,9 @@ public class DashboardServlet extends HttpServlet {
         Doctors doctor = doctorService.getDoctorByEmail(email);
         if (doctor != null) {
             request.setAttribute("doctor", doctor);
-            request.setAttribute("appointments", appointmentService.getAppointmentsByDoctorId(doctor.getId()));
+            List<Appointments> myApps = appointmentService.getAppointmentsByDoctorId(doctor.getId());
+            request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
+            request.setAttribute("myPatientsCount", doctor.getPatients() != null ? doctor.getPatients().size() : 0);
         }
     }
 
@@ -124,7 +126,9 @@ public class DashboardServlet extends HttpServlet {
         Nurses nurse = nurseService.getNurseByEmail(email);
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
-            request.setAttribute("patients", nurse.getPatients());
+            List<Patients> patients = nurse.getPatients();
+            request.setAttribute("wardPatients", patients != null ? patients : new ArrayList<>());
+            request.setAttribute("myPatientsCount", patients != null ? patients.size() : 0);
         }
     }
 
@@ -134,6 +138,10 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("patient", patient);
             List<Appointments> myApps = appointmentService.getAppointmentsByPatientId(patient.getId());
             request.setAttribute("myAppointments", myApps != null ? myApps : new ArrayList<>());
+            
+            // Add doctors for the request appointment dropdown
+            List<Doctors> allDoctors = doctorService.getAllDoctors();
+            request.setAttribute("allDoctors", allDoctors != null ? allDoctors : new ArrayList<>());
         }
     }
 }

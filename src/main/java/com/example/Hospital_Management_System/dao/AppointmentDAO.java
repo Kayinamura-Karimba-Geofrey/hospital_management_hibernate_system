@@ -105,7 +105,7 @@ public class AppointmentDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Appointments> query = session.createQuery(
                 "from Appointments a left join fetch a.patient " +
-                "where upper(a.status) like :status " +
+                "where (upper(a.status) like :status or a.status is null or trim(a.status) = '') " +
                 "order by a.appointmentDate desc", Appointments.class);
             query.setParameter("status", "%REQUESTED%");
             List<Appointments> results = query.list();

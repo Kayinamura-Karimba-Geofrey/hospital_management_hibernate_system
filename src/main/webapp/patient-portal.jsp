@@ -23,7 +23,7 @@
         <c:if test="${empty patient}">
             <div class="card" style="border-left: 4px solid var(--warning);">
                 <div class="card-header">
-                    <h3>⚠️ Profile Linkage Required</h3>
+                    <h3>Profile Linkage Required</h3>
                 </div>
                 <p style="margin-top: 12px; color: var(--text-muted);">We couldn't find a clinical record matching your account. Please contact the hospital administration to link your patient profile with your login credentials.</p>
             </div>

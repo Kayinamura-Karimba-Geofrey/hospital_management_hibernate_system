@@ -27,23 +27,20 @@
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">👥</span>
                     <span class="stat-label">Total Patients</span>
                 </div>
                 <div class="stat-value">${totalPatients}</div>
-                <div class="stat-trend trend-up">↑ 12% Month-over-Month</div>
+                <div class="stat-trend trend-up">12% Month-over-Month</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">👨‍⚕️</span>
                     <span class="stat-label">Doctors</span>
                 </div>
                 <div class="stat-value">${totalDoctors}</div>
-                <div class="stat-trend trend-up">↑ 2 new additions</div>
+                <div class="stat-trend trend-up">2 new additions</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">🩺</span>
                     <span class="stat-label">Nursing Staff</span>
                 </div>
                 <div class="stat-value">${totalNurses}</div>
@@ -51,11 +48,10 @@
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">💪</span>
                     <span class="stat-label">Active Staff</span>
                 </div>
                 <div class="stat-value">${activeStaff}</div>
-                <div class="stat-trend trend-up">↑ 98% Engagement</div>
+                <div class="stat-trend trend-up">98% Engagement</div>
             </div>
         </section>
 

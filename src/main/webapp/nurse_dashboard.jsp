@@ -28,7 +28,6 @@
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);">🏥</span>
                     <span class="stat-label">Department</span>
                 </div>
                 <div class="stat-value" style="font-size: 1.5rem;">${nurse.department.name}</div>
@@ -37,7 +36,6 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">👥</span>
                     <span class="stat-label">Active Ward</span>
                 </div>
                 <div class="stat-value">${myPatientsCount}</div>
@@ -46,7 +44,6 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">⚠️</span>
                     <span class="stat-label">Urgent Tasks</span>
                 </div>
                 <div class="stat-value" style="color: var(--danger);">${3}</div>
