@@ -3,8 +3,12 @@ package com.example.Hospital_Management_System.servlet;
 import com.example.Hospital_Management_System.dao.PatientsDAO;
 import com.example.Hospital_Management_System.entity.Appointments;
 import com.example.Hospital_Management_System.entity.Patients;
+import com.example.Hospital_Management_System.entity.User;
+import com.example.Hospital_Management_System.entity.Doctors;
 import com.example.Hospital_Management_System.service.AppointmentService;
 import com.example.Hospital_Management_System.service.AuditService;
+import com.example.Hospital_Management_System.service.PatientService;
+import com.example.Hospital_Management_System.service.DoctorService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,10 +33,6 @@ public class AppointmentServlet extends HttpServlet {
         patientsDAO = new PatientsDAO();
     }
 
-    /**
-     * Handles GET requests for listing and managing appointments.
-     * Supports "edit" and "delete" actions via query parameters.
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -56,38 +56,27 @@ public class AppointmentServlet extends HttpServlet {
         request.getRequestDispatcher("appointments.jsp").forward(request, response);
     }
 
-    /**
-     * Handles POST requests for saving or updating appointments.
-     * Redirects back to the appointments list upon success.
-     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if ("request".equals(action)) {
-            // Patient requesting an appointment
             String dateStr = request.getParameter("appointmentDate");
             String timeStr = request.getParameter("appointmentTime");
-            com.example.Hospital_Management_System.entity.User user = (com.example.Hospital_Management_System.entity.User) request.getSession().getAttribute("user");
-            
             String patientIdStr = request.getParameter("patientId");
+            User user = (User) request.getSession().getAttribute("user");
             
+            PatientService ps = new PatientService();
             Patients patient = null;
-            com.example.Hospital_Management_System.service.PatientService ps = new com.example.Hospital_Management_System.service.PatientService();
-            
+
             if (patientIdStr != null && !patientIdStr.isEmpty()) {
                 patient = ps.getPatientById(Integer.parseInt(patientIdStr));
-                System.out.println("DEBUG: Patient retrieved via ID: " + (patient != null ? patient.getName() : "null"));
             } else if (user != null) {
-                System.out.println("DEBUG: User found in session. Email: " + user.getEmail());
                 patient = ps.getPatientByEmail(user.getEmail());
-                System.out.println("DEBUG: Patient retrieved via Email: " + (patient != null ? patient.getName() : "null"));
-            } else {
-                System.out.println("DEBUG: User NOT found in session and no patientId provided!");
             }
 
             if (patient != null) {
-                System.out.println("DEBUG: Patient found. Saving requested appointment...");
+                System.out.println("DEBUG: Saving appointment for patient: " + patient.getName());
                 LocalDate date = LocalDate.parse(dateStr);
                 LocalTime time = LocalTime.parse(timeStr);
                 Appointments appointment = new Appointments(date, time);
@@ -95,18 +84,22 @@ public class AppointmentServlet extends HttpServlet {
                 
                 String doctorIdStr = request.getParameter("doctorId");
                 if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
-                    com.example.Hospital_Management_System.service.DoctorService ds = new com.example.Hospital_Management_System.service.DoctorService();
-                    com.example.Hospital_Management_System.entity.Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
-                    appointment.setDoctor(doctor);
+                    DoctorService ds = new DoctorService();
+                    Doctors doctor = ds.getDoctorById(Integer.parseInt(doctorIdStr));
+                    if (doctor != null) {
+                        appointment.setDoctor(doctor);
+                    }
                 }
                 
                 appointment.setStatus("REQUESTED");
+                System.out.println("DEBUG: Saving appointment - Status: " + appointment.getStatus() + ", Patient: " + (appointment.getPatient() != null ? appointment.getPatient().getName() : "NULL"));
                 appointmentService.saveAppointment(appointment);
-                AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Patient requested new appointment");
+                System.out.println("DEBUG: Appointment saved. ID assigned: " + appointment.getId());
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
             } else {
-                System.out.println("DEBUG: Patient NOT FOUND for request processing.");
+                System.out.println("DEBUG: Patient not found for email: " + (user != null ? user.getEmail() : "null"));
+                response.sendRedirect(request.getContextPath() + "/dashboard?msg=error_patient_not_found");
             }
-            response.sendRedirect(request.getContextPath() + "/dashboard?msg=request_sent");
             return;
         } else if ("approve".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -134,6 +127,7 @@ public class AppointmentServlet extends HttpServlet {
             return;
         }
 
+        // Default appointment creation (Admin/Staff)
         String idStr = request.getParameter("id");
         int patientId = Integer.parseInt(request.getParameter("patientId"));
         String dateStr = request.getParameter("appointmentDate");
@@ -150,10 +144,10 @@ public class AppointmentServlet extends HttpServlet {
         if (idStr != null && !idStr.isEmpty()) {
             appointment.setId(Integer.parseInt(idStr));
             appointmentService.updateAppointment(appointment);
-            AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated appointment for patient: " + (patient != null ? patient.getName() : "Unknown"));
+            AuditService.log(request.getSession(), "UPDATE", "Appointment", idStr, "Updated appointment");
         } else {
             appointmentService.saveAppointment(appointment);
-            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created new appointment for patient: " + (patient != null ? patient.getName() : "Unknown"));
+            AuditService.log(request.getSession(), "CREATE", "Appointment", String.valueOf(appointment.getId()), "Created appointment");
         }
 
         response.sendRedirect(request.getContextPath() + "/appointments");

@@ -38,10 +38,6 @@ public class DashboardServlet extends HttpServlet {
         clinicalService = new ClinicalService();
     }
 
-    /**
-     * Handles GET requests to identify user role and display the correct dashboard.
-     * Redirects to login if the session is invalid.
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -55,7 +51,6 @@ public class DashboardServlet extends HttpServlet {
         }
 
         String email = user.getEmail();
-
         String jspPage = null;
 
         if ("ADMIN".equals(role)) {
@@ -98,8 +93,8 @@ public class DashboardServlet extends HttpServlet {
         stats.put("Appointments", appointmentCount);
         request.setAttribute("stats", stats);
 
-        // Fetch requested appointments
         List<Appointments> requestedApps = appointmentService.getRequestedAppointments();
+        System.out.println("DEBUG: Admin Dashboard - Requested Appointments Count: " + (requestedApps != null ? requestedApps.size() : 0));
         request.setAttribute("requestedAppointments", requestedApps);
     }
 
@@ -117,7 +112,7 @@ public class DashboardServlet extends HttpServlet {
         if (nurse != null) {
             request.setAttribute("nurse", nurse);
             request.setAttribute("myPatientsCount", nurseService.getPatientsCount(nurse.getId()));
-            request.setAttribute("wardPatients", nurse.getPatients()); // Fetch list for the table
+            request.setAttribute("wardPatients", nurse.getPatients());
             request.setAttribute("deptAppointments", appointmentService.getAppointmentsByNurseId(nurse.getId()));
         }
     }
@@ -130,6 +125,8 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("myInvoices", financialService.getInvoicesByPatientId(patient.getId()));
             request.setAttribute("medicalRecord", clinicalService.getRecordByPatientId(patient.getId()));
             request.setAttribute("allDoctors", doctorService.getAllDoctors());
+        } else {
+            System.out.println("DEBUG: Dashboard - Patient not found for email: " + email);
         }
     }
 }

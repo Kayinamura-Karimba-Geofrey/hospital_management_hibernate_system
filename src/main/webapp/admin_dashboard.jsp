@@ -76,7 +76,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3>Appointment Requests</h3>
+                    <h3>Appointment Requests (${fn:length(requestedAppointments)})</h3>
                 </div>
                 <div class="activity-list" style="margin-top: 24px; display: flex; flex-direction: column; gap: 20px;">
                     <c:forEach var="req" items="${requestedAppointments}">
@@ -88,8 +88,8 @@
                             </div>
                             <div style="display: flex; gap: 8px;">
                                 <form action="${pageContext.request.contextPath}/appointments" method="post" style="display: inline;">
-                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="action" value="approve">
+                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="id" value="${req.id}">
                                     <button type="submit" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Approve</button>
                                 </form>
@@ -103,8 +103,8 @@
                                             <button onclick="document.getElementById('rejectModal_${req.id}').style.display='none'" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
                                         </div>
                                         <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
-                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                             <input type="hidden" name="action" value="reject">
+                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                             <input type="hidden" name="id" value="${req.id}">
                                             <div class="form-group">
                                                 <label>Reason for Rejection</label>

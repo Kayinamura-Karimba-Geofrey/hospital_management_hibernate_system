@@ -31,7 +31,8 @@
                     <h3>Request Appointment</h3>
                     <button onclick="document.getElementById('requestModal').style.display='none'" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">&times;</button>
                 </div>
-                <form action="${pageContext.request.contextPath}/appointments?action=request" method="post" style="margin-top: 20px;">
+                <form action="${pageContext.request.contextPath}/appointments" method="post" style="margin-top: 20px;">
+                    <input type="hidden" name="action" value="request">
                     <input type="hidden" name="csrfToken" value="${csrfToken}">
                     <input type="hidden" name="patientId" value="${patient.id}">
                     <div class="form-group">
@@ -102,7 +103,7 @@
         <section class="dashboard-grid" style="margin-top: 32px;">
             <div class="card" style="grid-column: span 2;">
                 <div class="card-header">
-                    <h3>Appointment History</h3>
+                    <h3>Appointment History (${fn:length(myAppointments)})</h3>
                 </div>
                 <div class="table-container" style="margin-top: 16px;">
                     <table class="data-table">

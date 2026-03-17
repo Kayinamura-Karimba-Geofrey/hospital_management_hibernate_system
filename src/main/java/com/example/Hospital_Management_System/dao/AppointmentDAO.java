@@ -115,7 +115,7 @@ public class AppointmentDAO {
      */
     public List<Appointments> getAppointmentsByPatientId(int patientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments where patient.id = :patientId", Appointments.class)
+            return session.createQuery("from Appointments a left join fetch a.doctor left join fetch a.patient where a.patient.id = :patientId", Appointments.class)
                     .setParameter("patientId", patientId)
                     .list();
         }
@@ -153,7 +153,21 @@ public class AppointmentDAO {
      */
     public List<Appointments> getRequestedAppointments() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Appointments where status = 'REQUESTED'", Appointments.class).list();
+            System.out.println("DEBUG: [AppointmentDAO] Fetching Requested Appointments...");
+            List<Appointments> results = session.createQuery("from Appointments a left join fetch a.patient where upper(trim(a.status)) = 'REQUESTED'", Appointments.class).list();
+            if (results != null) {
+                System.out.println("DEBUG: [AppointmentDAO] Found " + results.size() + " requested appointments.");
+                for (Appointments app : results) {
+                    System.out.println("DEBUG: [AppointmentDAO] App ID: " + app.getId() + ", Patient: " + (app.getPatient() != null ? app.getPatient().getName() : "MISSING"));
+                }
+            } else {
+                System.out.println("DEBUG: [AppointmentDAO] Query returned NULL results.");
+            }
+            return results;
+        } catch (Exception e) {
+            System.err.println("DEBUG: [AppointmentDAO] Error fetching requested appointments: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 }
