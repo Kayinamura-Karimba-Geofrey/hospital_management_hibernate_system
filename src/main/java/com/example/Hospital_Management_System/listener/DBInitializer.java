@@ -89,13 +89,28 @@ public class DBInitializer implements ServletContextListener {
 
     private void initializeDefaultAdmin() {
         UserDAO userDAO = new UserDAO();
-        User admin = userDAO.getUserByEmail("geofreykayin@gmail.com");
+        // Check by the canonical admin email
+        User admin = userDAO.getUserByEmail("geofreykayin1@gmail.com");
+        if (admin == null) {
+            // Also check the old email in case it was seeded before and needs migration
+            admin = userDAO.getUserByEmail("geofreykayin@gmail.com");
+            if (admin != null) {
+                // Migrate old email to the correct one and reset 2FA for fresh setup
+                admin.setEmail("geofreykayin1@gmail.com");
+                admin.setTwoFactorSecret(null);
+                admin.setTwoFactorEnabled(false);
+                userDAO.updateUser(admin);
+                System.out.println("Admin email migrated to geofreykayin1@gmail.com and 2FA reset.");
+            }
+        }
         if (admin == null) {
             System.out.println("Seeding admin user...");
             String hashedPass = BCrypt.hashpw("geo654", BCrypt.gensalt());
-            admin = new User("geofrey", hashedPass, "geofreykayin@gmail.com", "Geofrey", "ADMIN");
+            admin = new User("geofrey", hashedPass, "geofreykayin1@gmail.com", "Geofrey", "ADMIN");
+            admin.setTwoFactorSecret(null);
+            admin.setTwoFactorEnabled(false);
             userDAO.saveUser(admin);
-            System.out.println("Admin user seeded.");
+            System.out.println("Admin user seeded with 2FA disabled for initial setup.");
         } else if ("geo654".equals(admin.getPassword())) {
             System.out.println("Migrating plain-text admin password...");
             admin.setPassword(BCrypt.hashpw("geo654", BCrypt.gensalt()));

@@ -21,7 +21,7 @@ public class AuthFilter implements Filter {
         roleAccess.put("DOCTOR", new String[]{"dashboard", "doctors", "patients", "clinical", "surgery", "appointments", "facility", "analytics"});
         roleAccess.put("NURSE", new String[]{"dashboard", "nurses", "patients", "clinical", "facility", "appointments"});
         roleAccess.put("ACCOUNTANT", new String[]{"dashboard", "financial", "inventory"});
-        roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard"});
+        roleAccess.put("PATIENT", new String[]{"patient-portal", "dashboard", "appointments"});
     }
 
     /**

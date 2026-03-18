@@ -70,13 +70,29 @@
                                     <tr>
                                         <td style="color: var(--text-muted); font-size: 0.8rem;">#${app.id}</td>
                                         <td style="font-weight: 600; color: var(--slate-900);">${app.patient.name}</td>
-                                        <td>Dr. ${app.patient.doctor.name}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty app.doctor}">
+                                                    Dr. ${app.doctor.name}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="color: var(--text-muted); font-style: italic;">Pending assignment</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td>
                                             <div style="font-weight: 500;">${app.appointmentDate}</div>
                                             <div style="font-size: 0.8rem; color: var(--text-muted);">${app.appointmentTime}</div>
                                         </td>
                                         <td>
-                                            <span class="status-pill status-active">Confirmed</span>
+                                            <span class="status-pill ${app.status == 'REQUESTED' ? 'status-requested' : (app.status == 'REJECTED' ? 'status-rejected' : 'status-active')}">
+                                                ${app.status != null ? app.status : 'CONFIRMED'}
+                                            </span>
+                                            <c:if test="${app.status == 'REJECTED' && not empty app.rejectionReason}">
+                                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; max-width: 250px;">
+                                                    <strong style="color: var(--danger);">Reason:</strong> ${app.rejectionReason}
+                                                </div>
+                                            </c:if>
                                         </td>
                                         <td>
                                             <div style="display: flex; gap: 8px;">

@@ -77,7 +77,11 @@
                                         <td style="font-weight: 500;">Dr. ${app.doctor.name}</td>
                                         <td>${app.appointmentDate}</td>
                                         <td>Follow-up</td>
-                                        <td><span class="status-pill status-active">Confirmed</span></td>
+                                        <td>
+                                            <span class="status-pill ${app.status == 'REQUESTED' ? 'status-requested' : (app.status == 'REJECTED' ? 'status-rejected' : 'status-active')}">
+                                                ${app.status != null ? app.status : 'CONFIRMED'}
+                                            </span>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty appointments}">
